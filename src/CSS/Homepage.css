@@ -1,0 +1,94 @@
+/* HERO HOMEPAGE */
+
+.hero-bg {
+    background-image: url(../assets/homepage-hero.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 1310px;
+    position: relative;
+}
+
+.il-est-temps {
+    color: #FFF;
+    font-size: 50px;
+    margin-top: 10%;
+}
+
+.au-service-de {
+    color: #FFF;
+    font-size: 35px;
+    margin-top: 55%;
+}
+
+.trois-blocs {
+    column-gap: 50px;
+    margin-bottom: 100px;
+}
+
+.trois-blocs div {
+    border-radius: 10px;
+    background: #8C5CBC;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.40);
+    color: #FFF;
+    height: 200px;
+    width: 250px;
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    row-gap: 15px;
+}
+
+/* BIENFAITS */
+
+.massage-photo {
+    max-height: 420px;
+}
+
+.texte-du-bloc {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
+.bullets-bienfaits {
+    display: flex;
+    row-gap: 15px;
+    flex-direction: column;
+}
+
+.bullets-bienfaits p {
+    font-size: 18px;
+    width: 75%;
+}
+
+/* BANNER */
+
+.schema-une-heure {
+    width: 55%;
+    margin-bottom: 35px;
+}
+
+/* CLIENTS */
+
+.slider img {
+    max-width: 200px;
+    max-height: 100px;
+    margin-bottom: 100px;
+}
+
+.clients-title {
+    margin-top: 100px;
+    margin-bottom: 25px;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.clients-arrows {
+    font-weight: 700;
+    column-gap: 150%;
+}
