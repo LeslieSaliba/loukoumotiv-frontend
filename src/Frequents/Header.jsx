@@ -30,14 +30,16 @@ function Header() {
            <div className={`container-fluid navbar-bg d-flex align-items-center justify-content-between ${scrolled ? 'fixed-top' : ''}`}>
                 <a href="/"><img className="logo-navbar" src={scrolled ? logo_mauve : logo_blanc} alt="logo" /></a>
                 <ul className={`d-flex align-items-center oswald navbar-text ${scrolled ? 'text-violet' : 'text-white'}`}>
-                    <li>Accueil</li>
                     <li>Concept</li>
                     <li>Équipe</li>
                     <li>Mission</li>
-                    <button className='oswald white-button'>Se connecter</button>
+                    <button className='oswald white-button'>Nous rejoindre</button>
                     <button className='oswald mauve-button'>Prendre une pause</button>
                 </ul>
             </div>
+
+
+            
         </div>
     );
 }

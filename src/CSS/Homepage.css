@@ -33,7 +33,7 @@
     color: #FFF;
     height: 200px;
     width: 250px;
-    margin-top: 5%;
+    margin-top: 3%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -44,8 +44,14 @@
 
 /* BIENFAITS */
 
+.bienfaits-container {
+    margin-top: 100px;
+}
+
 .massage-photo {
     max-height: 420px;
+    margin-right: 10%;
+    padding-top: 50px;
 }
 
 .texte-du-bloc {
@@ -53,6 +59,7 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: flex-start;
+    margin-left: 10%;
 }
 
 .bullets-bienfaits {
@@ -63,7 +70,7 @@
 
 .bullets-bienfaits p {
     font-size: 18px;
-    width: 75%;
+    width: 70%;
 }
 
 /* BANNER */
@@ -75,7 +82,7 @@
 
 /* CLIENTS */
 
-.slider img {
+.clients-slider img {
     max-width: 200px;
     max-height: 100px;
     margin-bottom: 100px;
@@ -91,4 +98,238 @@
 .clients-arrows {
     font-weight: 700;
     column-gap: 150%;
+}
+
+/* RESPONSIVE */
+
+@media (min-width: 992px) and (max-width: 1199.98px) {}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+    /* HERO */
+
+    .hero-bg {
+        height: 1000px;
+    }
+
+    .il-est-temps {
+        font-size: 55px;
+        padding: 30px 30px 0 30px;
+    }
+
+    .au-service-de {
+        font-size: 30px;
+        margin-top: 60%;
+        padding: 30px 0 0 30px;
+    }
+
+    .trois-blocs {
+        column-gap: 10px;
+    }
+
+    /* BIENFAITS */
+
+    .bienfaits-container {
+        margin-top: 150px;
+    }
+
+    .texte-du-bloc {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        margin: 0px;
+    }
+
+    .bullets-bienfaits {
+        align-items: center;
+    }
+
+    .bullets-bienfaits div {
+        width: 100%;
+    }
+
+    .bullets-bienfaits p {
+        width: 100%;
+    }
+
+    .massage-photo {
+        /* max-width: 100%;
+        height: auto; */
+        padding-top: 50px;
+    }
+
+    /* CLIENTS */
+
+    .clients-slider img {
+        max-width: 125px;
+        max-height: 75px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+    /* HERO */
+
+    .il-est-temps {
+        font-size: 65px;
+        padding: 30px 30px 0 30px;
+    }
+
+    .au-service-de {
+        font-size: 20px;
+        margin-top: 140%;
+        padding: 30px 0 0 30px;
+    }
+
+    .trois-blocs {
+        column-gap: 10px;
+    }
+
+    /* BIENFAITS */
+
+    .texte-du-bloc {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        margin: 0px;
+    }
+
+    .bullets-bienfaits {
+        align-items: center;
+    }
+
+    .bullets-bienfaits div {
+        width: 100%;
+    }
+
+    .bullets-bienfaits p {
+        width: 100%;
+    }
+
+    .massage-photo {
+        margin: auto;
+        padding-top: 50px;
+    }
+
+    .schema-une-heure {
+        width: 100%;
+    }
+
+    /* CLIENTS */
+
+    .clients-title {
+        margin-top: 50px;
+        margin-bottom: 25px;
+        font-size: 20px;
+    }
+
+    .clients-slider {
+        column-gap: 5px;
+    }
+
+    .clients-slider img {
+        max-width: 100px;
+        max-height: 50px;
+        margin-bottom: 50px;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    /* HERO */
+
+    .hero-bg {
+        height: 1000px;
+    }
+
+    .il-est-temps {
+        font-size: 45px;
+        padding: 30px 30px 0 30px;
+    }
+
+    .au-service-de {
+        font-size: 20px;
+        margin-top: 125%;
+        padding: 30px 0 0 30px;
+    }
+
+    .trois-blocs {
+        column-gap: 10px;
+    }
+
+    .trois-blocs div {
+        color: #FFF;
+        height: 150px;
+        padding: 0px;
+        row-gap: 10px;
+    }
+
+    .trois-blocs div img {
+        width: 35px
+    }
+
+    .trois-blocs div p {
+        margin-bottom: 0px;
+    }
+
+    /* BIENFAITS */
+
+    .texte-du-bloc {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        margin: 0px;
+        margin-top: 50px;
+    }
+
+    .texte-du-bloc h4 {
+        text-align: center;
+    }
+
+    .bullets-bienfaits {
+        align-items: center;
+    }
+
+    .bullets-bienfaits div {
+        width: 100%;
+    }
+
+    .bullets-bienfaits p {
+        width: 100%;
+    }
+
+    .massage-photo {
+        max-height: 350px;
+        padding-top: 50px;
+        margin: auto;
+    }
+
+    .schema-une-heure {
+        width: 100%;
+    }
+
+    /* CLIENTS */
+
+    .clients-title {
+        margin-top: 50px;
+        margin-bottom: 25px;
+        font-size: 20px;
+    }
+
+    .clients-slider {
+        column-gap: 5px;
+    }
+
+    .clients-slider img {
+        max-width: 75px;
+        max-height: 35px;
+        margin-bottom: 50px;
+    }
+
+    .clients-arrows {
+        margin-right: 10%;
+    }
 }

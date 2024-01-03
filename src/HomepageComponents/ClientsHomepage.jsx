@@ -38,7 +38,7 @@ function ClientsHomepage() {
     ]
 
     const renderClients = () => {
-        const loopedData = [...clientData, ...clientData, ...clientData]; // Triplicate the data for seamless looping
+        const loopedData = [...clientData, ...clientData, ...clientData];
         const endIndex = Math.min(startIndex + 5, loopedData.length);
         return loopedData.slice(startIndex, endIndex).map((client, index) => (
             <div key={index}>
@@ -58,7 +58,7 @@ function ClientsHomepage() {
     };
 
     return (
-        <div className='container'>
+        <div className='container clients-container'>
             <div className='d-flex justify-content-between align-items-center'>
                 <h4 className='oswald clients-title'>Ils nous ont fait confiance</h4>
                 <div className='d-flex clients-arrows'>
@@ -71,7 +71,7 @@ function ClientsHomepage() {
                     </p>
                 </div>
             </div>
-            <div className='slider d-flex justify-content-between align-items-center'>
+            <div className='clients-slider d-flex justify-content-between align-items-center'>
                 {renderClients()}
             </div>
         </div>

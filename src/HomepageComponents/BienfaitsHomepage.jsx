@@ -7,7 +7,7 @@ import massage from '../assets/massage1.png';
 function BienfaitsHomepage() {
 
     return (
-        <div className='container d-flex text-photo-bloc'>
+        <div className='container bienfaits-container d-lg-flex d-md-block text-photo-bloc'>
             <div className='texte-du-bloc'>
                 <h4 className='oswald'>Les bienfaits d’un massage Loukoumotiv’</h4>
                 <div className='bullets-bienfaits'>
@@ -26,7 +26,9 @@ function BienfaitsHomepage() {
                 </div>
                 <button className='mauve-button en-savoir-plus'>En savoir plus</button>
             </div>
-            <img className='massage-photo' src={massage} alt="massage" />
+            <div className='d-flex justify-content-center'>
+                <img className='massage-photo ' src={massage} alt="massage" />
+            </div>
         </div >
     );
 }
