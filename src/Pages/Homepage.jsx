@@ -1,5 +1,3 @@
-import '../CSS/Homepage.css';
-import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 import Header from '../Frequents/Header';
 import MobileHeader from '../Frequents/MobileHeader';
@@ -13,7 +11,7 @@ function Homepage() {
 
     return (
         <div>
-            <div className='hero-bg'>
+            <div className='hero-bg-homepage'>
             <div className='d-none d-md-block'> 
                     <Header />
                 </div>
@@ -26,7 +24,6 @@ function Homepage() {
             <BannerHomepage />
             <ClientsHomepage />
             <Footer />
-            {/* </div> */}
         </div >
     );
 }

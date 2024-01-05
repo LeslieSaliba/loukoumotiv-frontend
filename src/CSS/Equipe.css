@@ -1,0 +1,102 @@
+/* HERO */
+
+.hero-bg-equipe {
+    background-image: url(../assets/equipe-hero.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 775px;
+    position: relative;
+}
+
+.notre-point-commun {
+    color: #FFF;
+    font-size: 35px;
+    margin-top: 15%;
+}
+
+.trois-blocs-equipe div {
+    border-radius: 10px;
+    background: #8C5CBC;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.40);
+    color: #FFF;
+    height: 335px;
+    width: 250px;
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 50px;
+    row-gap: 10px;
+}
+
+/* CORE TEAM */
+
+.core-team {
+    margin-top: 25%;
+    justify-content: space-between;
+}
+
+.core-team img {
+    width: 200px;
+    height: 225px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.core-team h6 {
+    font-weight: bold;
+}
+
+.core-team p {
+    width: 200px;
+}
+
+/* BANNER EQUIPE */
+
+.banner-equipe-container {
+    background-color: #8C5CBC;
+    margin-top: 50px;
+}
+
+.equipe-title {
+    margin-top: 100px;
+    margin-bottom: 25px;
+    font-size: 25px;
+    font-weight: 700;
+    color: #FFF;
+}
+
+.equipe-arrows {
+    color: #FFF;
+}
+
+.equipe-slider img {
+    margin-bottom: 0px;
+    height: 200px;
+    width: 175px;
+    object-fit: cover;
+}
+
+.equipe-slider h6 {
+    margin-bottom: 50px;
+    color: #FFF;
+}
+
+.equipe-member {
+    color: #FFF;
+    row-gap: 20px;
+}
+
+/* INSTAGRAM */
+
+.follow-us {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+    row-gap: 15px;
+    padding: 85px;
+}

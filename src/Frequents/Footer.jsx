@@ -30,7 +30,7 @@ function Footer() {
                             <a href="mailto:loukoumotiv@gmail.com"><img src={Mail} alt="loukoumotiv@gmail.com" /></a>
                             <a href="https://www.facebook.com/profile.php?id=100090999639657"><img src={Facebook} alt="Facebook" /></a>
                             <a href="https://www.instagram.com/loukoumotiv/"><img src={Instagram} alt="Instagram" /></a>
-                            <a href=""><img src={LinkedIn} alt="Linked In" /></a>
+                            <a href="https://www.linkedin.com/company/loukoumotiv/"><img src={LinkedIn} alt="Linked In" /></a>
                         </div>
                     </div>
                     <div>
