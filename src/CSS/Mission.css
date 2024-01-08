@@ -1,0 +1,89 @@
+/* HERO */
+
+.hero-bg-mission {
+    background-image: url(../assets/mission-hero.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 700px;
+    position: relative;
+}
+
+.gares-pour-detente {
+    color: #FFF;
+    font-size: 35px;
+    margin-top: 15%;
+}
+
+.trois-blocs-mission div {
+    border-radius: 10px;
+    background: #8C5CBC;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.40);
+    color: #FFF;
+    height: 200px;
+    width: 250px;
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 50px;
+    row-gap: 10px;
+}
+
+/* STEPS */
+
+.steps-mission {
+    margin-top: 12%;
+}
+
+/* FAQ */
+
+.FAQ-title {
+    margin-top: 50px;
+    margin-bottom: 25px;
+    font-size: 25px;
+    font-weight: 700;
+    color: #FFF;
+}
+
+.questions-container {
+    background-color: white;
+    width: 60%;
+    margin-bottom: 50px;
+}
+
+.questions-container .accordion-item {
+    margin: 7px 0;
+}
+
+.questions-container .accordion-item:not(:last-child) {
+    border-bottom: 1px solid #c8a2c8;
+}
+
+.questions-container .accordion-button:hover {
+    color: #8C5CBC;
+}
+
+.accordion-body p {
+    margin: 0;
+}
+
+/* GALLERY */
+
+.gallery-container {
+    margin-bottom: 100px;
+}
+
+.gallery-container h4 {
+    margin-top: 100px;
+    margin-bottom: 25px;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.gallery-container img {
+    width: 300px;
+    height: 275px;
+    object-fit: cover;
+}

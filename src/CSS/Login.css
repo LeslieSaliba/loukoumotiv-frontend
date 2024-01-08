@@ -1,0 +1,148 @@
+/* HERO */
+
+.hero-bg-login {
+    background-image: url(../assets/contact-hero.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 775px;
+    position: relative;
+}
+
+.valeurs {
+    color: #FFF;
+    font-size: 35px;
+    margin-top: 18%;
+}
+
+.trois-blocs-login {
+    column-gap: 50px;
+}
+
+.trois-blocs-login div {
+    border-radius: 10px;
+    background: #8C5CBC;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.40);
+    color: #FFF;
+    height: 335px;
+    width: 250px;
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 50px;
+    row-gap: 10px;
+}
+
+/* FORM */
+
+.rejoindre-container {
+    margin-top: 200px;
+    column-gap: 40px;
+}
+
+.candidature-container {
+    width: 60%;
+}
+
+.info-container {
+    width: 40%;
+}
+
+.candidature-container h4,
+.info-container h4 {
+    margin: 30px 0;
+}
+
+.candidature-container form {
+    row-gap: 10px;
+    margin-bottom: 100px;
+}
+
+.candidature-container .form-control.border-dark {
+    border: 1px solid #c8a2c8 !important;
+}
+
+.candidature-container .form-check-input {
+    border: 1px solid #000 !important;
+}
+
+.candidature-container textarea {
+    resize: none;
+}
+
+.candidature-container button {
+    width: 15%;
+}
+
+.form-floating>label {
+    white-space: normal;
+    width: calc(100% - 1.5rem);
+}
+
+/* LOGIN */
+
+.login-container {
+    background-color: #8C5CBC;
+    color: #FFF;
+    margin-bottom: 50px;
+    padding: 25px;
+}
+
+.login-label {
+    color: #000 !important;
+}
+
+.form-style {
+    background-color: white !important;
+}
+
+.login-container input {
+    width: 250px;
+}
+
+.form-group.floating .login-label,
+.form-group.floating .form-control:focus~.login-label {
+    color: #000;
+}
+
+/* RESPONSIVE */
+
+@media (min-width: 992px) and (max-width: 1199.98px) {}
+
+@media (min-width: 768px) and (max-width: 991.98px) {}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+    /* FORM */
+
+    .rejoindre-container {
+        flex-direction: column;
+    }
+
+    .candidature-container {
+        width: 100%;
+    }
+
+    .info-container {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    /* FORM */
+
+    .rejoindre-container {
+        flex-direction: column;
+    }
+
+    .candidature-container {
+        width: 100%;
+    }
+
+    .info-container {
+        width: 100%;
+    }
+}

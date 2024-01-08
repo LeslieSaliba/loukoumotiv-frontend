@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import '../CSS/Homepage.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
@@ -27,19 +28,16 @@ function Header() {
 
     return (
         <div className={`header ${scrolled ? 'scrolled' : ''}`}>
-           <div className={`container-fluid navbar-bg d-flex align-items-center justify-content-between ${scrolled ? 'fixed-top' : ''}`}>
-                <a href="/"><img className="logo-navbar" src={scrolled ? logo_mauve : logo_blanc} alt="logo" /></a>
+            <div className={`container-fluid navbar-bg d-flex align-items-center justify-content-between ${scrolled ? 'fixed-top' : ''}`}>
+                <Link to='/'><img className="logo-navbar" src={scrolled ? logo_mauve : logo_blanc} alt="logo" /></Link>
                 <ul className={`d-flex align-items-center oswald navbar-text ${scrolled ? 'text-violet' : 'text-white'}`}>
-                    <li>Concept</li>
-                    <li>Équipe</li>
-                    <li>Mission</li>
-                    <button className='oswald white-button'>Nous rejoindre</button>
-                    <button className='oswald mauve-button'>Prendre une pause</button>
+                    <Link to='/concept'><li>Concept</li></Link>
+                    <Link to='/equipe'><li>Équipe</li></Link>
+                    <Link to='/mission'><li>Mission</li></Link>
+                    <Link to='/se-connecter'><button className='oswald white-button'>Nous rejoindre</button></Link>
+                    <Link to='/contact'><button className='oswald mauve-button'>Prendre une pause</button></Link>
                 </ul>
             </div>
-
-
-            
         </div>
     );
 }

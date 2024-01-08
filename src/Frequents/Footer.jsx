@@ -25,12 +25,9 @@ function Footer() {
                             <li>Votre projet</li>
                             <li>Nous rejoindre</li>
                         </ul>
-                        <div className='d-flex footer-icons'>
-                            <a href="tel:+33611073140"><img src={Téléphone} alt="0611073140" /></a>
-                            <a href="mailto:loukoumotiv@gmail.com"><img src={Mail} alt="loukoumotiv@gmail.com" /></a>
-                            <a href="https://www.facebook.com/profile.php?id=100090999639657"><img src={Facebook} alt="Facebook" /></a>
-                            <a href="https://www.instagram.com/loukoumotiv/"><img src={Instagram} alt="Instagram" /></a>
-                            <a href="https://www.linkedin.com/company/loukoumotiv/"><img src={LinkedIn} alt="Linked In" /></a>
+                        <div className="footer-social-media d-flex flex-column">
+                            <a href="tel:+33611073140"><img src={Téléphone} alt="0611073140" />06 11 07 31 40</a>
+                            <a href="mailto:loukoumotiv@gmail.com"><img src={Mail} alt="loukoumotiv@gmail.com" />loukoumotiv@gmail.com</a>
                         </div>
                     </div>
                     <div>
@@ -41,32 +38,12 @@ function Footer() {
                                 <input type="email" placeholder='Votre email juste ici' />
                                 <button className='white-button'>S'inscrire</button>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div className="container-fluid footer-bg d-flex footer-mobile d-md-none">
-                <div className='container d-flex align-items-end justify-content-between'>
-                    <div className='d-flex footer-left'>
-                        <img className='footer-logo' src={LogoVertical} alt="Loukoumotiv'" />
-                        <span>© Loukoumotiv’ 2024.</span>
-                    </div>
-                    <div className='footer-right-mobile'>
-                        <form className='footer-right'>
-                            <p className='text-center'>Inscrivez-vous à notre newsletter <br />
-                                blablabla blablabla</p>
-                            <div className='d-flex footer-input-button'>
-                                <input type="email" placeholder='Votre email juste ici' />
-                                <button className='white-button'>S'inscrire</button>
+                            <div className='social-media-icons'>
+                                <a href="https://www.facebook.com/profile.php?id=100090999639657"><img src={Facebook} alt="Facebook" /></a>
+                                <a href="https://www.instagram.com/loukoumotiv/"><img src={Instagram} alt="Instagram" /></a>
+                                <a href="https://www.linkedin.com/company/loukoumotiv/"><img src={LinkedIn} alt="Linked In" /></a>
                             </div>
                         </form>
-                        <div className='d-flex footer-icons'>
-                            <a href="tel:+33611073140"><img src={Téléphone} alt="0611073140" /></a>
-                            <a href="mailto:loukoumotiv@gmail.com"><img src={Mail} alt="loukoumotiv@gmail.com" /></a>
-                            <a href="https://www.facebook.com/profile.php?id=100090999639657"><img src={Facebook} alt="Facebook" /></a>
-                            <a href="https://www.instagram.com/loukoumotiv/"><img src={Instagram} alt="Instagram" /></a>
-                            <a href=""><img src={LinkedIn} alt="Linked In" /></a>
-                        </div>
                     </div>
                 </div>
             </div>

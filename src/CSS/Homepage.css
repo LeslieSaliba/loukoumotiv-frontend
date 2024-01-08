@@ -120,7 +120,7 @@
     .au-service-de {
         font-size: 30px;
         margin-top: 60%;
-        padding: 30px 0 0 30px;
+        padding: 0 30px 0 30px;
     }
 
     .trois-blocs {
@@ -184,6 +184,8 @@
 
     .trois-blocs {
         column-gap: 10px;
+        flex-direction: column;
+        align-items: center;
     }
 
     /* BIENFAITS */
@@ -251,12 +253,14 @@
 
     .au-service-de {
         font-size: 20px;
-        margin-top: 125%;
-        padding: 30px 0 0 30px;
+        margin-top: 130%;
+        padding: 0px 30px 0 30px;
     }
 
     .trois-blocs {
         column-gap: 10px;
+        flex-direction: column;
+        align-items: center;
     }
 
     .trois-blocs div {
