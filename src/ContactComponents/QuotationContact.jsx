@@ -127,7 +127,7 @@ function QuotationContact() {
                         </div>
                         <FormGroup className="form-control border-dark">
                             <Label>Cadre de la prestation</Label>
-                            <div className="d-flex align-items-center">
+                            <div className="d-flex align-items-center prestation-input">
                                 <div className="me-3">
                                     <FormGroup check>
                                         <Label check className="p-2 rounded">
@@ -213,7 +213,7 @@ function QuotationContact() {
                             </div>
                         </div>
                         <button
-                            className="mauve-button"
+                            className="mauve-button submit-quotation"
                             disabled={state.submitting}
                             type="submit"
                         >

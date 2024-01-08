@@ -127,6 +127,39 @@
     color: #6A3E96;
 }
 
+/* HERO SECTION */
+
+.hero-title {
+    color: #FFF;
+    font-size: 50px;
+    margin-top: 10%;
+}
+
+.hero-subtitle {
+    color: #FFF;
+    font-size: 35px;
+    margin-top: 55%;
+}
+
+.trois-blocs {
+    column-gap: 50px;
+}
+
+.trois-blocs div {
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+    row-gap: 10px;
+    border-radius: 10px;
+    background: #8C5CBC;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.40);
+    color: #FFF;
+    width: 250px;
+}
+
 /* BUTTONS */
 
 .white-button {
@@ -271,15 +304,25 @@
 @media (min-width: 768px) and (max-width: 991.98px) {}
 
 @media (min-width: 576px) and (max-width: 767.98px) {
-    .footer-right-mobile {
-        display: flex;
+    /* HERO SECTION */
+
+    .hero-title {
+        font-size: 50px;
+        padding: 20px;
+    }
+
+    .hero-subtitle {
+        font-size: 35px;
+        padding: 20px;
+    }
+
+    .trois-blocs {
         flex-direction: column;
         align-items: center;
     }
 
-    .footer-input-button {
-        flex-direction: row;
-        column-gap: 10px;
+    .third-bloc {
+        margin-bottom: 10px;
     }
 
     .mauve-button {
@@ -289,43 +332,32 @@
 
 @media (max-width: 575.98px) {
 
-    .banner-title {
-        font-size: 20px;
-        width: 80%;
+    /* HERO SECTION */
+
+    .hero-title {
+        font-size: 45px;
+        padding: 20px;
     }
 
-    .schema-une-heure {
-        width: 100%;
+    .hero-subtitle {
+        font-size: 30px;
+        padding: 20px;
     }
 
-    /* FOOTER */
-
-    .footer-logo {
-        max-height: 180px;
-    }
-
-    .footer-left span {
-        font-size: 12px;
-        margin-left: 10%;
-    }
-
-    .footer-right-mobile {
-        display: flex;
+    .trois-blocs {
         flex-direction: column;
         align-items: center;
     }
 
-    .footer-input-button {
-        flex-direction: row;
-        column-gap: 10px;
+    .third-bloc {
+        margin-bottom: 10px;
     }
 
-    .footer-input-button input {
-        width: 100%;
-    }
+    /* BANNERS */
 
-    .footer-icons {
-        column-gap: 10px;
+    .banner-title {
+        font-size: 20px;
+        width: 80%;
     }
 
     .mauve-button {

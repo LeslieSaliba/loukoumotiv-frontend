@@ -10,10 +10,10 @@ function HeroEquipe() {
     return (
         <div>
             <div className='d-flex flex-column align-items-center'>
-            <h1 className='oswald shadow-text text-center il-est-temps'>Voyagez entre de bonnes mains</h1>
+            <h1 className='oswald shadow-text text-center hero-title'>Voyagez entre de bonnes mains</h1>
             <button className='mauve-button text-center'>Réserver une mission</button>
             </div>
-            <h4 className='oswald shadow-text text-center notre-point-commun'>Notre point commun : la passion du bien-être !</h4>
+            <h4 className='oswald shadow-text text-center hero-subtitle'>Notre point commun : la passion du bien-être !</h4>
 
             <div className='d-flex justify-content-center trois-blocs trois-blocs-equipe'>
                 <div>
@@ -26,7 +26,7 @@ function HeroEquipe() {
                     <p className='text-center'>Partage</p>
                     <p className='text-center font-italic'>Enseigner en donnant de soi, cette idée a guidé notre projet. Le bien-être va au-delà du massage ; il s'agit de transmettre des outils de relaxation pour une vision holistique de l'être humain.</p>
                 </div>
-                <div>
+                <div className='third-bloc'>
                     <img src={pause} alt="pause" />
                     <p className='text-center'>Pause</p>
                     <p className='text-center font-italic'>Souvent négligée, elle est essentielle. Notre objectif est de vous faire découvrir les nombreux bienfaits souvent méconnus de cette pause dans le temps.</p>

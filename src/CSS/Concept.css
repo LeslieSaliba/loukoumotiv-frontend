@@ -5,28 +5,11 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 700px;
+    height: 100%;
     position: relative;
 }
 
-.titre2-concept {
-    color: #FFF;
-    font-size: 35px;
-    margin-top: 15%;
+.trois-blocs-concept div {
+    height: 200px;
 }
 
-.trois-blocs-concept div {
-    border-radius: 10px;
-    background: #8C5CBC;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.40);
-    color: #FFF;
-    height: 200px;
-    width: 250px;
-    margin-top: 3%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 50px;
-    row-gap: 10px;
-}

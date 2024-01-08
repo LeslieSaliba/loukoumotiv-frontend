@@ -22,15 +22,15 @@ function CoreEquipe() {
         },
         {
             name: 'Cassandra Seyi',
-            position: `Responsable partenariats`,
+            position: `Responsable partenariats et marketing`,
             imageSrc: '../equipe/Glenn.png',
         },
     ]
 
     return (
-        <div className='container d-flex core-team'>
+        <div className='container d-flex align-items-center core-team'>
             {coreTeamData.map((member, index) => (
-                <div key={index} className='d-flex justify-content-center align-items-center flex-column'>
+                <div key={index} className='d-flex justify-content-center align-items-center flex-column core-single'>
                     <img src={member.imageSrc} alt={member.name} />
                     <h6 className='text-center'>{member.name}</h6>
                     <p className='text-center font-italic'>{member.position}</p>

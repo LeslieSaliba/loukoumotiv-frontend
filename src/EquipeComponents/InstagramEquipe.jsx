@@ -6,7 +6,7 @@ import '../CSS/bootstrap.min.css';
 function InstagramEquipe() {
 
     return (
-        <div className='container follow-us'>
+        <div className='container follow-us d-flex flex-column'>
             <h4 className='text-center'>Retrouvez toutes nos aventures et
                 <br />nos prochains arrêts sur Instagram !</h4>
             <a href="https://www.instagram.com/loukoumotiv/"><button className='mauve-button'>Cliquez juste ici !</button></a>

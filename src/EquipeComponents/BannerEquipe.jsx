@@ -58,7 +58,7 @@ function BannerEquipe() {
         <div className='container-fluid banner-equipe-container'>
             <div className='container d-flex justify-content-between align-items-center'>
                 <h4 className='oswald equipe-title'>Et nos loukoums masseurs !</h4>
-                <div className='d-flex clients-arrows equipe-arrows'>
+                <div className='d-flex equipe-arrows'>
                     <p onClick={handlePrevious} disabled={startIndex === 0}>
                         &lt;
                     </p>

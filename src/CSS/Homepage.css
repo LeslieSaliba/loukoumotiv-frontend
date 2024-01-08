@@ -5,41 +5,12 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 1310px;
+    height: 100%;
     position: relative;
 }
 
-.il-est-temps {
-    color: #FFF;
-    font-size: 50px;
-    margin-top: 10%;
-}
-
-.au-service-de {
-    color: #FFF;
-    font-size: 35px;
-    margin-top: 55%;
-}
-
-.trois-blocs {
-    column-gap: 50px;
-    margin-bottom: 100px;
-}
-
-.trois-blocs div {
-    border-radius: 10px;
-    background: #8C5CBC;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.40);
-    color: #FFF;
-    height: 200px;
-    width: 250px;
-    margin-top: 3%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 50px;
-    row-gap: 15px;
+.trois-blocs-homepage {
+    /* height: 1000px; */
 }
 
 /* BIENFAITS */
@@ -51,7 +22,6 @@
 .massage-photo {
     max-height: 420px;
     margin-right: 10%;
-    padding-top: 50px;
 }
 
 .texte-du-bloc {
@@ -105,32 +75,10 @@
 @media (min-width: 992px) and (max-width: 1199.98px) {}
 
 @media (min-width: 768px) and (max-width: 991.98px) {
-
-    /* HERO */
-
-    .hero-bg {
-        height: 1000px;
-    }
-
-    .il-est-temps {
-        font-size: 55px;
-        padding: 30px 30px 0 30px;
-    }
-
-    .au-service-de {
-        font-size: 30px;
-        margin-top: 60%;
-        padding: 0 30px 0 30px;
-    }
-
-    .trois-blocs {
-        column-gap: 10px;
-    }
-
     /* BIENFAITS */
 
     .bienfaits-container {
-        margin-top: 150px;
+        margin-top: 100px;
     }
 
     .texte-du-bloc {
@@ -138,7 +86,8 @@
         flex-direction: column;
         justify-content: space-evenly;
         align-items: center;
-        margin: 0px;
+        margin: auto;
+        width: 75%;
     }
 
     .bullets-bienfaits {
@@ -154,8 +103,6 @@
     }
 
     .massage-photo {
-        /* max-width: 100%;
-        height: auto; */
         padding-top: 50px;
     }
 
@@ -168,26 +115,6 @@
 }
 
 @media (min-width: 576px) and (max-width: 767.98px) {
-
-    /* HERO */
-
-    .il-est-temps {
-        font-size: 65px;
-        padding: 30px 30px 0 30px;
-    }
-
-    .au-service-de {
-        font-size: 20px;
-        margin-top: 140%;
-        padding: 30px 0 0 30px;
-    }
-
-    .trois-blocs {
-        column-gap: 10px;
-        flex-direction: column;
-        align-items: center;
-    }
-
     /* BIENFAITS */
 
     .texte-du-bloc {
@@ -239,45 +166,6 @@
 }
 
 @media (max-width: 575.98px) {
-
-    /* HERO */
-
-    .hero-bg {
-        height: 1000px;
-    }
-
-    .il-est-temps {
-        font-size: 45px;
-        padding: 30px 30px 0 30px;
-    }
-
-    .au-service-de {
-        font-size: 20px;
-        margin-top: 130%;
-        padding: 0px 30px 0 30px;
-    }
-
-    .trois-blocs {
-        column-gap: 10px;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .trois-blocs div {
-        color: #FFF;
-        height: 150px;
-        padding: 0px;
-        row-gap: 10px;
-    }
-
-    .trois-blocs div img {
-        width: 35px
-    }
-
-    .trois-blocs div p {
-        margin-bottom: 0px;
-    }
-
     /* BIENFAITS */
 
     .texte-du-bloc {

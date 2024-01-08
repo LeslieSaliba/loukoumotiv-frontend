@@ -53,6 +53,7 @@ function Header() {
                     <div className='sidebar-top'>
                         <img src={close_menu} alt='Close menu' onClick={toggleMenu} className='close-burger-menu' />
                         <ul>
+                            <Link to='/'><li>Accueil</li></Link>
                             <Link to='/concept'><li>Concept</li></Link>
                             <Link to='/equipe'><li>Équipe</li></Link>
                             <Link to='/mission'><li>Mission</li></Link>

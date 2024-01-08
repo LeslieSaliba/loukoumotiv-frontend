@@ -121,7 +121,7 @@ function JoinFormLogin() {
                                 </FormGroup>
                             </div>
                         </div>
-                        <div className="row mb-1">
+                        <div className="">
                             <div className="col-md-12">
                                 <FormGroup floating>
                                     <Input
@@ -142,7 +142,7 @@ function JoinFormLogin() {
                             </div>
                         </div>
                         <button
-                            className="mauve-button"
+                            className="mauve-button submit-candidature"
                             disabled={state.submitting}
                             type="submit"
                         >

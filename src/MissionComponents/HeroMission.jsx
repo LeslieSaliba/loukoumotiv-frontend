@@ -10,10 +10,10 @@ function HeroMission() {
     return (
         <div>
             <div className='d-flex flex-column align-items-center'>
-                <h1 className='oswald shadow-text text-center il-est-temps'>Départ imminent : détente</h1>
+                <h1 className='oswald shadow-text text-center hero-title'>Départ imminent : détente</h1>
                 <button className='mauve-button text-center'>Réserver une mission</button>
             </div>
-            <h4 className='oswald shadow-text text-center notre-point-commun'>3 gares pour la destination bien-être</h4>
+            <h4 className='oswald shadow-text text-center hero-subtitle'>3 gares pour la destination bien-être</h4>
 
             <div className='d-flex justify-content-center trois-blocs trois-blocs-mission'>
                 <div>
@@ -24,7 +24,7 @@ function HeroMission() {
                     <img src={massage} alt="massage" />
                     <p className='text-center'>Intervention de nos loukoums masseurs</p>
                 </div>
-                <div>
+                <div className='third-bloc'>
                     <img src={relaxation} alt="relaxation" />
                     <p className='text-center'>Un temps pour vous</p>
                 </div>
