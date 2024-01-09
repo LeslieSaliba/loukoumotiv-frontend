@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import '../CSS/Mission.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
@@ -11,7 +12,7 @@ function HeroMission() {
         <div>
             <div className='d-flex flex-column align-items-center'>
                 <h1 className='oswald shadow-text text-center hero-title'>Départ imminent : détente</h1>
-                <button className='mauve-button text-center'>Réserver une mission</button>
+                <Link to='/contact'><button className='mauve-button text-center'>Réserver une mission</button></Link>
             </div>
             <h4 className='oswald shadow-text text-center hero-subtitle'>3 gares pour la destination bien-être</h4>
 

@@ -222,9 +222,10 @@
 }
 
 .banner-title {
-    font-size: 30px;
+    font-size: 25px;
     color: #FFF;
     margin-top: 35px;
+    width: 60%;
 }
 
 /* FOOTER */

@@ -1,6 +1,6 @@
 /* HERO */
 
-.hero-bg-mission {
+.hero-bg-concept {
     background-image: url(../assets/concept-hero.png);
     background-position: center;
     background-repeat: no-repeat;
@@ -13,3 +13,78 @@
     height: 200px;
 }
 
+/* CONCEPT */
+
+.chaise-photo {
+    max-height: 420px;
+    margin-right: 10%;
+}
+
+.offre-container {
+    margin-bottom: 50px;
+}
+
+/* BANNER */
+
+.loukoumBG-container {
+    background-color: #8C5CBC;
+}
+
+.loukoum-container {
+    column-gap: 50px;
+}
+
+.loukoum-image img {
+    max-height: 300px;
+    padding: 25px 0;
+}
+
+.loukoum-meaning {
+    color: #FFF;
+    font-size: 20px;
+}
+
+.loukoum-meaning p {
+    line-height: 30px;
+}
+
+/* TESTIMONIAL */
+
+.single-testimonial {
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 50px;
+}
+
+/* RESPONSIVE */
+
+@media (min-width: 992px) and (max-width: 1199.98px) {}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .chaise-photo {
+        padding-top: 50px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .chaise-photo {
+        margin: auto;
+        padding-top: 50px;
+    }
+
+    .loukoum-container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .chaise-photo {
+        max-height: 350px;
+        padding-top: 50px;
+        margin: auto;
+    }
+
+    .loukoum-container {
+        flex-direction: column;
+    }
+}

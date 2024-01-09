@@ -4,7 +4,7 @@ import MobileHeader from '../Frequents/MobileHeader';
 import HeroConcept from '../ConceptComponents/HeroConcept';
 import OffreConcept from '../ConceptComponents/OffreConcept';
 import BannerConcept from '../ConceptComponents/BannerConcept';
-import EngagementConcept from '../ConceptComponents/EngagementConcept';
+import TestimonialConcept from '../ConceptComponents/TestimonialConcept';
 import Footer from '../Frequents/Footer';
 
 function Concept() {
@@ -22,7 +22,7 @@ function Concept() {
             </div>
             <OffreConcept />
             <BannerConcept />
-            <EngagementConcept />
+            <TestimonialConcept />
             <Footer />
         </div >
     );

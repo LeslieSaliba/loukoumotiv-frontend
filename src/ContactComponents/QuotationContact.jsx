@@ -229,7 +229,7 @@ function QuotationContact() {
             </div>
             <div className="info-container">
                 <h4>xxx</h4>
-                <p>Texte générique pour dire je ne sais quoi... Texte générique pour dire je ne sais quoi... Texte générique pour dire je ne sais quoi...</p>
+                <p>Découvrez comment nous adaptons nos services pour créer un environnement relaxant répondant à vos besoins.</p>
                 <div className="footer-social-media d-flex flex-column">
                     <a href="tel:+33611073140"><img src={Téléphone} alt="0611073140" />06 11 07 31 40</a>
                     <a href="mailto:loukoumotiv@gmail.com"><img src={Mail} alt="loukoumotiv@gmail.com" />loukoumotiv@gmail.com</a>

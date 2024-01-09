@@ -27,7 +27,7 @@ function BienfaitsHomepage() {
                 <button className='mauve-button en-savoir-plus'>En savoir plus</button>
             </div>
             <div className='d-flex justify-content-center'>
-                <img className='massage-photo ' src={massage} alt="massage" />
+                <img className='massage-photo' src={massage} alt="massage" />
             </div>
         </div >
     );

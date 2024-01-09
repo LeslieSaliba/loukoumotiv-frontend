@@ -22,7 +22,6 @@ function LoginLogin() {
             <h4 className="oswald">
                 Espace connexion loukoum masseur
             </h4>
-            <p>xxx</p>
             <Form className="d-flex flex-column align-items-start" onSubmit={handleSignIn}>
                 <div>
                     <FormGroup floating>
