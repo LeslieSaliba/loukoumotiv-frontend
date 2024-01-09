@@ -10,13 +10,13 @@
 }
 
 .trois-blocs-contact div {
-    height: 335px;
+    height: 275px;
 }
 
 /* FORM */
 
 .contact-container {
-    /* margin-top: 200px; */
+    margin-top: 100px;
     column-gap: 40px;
 }
 
@@ -84,6 +84,7 @@ input[type="radio"]:checked {
 
     .contact-container {
         flex-direction: column;
+        margin-top: 0px;
     }
 
     .quotation-container {
@@ -110,6 +111,7 @@ input[type="radio"]:checked {
 
     .contact-container {
         flex-direction: column;
+        margin-top: 0px;
     }
 
     .quotation-container {

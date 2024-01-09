@@ -16,7 +16,7 @@
 /* BIENFAITS */
 
 .bienfaits-container {
-    margin-top: 100px;
+    margin-top: 150px;
 }
 
 .massage-photo {
@@ -115,7 +115,12 @@
 }
 
 @media (min-width: 576px) and (max-width: 767.98px) {
+    
     /* BIENFAITS */
+
+    .bienfaits-container {
+        margin-top: 50px;
+    }
 
     .texte-du-bloc {
         display: flex;
@@ -167,6 +172,10 @@
 
 @media (max-width: 575.98px) {
     /* BIENFAITS */
+
+    .bienfaits-container {
+        margin-top: 50px;
+    }
 
     .texte-du-bloc {
         display: flex;

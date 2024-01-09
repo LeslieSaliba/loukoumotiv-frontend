@@ -11,7 +11,7 @@ function HeroConcept() {
     return (
         <div>
             <div className='d-flex flex-column align-items-center'>
-                <h1 className='oswald shadow-text text-center hero-title'>Il est temps de faire une (vraie) pause</h1>
+                <h1 className='oswald shadow-text text-center hero-title'>Il est temps de faire <br />une (vraie) pause</h1>
                 <Link to='/contact'><button className='mauve-button text-center'>Réserver une mission</button></Link>
             </div>
             <h4 className='oswald shadow-text text-center hero-subtitle'>xxx</h4>

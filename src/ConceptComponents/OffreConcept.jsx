@@ -17,7 +17,7 @@ function OffreConcept() {
                     </div>
                     <div className='d-flex'>
                         <img className='loukoum-icon' src={loukoum} alt="loukoum" />
-                        <p>Notre équipe d'ostéopathes et de masseurs professionnels met l’accent sur la pause - le temps pour soi. </p>
+                        <p>Notre équipe d'ostéopathes et de masseurs professionnels met l’accent sur la pause - le temps pour soi.</p>
                     </div>
                     <div className='d-flex'>
                         <img className='loukoum-icon' src={loukoum} alt="loukoum" />
