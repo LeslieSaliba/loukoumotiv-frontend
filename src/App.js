@@ -6,11 +6,13 @@ import Equipe from './Pages/Equipe';
 import Mission from './Pages/Mission';
 import Contact from './Pages/Contact';
 import Login from './Pages/Login';
+import Test from './Dashboards/Test'
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
+      <Route path="/test" element={<Test />} />
       <Route path="/concept" element={<Concept />} />
       <Route path="/equipe" element={<Equipe />} />
       <Route path="/mission" element={<Mission />} />
