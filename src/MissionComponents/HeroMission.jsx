@@ -11,7 +11,7 @@ function HeroMission() {
     return (
         <div>
             <div className='d-flex flex-column align-items-center'>
-                <h1 className='oswald shadow-text text-center hero-title'>Départ imminent : détente</h1>
+                <h1 className='oswald shadow-text text-center hero-title'>Un voyage à travers notre massage</h1>
                 <Link to='/contact'><button className='mauve-button text-center'>Réserver une mission</button></Link>
             </div>
             <h4 className='oswald shadow-text text-center hero-subtitle'>3 gares pour la destination bien-être</h4>
