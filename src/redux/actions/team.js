@@ -11,7 +11,7 @@ export const getAllMembers = () => {
                 });
             })
             .catch((error) => {
-                console.error("Erreur xxx", error)
+                console.error("Erreur lors de l'affichage de l'équipe", error)
             })
     }
 }
@@ -28,7 +28,7 @@ export const getMemberById = (Id) => {
                 });
             })
             .catch((error) => {
-                console.error("Erreur xxx", error)
+                console.error(`Erreur lors de l'affichage du membre (Id : ${Id} de l'équipe`, error)
             })
     }
 }
@@ -46,7 +46,7 @@ export const login = (email, password) => {
                 });
             })
             .catch((error) => {
-                console.error("Erreur xxx", error)
+                console.error("Erreur lors de la connexion", error)
             })
     }
 }
@@ -58,12 +58,12 @@ export const addMember = (fullName, role, email, phoneNumber, password) => {
             .then((response) => {
                 const member = response.data.teamMember
                 dispatch({
-                    type: "add",
+                    type: "addMember",
                     payload: member,
                 });
             })
             .catch((error) => {
-                console.error("Erreur xxx", error)
+                console.error("Erreur lors de l'ajout du membre de l'équipe", error)
             })
     }
 }
@@ -79,7 +79,7 @@ export const getByRole = (role) => {
                 });
             })
             .catch((error) => {
-                console.error("Erreur xxx", error)
+                console.error(`Erreur lors de l'affichage des membres "${role}"`, error)
             })
     }
 }
@@ -95,7 +95,7 @@ export const deleteMember = (Id) => {
                 });
             })
             .catch((error) => {
-                console.error("Erreur xxx", error)
+                console.error("Erreur de la suppression du membre", error)
             })
     }
 }
@@ -113,7 +113,7 @@ export const updateMember = (Id, fullName, phoneNumber, email, password, dateOfB
                 });
             })
             .catch((error) => {
-                console.error("Erreur xxx", error)
+                console.error("Erreur lors de la mise à jour du membre", error)
             })
     }
 }
@@ -130,7 +130,7 @@ export const switchToMasseur = (Id) => {
                 });
             })
             .catch((error) => {
-                console.error("Erreur xxx", error)
+                console.error(`Erreur lors du passage au rôle "masseur"`, error)
             })
     }
 }
@@ -147,10 +147,7 @@ export const switchToAdmin = (Id) => {
                 });
             })
             .catch((error) => {
-                console.error("Erreur xxx", error)
+                console.error(`Erreur lors du passage au rôle "admin"`, error)
             })
     }
 }
-
-
-
