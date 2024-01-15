@@ -19,8 +19,8 @@ function App() {
       <Route path="/mission" element={<Mission />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/se-connecter" element={<Login />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/masseur" element={<MasseurDashboard />} />
+      <Route path="/admin/*" element={<AdminDashboard />} />
+      <Route path="/masseur/*" element={<MasseurDashboard />} />
       <Route path="/test" element={<Test />} />
     </Routes>
   );

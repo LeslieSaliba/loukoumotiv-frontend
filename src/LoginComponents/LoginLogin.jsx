@@ -24,9 +24,9 @@ function LoginLogin() {
 
     useEffect(() => {
         if (role === "admin") {
-            navigate('/admin')
+            navigate('/admin/missions')
         } else if (role === 'masseur') {
-            navigate('/masseur')
+            navigate('/masseur/toutes-les-missions')
         }
     }, [token])
 

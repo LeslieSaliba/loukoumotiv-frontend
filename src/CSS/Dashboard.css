@@ -1,0 +1,48 @@
+.dashboard-header {
+    background-color: #8C5CBC;
+    color: #FFF
+}
+
+.logo-dashboard {
+    max-height: 100px;
+    padding: 15px;
+}
+
+.navbar-dash {
+    column-gap: 15px;
+    margin: 15px;
+}
+
+.navbar-dash li {
+    list-style-type: none;
+    color: #000;
+    text-decoration: none;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+}
+
+.navbar-dash a {
+    text-decoration: none;
+}
+
+.navbar-dash li:hover {
+    text-decoration: underline;
+    color: #8C5CBC;
+}
+
+.hello-dash {
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.profile-dash {
+    max-height: 35px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;;
+}
+
+.profile-dash:hover {
+    transform: scale(1.1);
+}
