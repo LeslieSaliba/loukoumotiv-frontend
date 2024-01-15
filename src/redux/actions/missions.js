@@ -151,7 +151,7 @@ export const getMissionsByTeamBillingStatus = (teamBilling) => {
 export const registerToMission = (missionId, teamMemberId) => {
     const newRegistration = { missionId, teamMemberId }
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL} / missions / register`, newRegistration)
+        axios.put(`${process.env.REACT_APP_URL}/missions/register`, newRegistration)
             .then((response) => {
                 const mission = response.data.mission
                 const id = response.data.missionId
@@ -169,7 +169,7 @@ export const registerToMission = (missionId, teamMemberId) => {
 export const dropMission = (missionId, teamMemberId) => {
     const newDrop = { missionId, teamMemberId }
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL} / missions / drop`, newDrop)
+        axios.put(`${process.env.REACT_APP_URL}/missions/drop`, newDrop)
             .then((response) => {
                 const mission = response.data.mission
                 const id = response.data.missionId
