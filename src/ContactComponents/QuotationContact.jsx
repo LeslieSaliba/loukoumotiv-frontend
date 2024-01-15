@@ -44,7 +44,7 @@ function QuotationContact() {
         <div className="d-flex container contact-container">
             <div className="quotation-container">
                 <h4 className="oswald">
-                    xxx
+                    Votre projet bien-être
                 </h4>
                 <div className="">
                     <Form className="d-flex flex-column" onSubmit={handleFormSubmit}>
@@ -228,7 +228,7 @@ function QuotationContact() {
                 </div>
             </div>
             <div className="info-container">
-                <h4>xxx</h4>
+                <h4>Écrivez-nous</h4>
                 <p>Découvrez comment nous adaptons nos services pour créer un environnement relaxant répondant à vos besoins.</p>
                 <div className="footer-social-media d-flex flex-column">
                     <a href="tel:+33611073140"><img src={Téléphone} alt="0611073140" />06 11 07 31 40</a>

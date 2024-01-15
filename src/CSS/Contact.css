@@ -68,6 +68,16 @@ input[type="radio"]:checked {
     width: fit-content !important;
 }
 
+.contact-container input:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
+.contact-container textarea:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 992px) and (max-width: 1199.98px) {}

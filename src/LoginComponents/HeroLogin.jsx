@@ -16,14 +16,17 @@ function HeroLogin() {
                 <div>
                     <img src={transmission} alt="Transmission" />
                     <p className='text-center'>Transmission</p>
+                    <p className='text-center font-italic'>Notre engagement de transmission implique le partage non seulement de compétences techniques, mais aussi des valeurs définissant notre approche bienveillante et collective.</p>
                 </div>
                 <div>
                     <img src={équipe} alt="Esprit d’équipe" />
                     <p className='text-center'>Esprit d’équipe</p>
+                    <p className='text-center font-italic'>La collaboration harmonieuse des loukoums masseurs favorise le partage d'idées et le respect mutuel, créant ainsi une dynamique positive axée sur l'épanouissement individuel.</p>
                 </div>
                 <div className='third-bloc'>
                     <img src={inédit} alt="Inédit" />
                     <p className='text-center'>Inédit</p>
+                    <p className='text-center font-italic'>Avec Loukoumotiv, découvrez des lieux atypiques  pour partager votre passion du massage.</p>
                 </div>
             </div>
         </div >

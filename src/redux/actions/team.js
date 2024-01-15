@@ -21,7 +21,6 @@ export const getMemberById = (Id) => {
         axios.get(`${process.env.REACT_APP_URL}/team/getById/${Id}`)
             .then((response) => {
                 const member = response.data.teamMember
-                // console.log(member); 
                 dispatch({
                     type: "getMemberById",
                     payload: member,
@@ -33,23 +32,42 @@ export const getMemberById = (Id) => {
     }
 }
 
+// export const login = (email, password) => {
+//     return (dispatch) => {
+//         axios.post(`${process.env.REACT_APP_URL}/team/login`, { email, password })
+//             .then((response) => {
+//                 const { token, id, role } = response.data
+//                 dispatch({
+//                     type: "login",
+//                     payload: { token, id, role },
+//                 });
+//             })
+//             .catch((error) => {
+//                 console.error("Erreur lors de la connexion", error)
+//             })
+//     }
+// }
+
 export const login = (email, password) => {
     return (dispatch) => {
-        axios.post(`${process.env.REACT_APP_URL}/team/login`, { email, password })
-            .then((response) => {
-                const token = response.data.token
-                const id = response.data.id
-                // console.log(member); 
-                dispatch({
-                    type: "login",
-                    payload: { token, id },
+        return new Promise((resolve, reject) => {
+            axios
+                .post(`${process.env.REACT_APP_URL}/team/login`, { email, password })
+                .then((response) => {
+                    const { token, id, role } = response.data;
+                    dispatch({
+                        type: "login",
+                        payload: { token, id, role },
+                    });
+                    localStorage.setItem("token", token);
+                    resolve();
+                })
+                .catch((error) => {
+                    reject(error);
                 });
-            })
-            .catch((error) => {
-                console.error("Erreur lors de la connexion", error)
-            })
-    }
-}
+        });
+    };
+};
 
 export const addMember = (fullName, role, email, phoneNumber, password) => {
     const newMember = { fullName, role, email, phoneNumber, password }

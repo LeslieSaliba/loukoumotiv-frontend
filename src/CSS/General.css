@@ -299,6 +299,11 @@
     padding: 10px;
 }
 
+.footer-input-button input:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 992px) and (max-width: 1199.98px) {}

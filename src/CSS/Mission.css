@@ -1,7 +1,7 @@
 /* HERO */
 
 .hero-bg-mission {
-    background-image: url(../assets/equipe-hero.png);
+    background-image: url(../assets/mission-hero.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -50,6 +50,11 @@
 
 .questions-container .accordion-button:hover {
     color: #8C5CBC;
+}
+
+.accordion-button:focus {
+    border-color: none;
+    box-shadow: none;
 }
 
 .accordion-body p {

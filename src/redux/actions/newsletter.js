@@ -18,7 +18,7 @@ export const getAllSubscribers = () => {
 
 export const subscribeToNewsletter = (email) => {
     return (dispatch) => {
-        axios.post(`${process.env.REACT_APP_URL}/newsletter/subscribe`, email)
+        axios.post(`${process.env.REACT_APP_URL}/newsletter/subscribe`, { email })
             .then((response) => {
                 const subscriber = response.data.subscribed
                 dispatch({

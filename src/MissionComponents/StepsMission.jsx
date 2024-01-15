@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import '../CSS/Mission.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
@@ -9,7 +10,7 @@ function StepsMission() {
     return (
         <div className='container bienfaits-container steps-container d-lg-flex d-md-block text-photo-bloc'>
             <div className='texte-du-bloc'>
-                <h4 className='oswald'>xxx</h4>
+                <h4 className='oswald'>Votre voyage idéal</h4>
                 <div className='bullets-bienfaits'>
                     <div className='d-flex'>
                         <img className='loukoum-icon' src={loukoum} alt="1" />
@@ -24,10 +25,10 @@ function StepsMission() {
                         <p>Vos collaborateurs profitent de 10 à 20 minutes de relaxation, avec nos masseurs disponibles pour des conseils supplémentaires sur le bien-être.</p>
                     </div>
                 </div>
-                <button className='mauve-button en-savoir-plus'>Prendre une pause</button>
+                <Link to='/contact'><button className='mauve-button en-savoir-plus'>Prendre une pause</button></Link> 
             </div>
             <div className='d-flex justify-content-center'>
-                <img className='bloc-photo' src={massage} alt="chaise AMMA" />
+                <img className='bloc-photo' src={massage} alt="massage" />
             </div>
         </div >
     );

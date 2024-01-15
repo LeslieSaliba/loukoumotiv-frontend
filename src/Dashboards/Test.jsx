@@ -31,8 +31,6 @@ function Test() {
         console.log("newsletter", newsletter);
     }, 5000);
 
-    // console.log(team);
-
     return (
         <div className='container'>
             {/* <ul>
