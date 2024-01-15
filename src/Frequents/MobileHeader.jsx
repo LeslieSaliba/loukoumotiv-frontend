@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { subscribeToNewsletter } from '../redux/actions/newsletter'
 import { Link } from "react-router-dom";
 import '../CSS/Homepage.css';
 import '../CSS/General.css';
@@ -14,9 +16,13 @@ import Facebook from '../assets/icones/fb_blanc.png';
 import Instagram from '../assets/icones/insta_blanc.png';
 import LinkedIn from '../assets/icones/linkedin_blanc.png';
 
-function Header() {
+function MobileHeader() {
     const [scrolled, setScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const dispatch = useDispatch();
+    const newsletter = useSelector((state) => state.newsletter);
+    const [email, setEmail] = useState('');
+    const [validationError, setValidationError] = useState('');
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -38,6 +44,22 @@ function Header() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    const handleInputChange = (e) => {
+        setEmail(e.target.value);
+        setValidationError(``);
+    };
+
+    const handleSubscribe = (e) => {
+        e.preventDefault();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setValidationError(`Format d'email invalide`);
+            return;
+        }
+        dispatch(subscribeToNewsletter(email));
+        setEmail('');
+    };
 
     return (
         <div className={`header ${scrolled ? 'scrolled' : ''}`}>
@@ -76,12 +98,21 @@ function Header() {
                         </div>
 
                         <div>
-                            <form>
+                            <form onClick={handleSubscribe}>
                                 <p className='text-center'>Inscrivez-vous à notre newsletter</p>
                                 <div className='d-flex flex-column footer-input-button'>
-                                    <input type="email" placeholder='Votre email juste ici' />
+                                    <input
+                                        type="email"
+                                        placeholder='Votre email juste ici'
+                                        value={email}
+                                        onChange={handleInputChange}
+                                    />
                                     <button className='white-button'>S'inscrire</button>
+                                    {validationError && (
+                                        <span className='text-danger font-italic'>{validationError}</span>
+                                    )}
                                 </div>
+
                                 <span className='text-white'>© Loukoumotiv’ 2024.</span>
                             </form>
                         </div>
@@ -94,4 +125,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default MobileHeader;

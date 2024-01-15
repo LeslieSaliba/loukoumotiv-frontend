@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { subscribeToNewsletter } from '../redux/actions/newsletter'
 import '../CSS/Homepage.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
@@ -9,6 +12,26 @@ import Instagram from '../assets/icones/insta_blanc.png';
 import LinkedIn from '../assets/icones/linkedin_blanc.png';
 
 function Footer() {
+    const dispatch = useDispatch();
+    const newsletter = useSelector((state) => state.newsletter);
+    const [email, setEmail] = useState('');
+    const [validationError, setValidationError] = useState('');
+
+    const handleInputChange = (e) => {
+        setEmail(e.target.value);
+        setValidationError(``);
+    };
+
+    const handleSubscribe = (e) => {
+        e.preventDefault();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setValidationError(`Format d'email invalide`);
+            return;
+        }
+        dispatch(subscribeToNewsletter(email));
+        setEmail('');
+    };
 
     return (
         <div>
@@ -31,12 +54,20 @@ function Footer() {
                         </div>
                     </div>
                     <div>
-                        <form className='footer-right'>
+                        <form className='footer-right' onSubmit={handleSubscribe}>
                             <p>Inscrivez-vous à notre newsletter <br />
                                 blablabla blablabla</p>
                             <div className='d-flex footer-input-button'>
-                                <input type="email" placeholder='Votre email juste ici' />
+                                <input
+                                    type="email"
+                                    placeholder='Votre email juste ici'
+                                    value={email}
+                                    onChange={handleInputChange}
+                                />
                                 <button className='white-button'>S'inscrire</button>
+                                {validationError && (
+                                    <span className='text-danger font-italic'>{validationError}</span>
+                                )}
                             </div>
                             <div className='social-media-icons'>
                                 <a href="https://www.facebook.com/profile.php?id=100090999639657"><img src={Facebook} alt="Facebook" /></a>

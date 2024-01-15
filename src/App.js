@@ -6,6 +6,9 @@ import Equipe from './Pages/Equipe';
 import Mission from './Pages/Mission';
 import Contact from './Pages/Contact';
 import Login from './Pages/Login';
+import AdminDashboard from './Pages/AdminDashboard';
+import MasseurDashboard from './Pages/MasseurDashboard';
+import Test from './Dashboards/Test';
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
       <Route path="/mission" element={<Mission />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/se-connecter" element={<Login />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/masseur" element={<MasseurDashboard />} />
+      <Route path="/test" element={<Test />} />
     </Routes>
   );
 }

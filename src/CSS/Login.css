@@ -1,7 +1,7 @@
 /* HERO */
 
 .hero-bg-login {
-    background-image: url(../assets/contact-hero.png);
+    background-image: url(../assets/login-hero.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -63,6 +63,16 @@
     width: fit-content !important;
 }
 
+.rejoindre-container input:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
+.rejoindre-container textarea:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
 /* LOGIN */
 
 .login-container {
@@ -88,6 +98,11 @@
 .form-group.floating .login-label,
 .form-group.floating .form-control:focus~.login-label {
     color: #000;
+}
+
+.login-container input:focus{
+    border-color: none;
+    box-shadow: none;
 }
 
 /* RESPONSIVE */

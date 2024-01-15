@@ -53,6 +53,7 @@
 .equipe-arrows {
     color: #FFF;
     column-gap: 30px;
+    cursor: pointer;
 }
 
 .equipe-slider img {

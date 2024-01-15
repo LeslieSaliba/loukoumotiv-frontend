@@ -68,6 +68,7 @@
 .clients-arrows {
     font-weight: 700;
     column-gap: 150%;
+    cursor: pointer;
 }
 
 /* RESPONSIVE */

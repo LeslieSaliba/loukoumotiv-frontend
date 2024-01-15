@@ -9,7 +9,7 @@ function HeroHomepage() {
 
     return (
         <div>
-            <h1 className='oswald shadow-text text-center hero-title'>Il est temps de prendre<br />une (vraie) pause</h1>
+            <h1 className='oswald shadow-text text-center hero-title'>Une détente engagée grâce à nos massages</h1>
             <h4 className='oswald shadow-text text-center hero-subtitle'>Loukoumotiv' au service de votre bien-être</h4>
 
             <div className='d-flex justify-content-center trois-blocs trois-blocs-homepage'>

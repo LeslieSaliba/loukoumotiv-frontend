@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import '../CSS/Homepage.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
@@ -24,7 +25,7 @@ function BienfaitsHomepage() {
                         <p>des conseils pour la suite et partage d’outils d’auto-relaxation</p>
                     </div>
                 </div>
-                <button className='mauve-button en-savoir-plus'>En savoir plus</button>
+                <Link to='/concept'><button className='mauve-button en-savoir-plus'>En savoir plus</button></Link>
             </div>
             <div className='d-flex justify-content-center'>
                 <img className='massage-photo' src={massage} alt="massage" />
