@@ -18,7 +18,7 @@
     color: #000;
     text-decoration: none;
     font-family: 'Oswald', sans-serif;
-    font-weight: bold;
+    font-style: italic;
 }
 
 .navbar-dash a {
@@ -40,9 +40,83 @@
     max-height: 35px;
     margin-right: 10px;
     cursor: pointer;
-    transition: transform 0.3s ease;;
+    transition: transform 0.3s ease;
 }
 
 .profile-dash:hover {
     transform: scale(1.1);
+}
+
+/* TABLE */
+
+.scrollable-table {
+    overflow-x: auto;
+}
+
+.scrollable-table tr,
+.scrollable-table th,
+.scrollable-table td {
+    border-bottom-width: 0.5px;
+}
+
+.table-action-icon {
+    width: 30px;
+    cursor: pointer; 
+    transition: transform 0.3s ease;
+}
+
+.table-action-icon:hover {
+    transform: scale(1.1);
+}
+
+/* MODAL */
+
+.modal-dialog {
+    background-color: white;
+}
+
+.action-button {
+    background-color: #8C5CBC;
+    border: 1px solid #8C5CBC;
+    color: #FFF;
+    border-radius: 10px;
+    padding: 10px;
+    margin-right: 20px;
+}
+
+.action-button:hover {
+    background-color: #6A3E96;
+    border: 1px solid #6A3E96;
+}
+
+.cancel-button {
+    background-color: #FFF;
+    border: 1px solid #8C5CBC;
+    color: #8C5CBC;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.cancel-button:hover {
+    color: #6A3E96;
+    border: 1px solid #6A3E96;
+    background-color: #FFF;
+}
+
+.add-button {
+    margin-bottom: 20px;
+}
+
+.form-modal input,
+.form-modal select,
+.form-modal textarea {
+    border: 0.5px solid black;
+}
+
+.form-modal label {
+    font-size: 12px;
+}
+
+.permis-checkbox {
+    margin-top: 20px;
 }

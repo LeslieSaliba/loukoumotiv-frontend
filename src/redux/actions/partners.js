@@ -68,12 +68,11 @@ export const getPartnerByType = (type) => {
 
 export const deletePartner = (Id) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/partners/delete`, Id)
+        axios.delete(`${process.env.REACT_APP_URL}/partners/delete/${Id}`)
             .then((response) => {
-                const id = response.data.Id
                 dispatch({
                     type: "deletePartner",
-                    payload: id,
+                    payload: Id,
                 });
             })
             .catch((error) => {

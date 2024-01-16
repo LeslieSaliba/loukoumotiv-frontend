@@ -51,12 +51,11 @@ export const addContact = (fullName, email, phoneNumber, position, companyName, 
 
 export const deleteContact = (Id) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/directory/delete`, Id)
+        axios.delete(`${process.env.REACT_APP_URL}/directory/delete/${Id}`)
             .then((response) => {
-                const id = response.data.Id
                 dispatch({
                     type: "deleteContact",
-                    payload: id,
+                    payload: Id,
                 });
             })
             .catch((error) => {

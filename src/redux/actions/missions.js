@@ -68,12 +68,11 @@ export const getMissionByType = (type) => {
 
 export const deleteMission = (Id) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/missions/delete`, Id)
+        axios.delete(`${process.env.REACT_APP_URL}/missions/delete/${Id}`)
             .then((response) => {
-                const id = response.data.Id
                 dispatch({
                     type: "deleteMission",
-                    payload: id,
+                    payload: Id,
                 });
             })
             .catch((error) => {

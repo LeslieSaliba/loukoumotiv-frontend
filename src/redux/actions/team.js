@@ -104,12 +104,11 @@ export const getByRole = (role) => {
 
 export const deleteMember = (Id) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/team/delete`, Id)
+        axios.delete(`${process.env.REACT_APP_URL}/team/delete/${Id}`)
             .then((response) => {
-                const id = response.data.Id
                 dispatch({
                     type: "deleteMember",
-                    payload: id,
+                    payload: Id,
                 });
             })
             .catch((error) => {

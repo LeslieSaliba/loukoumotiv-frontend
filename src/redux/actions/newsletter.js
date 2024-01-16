@@ -50,12 +50,11 @@ export const getSubscriberById = (Id) => {
 
 export const unsubscribeToNewsletter = (Id) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/newsletter/unsubscribe`, Id)
+        axios.delete(`${process.env.REACT_APP_URL}/newsletter/unsubscribe/${Id}`)
             .then((response) => {
-                const id = response.data.Id
                 dispatch({
                     type: "unsubscribeToNewsletter",
-                    payload: id,
+                    payload: Id,
                 });
             })
             .catch((error) => {
