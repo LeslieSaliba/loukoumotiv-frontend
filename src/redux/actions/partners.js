@@ -20,7 +20,8 @@ export const getPartnerById = (Id) => {
     return (dispatch) => {
         axios.get(`${process.env.REACT_APP_URL}/partners/getById/${Id}`)
             .then((response) => {
-                const partner = response.data.partner
+                const partner = response.data.partner;
+                console.log('Received partner data:', partner);
                 dispatch({
                     type: "getPartnerById",
                     payload: partner,

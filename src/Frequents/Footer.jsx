@@ -55,8 +55,7 @@ function Footer() {
                     </div>
                     <div>
                         <form className='footer-right' onSubmit={handleSubscribe}>
-                            <p>Inscrivez-vous à notre newsletter <br />
-                                blablabla blablabla</p>
+                            <p>Inscrivez-vous à notre newsletter pour recevoir nos actualités bien-être</p>
                             <div className='d-flex footer-input-button'>
                                 <input
                                     type="email"

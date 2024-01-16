@@ -1,97 +1,390 @@
-import { useMemo } from 'react';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { getAllMissions, getMissionById, addMission, getMissionByType, deleteMission, updateMission, getMissionsByStatus, getMissionsByPartnerBillingStatus, getMissionsByTeamBillingStatus, registerToMission, dropMission } from '../redux/actions/missions';
+import { getMemberById } from '../redux/actions/team';
+import { getPartnerById } from '../redux/actions/partners';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Form, FormGroup, Label, Input } from 'reactstrap';
+import '../CSS/Dashboard.css';
+import '../CSS/General.css';
+import '../CSS/bootstrap.min.css';
+import remove from '../assets/icones/supprimer_noir.png';
+import edit from '../assets/icones/modifier_noir.png';
 
-//nested data is ok, see accessorKeys in ColumnDef below
-const data = [
-  {
-    name: {
-      firstName: 'John',
-      lastName: 'Doe',
-    },
-    address: '261 Erdman Ford',
-    city: 'East Daphne',
-    state: 'Kentucky',
-  },
-  {
-    name: {
-      firstName: 'Jane',
-      lastName: 'Doe',
-    },
-    address: '769 Dominic Grove',
-    city: 'Columbus',
-    state: 'Ohio',
-  },
-  {
-    name: {
-      firstName: 'Joe',
-      lastName: 'Doe',
-    },
-    address: '566 Brakus Inlet',
-    city: 'South Linda',
-    state: 'West Virginia',
-  },
-  {
-    name: {
-      firstName: 'Kevin',
-      lastName: 'Vandy',
-    },
-    address: '722 Emie Stream',
-    city: 'Lincoln',
-    state: 'Nebraska',
-  },
-  {
-    name: {
-      firstName: 'Joshua',
-      lastName: 'Rolluffs',
-    },
-    address: '32188 Larkin Turnpike',
-    city: 'Charleston',
-    state: 'South Carolina',
-  },
-];
+function MissionsDash() {
+  const dispatch = useDispatch();
+  const missions = useSelector((state) => state.missions);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [missionToEdit, setMissionToEdit] = useState({});
+  const [missionToDelete, setMissionToDelete] = useState(null);
+  const [partnerNames, setPartnerNames] = useState({});
+  const [registeredMembersNames, setRegisteredMembersNames] = useState({});
 
-const MissionsDash = () => {
-  //should be memoized or stable
-  const columns = useMemo(
-    () => [
+  const [fullName, setFullName] = useState('');
+  const [role, setRole] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [joiningDate, setJoiningDate] = useState('');
+  const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    dispatch(getAllMissions())
+  }, [dispatch])
+
+  setTimeout(() => {
+    console.log("missions", missions);
+  }, 5000);
+
+  const toggleEditModal = (mission) => {
+    setMissionToEdit(mission);
+    setShowEditModal(!showEditModal)
+  }
+
+  const handleEdit = () => {
+    if (missionToEdit && missionToEdit._id) {
+      dispatch(updateMission(missionToEdit._id, missionToEdit));
+      setShowEditModal(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const fieldValue = type === 'checkbox' ? checked : value;
+    setMissionToEdit((prevMission) => ({
+      ...prevMission,
+      [name]: fieldValue,
+    }));
+  };
+
+  const toggleDeleteModal = (Id, title) => {
+    setMissionToDelete({ Id, title });
+    setShowDeleteModal(!showDeleteModal)
+  }
+
+  const handleDelete = () => {
+    if (missionToDelete && missionToDelete.Id) {
+      dispatch(deleteMission(missionToDelete.Id));
+      setShowDeleteModal(false);
+    }
+  };
+
+  const toggleAddModal = () => {
+    setShowAddModal(!showAddModal)
+  }
+
+  const handleAdd = () => {
+    dispatch(addMission());
+    setShowAddModal(false)
+  }
+
+  return (
+    <div className="container ">
+      <div className='d-flex justify-content-end'>
+        <button className="action-button add-button" onClick={() => { toggleAddModal() }}>Ajouter une mission</button>
+      </div>
+      <table className="table scrollable-table">
+        <thead>
+          <tr>
+            <th scope="col">Titre</th>
+            <th scope="col">Partenaire</th>
+            <th scope="col">Type</th>
+            <th scope="col">Date(s)</th>
+            <th scope="col">Heures</th>
+            <th scope="col">Masseurs requis</th>
+            <th scope="col">Masseurs inscrits</th>
+            <th scope="col">Rémunération</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {missions &&
+          missions.map((mission) => (
+            <tr key={mission._id}>
+              <td scope="row">{mission.title}</td>
+              <td>{mission.partner}</td>
+              <td>{mission.type}</td>
+              <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
+              <td>{mission.time.hours}</td>
+              <td>{mission.requiredMembers}</td>
+              <td>{mission.registeredMembers}</td>
+              <td>{mission.remuneration}</td>
+              <td>
+                <img className="table-action-icon" src={edit} alt="modifier" onClick={() => toggleEditModal(mission)} />
+                <img
+                  className="table-action-icon"
+                  src={remove}
+                  alt="supprimer"
+                  onClick={() => toggleDeleteModal(mission._id, mission.title)}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* {showEditModal && (
+        <div>
+          <Modal isOpen={toggleEditModal} toggle={toggleEditModal}>
+            {missionToEdit && (
+              < Form className="form-modal">
+                <ModalHeader toggle={toggleEditModal}>Mettre à jour le membre</ModalHeader>
+                <ModalBody>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="fullName">Nom complet</Label>
+                        <Input type="text" name="fullName" id="fullName" value={missionToEdit.fullName || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="role">Rôle</Label>
+                        <Input type="select" name="role" id="role" value={missionToEdit.role || ''} onChange={handleChange} bsSize="sm">
+                          <option value="admin">Admin</option>
+                          <option value="masseur">Masseur</option>
+                        </Input>
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="phoneNumber">Numéro de téléphone</Label>
+                        <Input type="text" name="phoneNumber" id="phoneNumber" value={missionToEdit.phoneNumber || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="email">Email</Label>
+                        <Input type="email" name="email" id="email" value={missionToEdit.email || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="password">Mot de passe</Label>
+                        <Input type="password" name="password" id="password" value={missionToEdit.password || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="dateOfBirth">Date de naissance</Label>
+                        <Input type="date" name="dateOfBirth" id="dateOfBirth" value={missionToEdit.dateOfBirth || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-12">
+                      <FormGroup>
+                        <Label for="fullAddress">Adresse</Label>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <Input type="text" name="fullAddress.number" id="fullAddressNumber" value={missionToEdit.fullAddress?.number || ''} onChange={handleChange} placeholder="N° de rue" bsSize="sm" />
+                          </div>
+                          <div className="col-md-6">
+                            <Input type="text" name="fullAddress.street" id="fullAddressStreet" value={missionToEdit.fullAddress?.street || ''} onChange={handleChange} placeholder="Rue" bsSize="sm" />
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <Input type="text" name="fullAddress.ZIPcode" id="fullAddressZIPcode" value={missionToEdit.fullAddress?.ZIPcode || ''} onChange={handleChange} placeholder="Code postal" bsSize="sm" />
+                          </div>
+                          <div className="col-md-6">
+                            <Input type="text" name="fullAddress.city" id="fullAddressCity" value={missionToEdit.fullAddress?.city || ''} onChange={handleChange} placeholder="Ville" bsSize="sm" />
+                          </div>
+                        </div>
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="instagram">Instagram (@)</Label>
+                        <Input type="text" name="instagram" id="instagram" value={missionToEdit.instagram || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="picture">Photo</Label>
+                        <Input type="text" name="picture" id="picture" value={missionToEdit.picture || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="siret">Siret</Label>
+                        <Input type="text" name="siret" id="siret" value={missionToEdit.siret || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="IBAN">IBAN</Label>
+                        <Input type="text" name="IBAN" id="IBAN" value={missionToEdit.IBAN || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
+                        <Input type="date" name="joiningDate" id="joiningDate" value={missionToEdit.joiningDate || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="row">
+                        <div className="col-md-12">
+                          <FormGroup check>
+                            <Label check >
+                              <Input type="checkbox" name="drivingLicense" id="drivingLicense" checked={missionToEdit.drivingLicense || false} onChange={handleChange} />{' '}
+                              Permis de conduire
+                            </Label>
+                          </FormGroup>
+                        </div>
+                        <div className="col-md-12">
+                          <FormGroup check>
+                            <Label check>
+                              <Input type="checkbox" name="motorized" id="motorized" checked={missionToEdit.motorized || false} onChange={handleChange} />{' '}
+                              Véhiculé.e
+                            </Label>
+                          </FormGroup>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-12">
+                      <FormGroup>
+                        <Label for="notes">Notes</Label>
+                        <Input type="textarea" name="notes" id="notes" value={missionToEdit.notes || ''} onChange={handleChange} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button className='action-button' onClick={() => handleEdit()}>
+                    Enregistrer
+                  </Button>
+                  <Button className='cancel-button' onClick={toggleEditModal}>
+                    Annuler
+                  </Button>
+                </ModalFooter>
+              </Form>
+            )}
+          </Modal>
+        </div>
+      )}
+
       {
-        accessorKey: 'name.firstName', //access nested data with dot notation
-        header: 'First Name',
-        size: 150,
-      },
-      {
-        accessorKey: 'name.lastName',
-        header: 'Last Name',
-        size: 150,
-      },
-      {
-        accessorKey: 'address', //normal accessorKey
-        header: 'Address',
-        size: 200,
-      },
-      {
-        accessorKey: 'city',
-        header: 'City',
-        size: 150,
-      },
-      {
-        accessorKey: 'state',
-        header: 'State',
-        size: 150,
-      },
-    ],
-    [],
+        showDeleteModal && (
+          <div className=''>
+            <Modal isOpen={toggleDeleteModal} toggle={toggleDeleteModal}>
+              <ModalHeader toggle={toggleDeleteModal}>Retirer un loukoum de la boîte</ModalHeader>
+              <ModalBody>
+                {missionToDelete && (
+                  <p>Êtes-vous sûr de vouloir supprimer '{missionToDelete.fullName}' de l'équipe ?</p>
+                )}
+              </ModalBody>
+              <ModalFooter>
+                <Button className='action-button' onClick={() => handleDelete()}>
+                  Confirmer
+                </Button>
+                <Button className='cancel-button' onClick={toggleDeleteModal}>
+                  Annuler
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+        )}
+
+      {showAddModal && (
+        <div>
+          <Modal isOpen={toggleAddModal} toggle={toggleAddModal}>
+            < Form className="form-modal">
+              <ModalHeader toggle={toggleAddModal}>Ajouter un nouveau membre</ModalHeader>
+              <ModalBody>
+                <div className="row">
+                  <div className="col-md-6">
+                    <FormGroup>
+                      <Label for="fullName">Nom complet</Label>
+                      <Input type="text" name="fullName" id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" />
+                    </FormGroup>
+                  </div>
+                  <div className="col-md-6">
+                    <FormGroup>
+                      <Label for="role">Rôle</Label>
+                      <Input type="select" name="role" id="role" value={role} onChange={(e) => setRole(e.target.value)} bsSize="sm">
+                        <option value="admin">Admin</option>
+                        <option value="masseur">Masseur</option>
+                      </Input>
+                    </FormGroup>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-md-6">
+                    <FormGroup>
+                      <Label for="phoneNumber">Numéro de téléphone</Label>
+                      <Input type="text" name="phoneNumber" id="phoneNumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" />
+                    </FormGroup>
+                  </div>
+                  <div className="col-md-6">
+                    <FormGroup>
+                      <Label for="email">Email</Label>
+                      <Input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
+                    </FormGroup>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-md-6">
+                    <FormGroup>
+                      <Label for="password">Mot de passe</Label>
+                      <Input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
+                    </FormGroup>
+                  </div>
+                  <div className="col-md-6">
+                    <FormGroup>
+                      <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
+                      <Input type="date" name="joiningDate" id="joiningDate" value={joiningDate} onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
+                    </FormGroup>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-12">
+                    <FormGroup>
+                      <Label for="notes">Notes</Label>
+                      <Input type="textarea" name="notes" id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                    </FormGroup>
+                  </div>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button className='action-button' onClick={() => handleAdd()}>
+                  Ajouter
+                </Button>
+                <Button className='cancel-button' onClick={toggleAddModal}>
+                  Annuler
+                </Button>
+              </ModalFooter>
+            </Form>
+          </Modal>
+        </div>
+      )} */}
+
+    </div >
   );
-
-  const table = useMaterialReactTable({
-    columns,
-    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
-  });
-
-  return <MaterialReactTable table={table} />;
-};
+}
 
 export default MissionsDash;

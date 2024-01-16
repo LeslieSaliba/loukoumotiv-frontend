@@ -26,7 +26,7 @@ function HeroLogin() {
                 <div className='third-bloc'>
                     <img src={inédit} alt="Inédit" />
                     <p className='text-center'>Inédit</p>
-                    <p className='text-center font-italic'>Avec Loukoumotiv, découvrez des lieux atypiques  pour partager votre passion du massage.</p>
+                    <p className='text-center font-italic'>Avec Loukoumotiv, découvre des lieux atypiques  pour partager votre passion du massage.</p>
                 </div>
             </div>
         </div >

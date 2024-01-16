@@ -40,7 +40,7 @@ function JoinFormLogin() {
         <div className="d-flex container rejoindre-container">
             <div className="candidature-container">
                 <h4 className="oswald">
-                    xxx
+                    Faisons connaissance !
                 </h4>
                 <div className="">
                     <Form className="d-flex flex-column" onSubmit={handleFormSubmit}>
@@ -150,15 +150,15 @@ function JoinFormLogin() {
                         </button>
 
                         {state.succeeded && (
-                            <p>Merci pour votre message, l'équipe Loukoumotiv' revient vers vous dans les plus brefs délais. Prenez soin de vous !</p>
+                            <p>Merci pour votre message, l'équipe Loukoumotiv' revient vers toi dans les plus brefs délais. Prenez soin de vous !</p>
                         )}
                     </Form>
 
                 </div>
             </div>
             <div className="info-container">
-                <h4>xxx</h4>
-                <p>Texte générique pour dire je ne sais quoi... Texte générique pour dire je ne sais quoi... Texte générique pour dire je ne sais quoi...</p>
+                <h4>Nous rejoindre</h4>
+                <p>Tu souhaites travailler en équipe et partager ta passion du bien-être à travers tes massages personnalisés ? L'équipe Loukoumotiv' te tend la main !</p>
                 <div className="footer-social-media d-flex flex-column">
                     <a href="tel:+33611073140"><img src={Téléphone} alt="0611073140" />06 11 07 31 40</a>
                     <a href="mailto:loukoumotiv@gmail.com"><img src={Mail} alt="loukoumotiv@gmail.com" />loukoumotiv@gmail.com</a>
