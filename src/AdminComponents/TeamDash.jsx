@@ -271,8 +271,7 @@ function TeamDash() {
         </div>
       )}
 
-      {
-        showDeleteModal && (
+      {showDeleteModal && (
           <div className=''>
             <Modal isOpen={toggleDeleteModal} toggle={toggleDeleteModal}>
               <ModalHeader toggle={toggleDeleteModal}>Retirer un loukoum de la boîte</ModalHeader>

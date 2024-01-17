@@ -113,6 +113,17 @@
     border: 0.5px solid black;
 }
 
+.form-modal input:focus,
+.form-modal select:focus,
+.form-modal textarea:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
+.form-modal textarea{
+    resize: none;
+}
+
 .form-modal label {
     font-size: 12px;
 }
