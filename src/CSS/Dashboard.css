@@ -61,7 +61,7 @@
 
 .table-action-icon {
     width: 30px;
-    cursor: pointer; 
+    cursor: pointer;
     transition: transform 0.3s ease;
 }
 
@@ -120,7 +120,7 @@
     box-shadow: none;
 }
 
-.form-modal textarea{
+.form-modal textarea {
     resize: none;
 }
 

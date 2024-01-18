@@ -75,8 +75,8 @@ function PartnersDash() {
 
   const handleAdd = () => {
     if (!name || !type || !location || !website || !referenceContact) {
-      console.error('Tous les champs doivent être renseignés');
-      setValidationMessage('Tous les champs doivent être renseignés');
+      console.error('Les champs * doivent être renseignés');
+      setValidationMessage('Les champs * doivent être renseignés');
       return;
     }
 
@@ -132,13 +132,13 @@ function PartnersDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="fullName">Nom</Label>
+                        <Label for="fullName">Nom *</Label>
                         <Input type="text" placeholder={partnerToEdit.name || ''} onChange={(e) => setName(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="type">Type</Label>
+                        <Label for="type">Type *</Label>
                         <Input type="select" placeholder={partnerToEdit.type || ''} onChange={(e) => setType(e.target.value)} bsSize="sm" required >
                           <option value="event">Event</option>
                           <option value="corporate">Corporate</option>
@@ -151,13 +151,13 @@ function PartnersDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="place">Précision sur le lieu</Label>
+                        <Label for="place">Précision sur le lieu *</Label>
                         <Input type="text" placeholder={partnerToEdit.location?.place || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="website">Site internet</Label>
+                        <Label for="website">Site internet *</Label>
                         <Input type="text" placeholder={partnerToEdit.website || ''} onChange={(e) => setWebsite(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
@@ -169,21 +169,21 @@ function PartnersDash() {
                         <Label for="address">Adresse</Label>
                         <div className="row">
                           <div className="col-md-6">
-                            <Label for="address">N°</Label>
+                            <Label for="address">N° *</Label>
                             <Input type="text" placeholder={partnerToEdit.location?.number || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                            <Label for="address">Rue</Label>
+                            <Label for="address">Rue *</Label>
                             <Input type="text" placeholder={partnerToEdit.location?.street || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
-                            <Label for="address">Code postal</Label>
+                            <Label for="address">Code postal *</Label>
                             <Input type="text" placeholder={partnerToEdit.location?.ZIPcode || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                            <Label for="address">Ville</Label>
+                            <Label for="address">Ville *</Label>
                             <Input type="text" placeholder={partnerToEdit.location?.city || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
@@ -197,21 +197,21 @@ function PartnersDash() {
                         <Label for="address">Contact de référence</Label>
                         <div className="row">
                           <div className="col-md-6">
-                          <Label for="name">Nom</Label>
+                          <Label for="name">Nom *</Label>
                             <Input type="text" placeholder={partnerToEdit.referenceContact?.name || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, name: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                          <Label for="number">Numéro de téléphone</Label>
+                          <Label for="number">Numéro de téléphone *</Label>
                             <Input type="text" placeholder={partnerToEdit.referenceContact?.number || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, number: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
-                          <Label for="email">Email</Label>
+                          <Label for="email">Email *</Label>
                             <Input type="text" placeholder={partnerToEdit.referenceContact?.email || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, email: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                          <Label for="position">Poste</Label>
+                          <Label for="position">Poste *</Label>
                             <Input type="text" placeholder={partnerToEdit.referenceContact?.position || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, position: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
@@ -275,13 +275,13 @@ function PartnersDash() {
                 <div className="row">
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="fullName">Nom</Label>
+                      <Label for="fullName">Nom *</Label>
                       <Input type="text" onChange={(e) => setName(e.target.value)} bsSize="sm" />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="type">Type</Label>
+                      <Label for="type">Type *</Label>
                       <Input type="select" onChange={(e) => setType(e.target.value)} bsSize="sm">
                         <option value="event">Event</option>
                         <option value="corporate">Corporate</option>
@@ -294,13 +294,13 @@ function PartnersDash() {
                 <div className="row">
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="place">Précision sur le lieu</Label>
+                      <Label for="place">Précision sur le lieu *</Label>
                       <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="website">Site internet</Label>
+                      <Label for="website">Site internet *</Label>
                       <Input type="text" onChange={(e) => setWebsite(e.target.value)} bsSize="sm" />
                     </FormGroup>
                   </div>
@@ -312,21 +312,21 @@ function PartnersDash() {
                       <Label for="address">Adresse</Label>
                       <div className="row">
                         <div className="col-md-6">
-                          <Label for="fullAddress">N°</Label>
+                          <Label for="fullAddress">N° *</Label>
                           <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" />
                         </div>
                         <div className="col-md-6">
-                          <Label for="fullAddress">Rue</Label>
+                          <Label for="fullAddress">Rue *</Label>
                           <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" />
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-md-6">
-                          <Label for="fullAddress">Code postal</Label>
+                          <Label for="fullAddress">Code postal *</Label>
                           <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" />
                         </div>
                         <div className="col-md-6">
-                          <Label for="fullAddress">Ville</Label>
+                          <Label for="fullAddress">Ville *</Label>
                           <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" />
                         </div>
                       </div>
@@ -340,21 +340,21 @@ function PartnersDash() {
                       <Label for="address">Contact de référence</Label>
                       <div className="row">
                         <div className="col-md-6">
-                          <Label for="referenceContact">Nom complet</Label>
+                          <Label for="referenceContact">Nom complet *</Label>
                           <Input type="text" onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, name: e.target.value }))} bsSize="sm" />
                         </div>
                         <div className="col-md-6">
-                          <Label for="referenceContact">Numéro de téléphone</Label>
+                          <Label for="referenceContact">Numéro de téléphone *</Label>
                           <Input type="text" onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, number: e.target.value }))} bsSize="sm" />
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-md-6">
-                          <Label for="referenceContact">Email</Label>
+                          <Label for="referenceContact">Email *</Label>
                           <Input type="text" onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, email: e.target.value }))} bsSize="sm" />
                         </div>
                         <div className="col-md-6">
-                          <Label for="referenceContact">Poste</Label>
+                          <Label for="referenceContact">Poste *</Label>
                           <Input type="text" onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, position: e.target.value }))} bsSize="sm" />
                         </div>
                       </div>

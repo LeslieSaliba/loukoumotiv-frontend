@@ -150,7 +150,7 @@ function JoinFormLogin() {
                         </button>
 
                         {state.succeeded && (
-                            <p>Merci pour votre message, l'équipe Loukoumotiv' revient vers toi dans les plus brefs délais. Prenez soin de vous !</p>
+                            <p className="thank-you-message">Merci pour ton message, l'équipe Loukoumotiv' revient vers toi dans les plus brefs délais. Prends soin de toi !</p>
                         )}
                     </Form>
 

@@ -14,13 +14,12 @@ function DashHeader() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const team = useSelector((state) => state.team);
-    const [loggedMember, setLoggedMember] = useState('');
     const [showEditModal, setShowEditModal] = useState(false);
     const [memberToEdit, setMemberToEdit] = useState({});
+    const Id = localStorage.getItem('id');
 
     useEffect(() => {
-        dispatch(getMemberById())
-        setLoggedMember();
+        dispatch(getMemberById(Id))
     }, [dispatch])
 
     const handleLogout = () => {
@@ -40,22 +39,13 @@ function DashHeader() {
         }
     };
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        const fieldValue = type === 'checkbox' ? checked : value;
-        setMemberToEdit((prevMember) => ({
-            ...prevMember,
-            [name]: fieldValue,
-        }));
-    };
-
     return (
         <div className='container-fluid dashboard-header'>
             <div className='container d-flex align-items-center justify-content-between'>
                 <div><Link to='/'><img src={logo} alt="LOUKOUMOTIV'" className='logo-dashboard' /></Link></div>
-                <div className='hello-dash'>Hello xxx</div>
+                <div className='hello-dash'>Hello {team.fullName}</div>
                 <div>
-                    <img src={profile} alt="profil" className='profile-dash' onClick={() => { toggleEditModal(loggedMember) }} />
+                    <img src={profile} alt="profil" className='profile-dash' onClick={() => { toggleEditModal(team._id) }} />
                     <button className='white-button' onClick={handleLogout}>Se déconnecter</button>
                 </div>
             </div>
@@ -65,19 +55,19 @@ function DashHeader() {
                     <Modal isOpen={toggleEditModal} toggle={toggleEditModal}>
                         {memberToEdit && (
                             < Form className="form-modal">
-                                <ModalHeader toggle={toggleEditModal}>Mettre à jour le membre</ModalHeader>
+                                <ModalHeader toggle={toggleEditModal}>Mettre à jour votre profil</ModalHeader>
                                 <ModalBody>
                                     <div className="row">
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="fullName">Nom complet</Label>
-                                                <Input type="text" name="fullName" id="fullName" value={memberToEdit.fullName || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="text" placeholder={memberToEdit.fullName || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="role">Rôle</Label>
-                                                <Input type="select" name="role" id="role" value={memberToEdit.role || ''} onChange={handleChange} bsSize="sm">
+                                                <Input type="select" placeholder={memberToEdit.role || ''} bsSize="sm">
                                                     <option value="admin">Admin</option>
                                                     <option value="masseur">Masseur</option>
                                                 </Input>
@@ -89,13 +79,13 @@ function DashHeader() {
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="phoneNumber">Numéro de téléphone</Label>
-                                                <Input type="text" name="phoneNumber" id="phoneNumber" value={memberToEdit.phoneNumber || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="text" placeholder={memberToEdit.phoneNumber || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="email">Email</Label>
-                                                <Input type="email" name="email" id="email" value={memberToEdit.email || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="email" placeholder={memberToEdit.email || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -104,13 +94,13 @@ function DashHeader() {
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="password">Mot de passe</Label>
-                                                <Input type="password" name="password" id="password" value={memberToEdit.password || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="password" placeholder={memberToEdit.password || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="dateOfBirth">Date de naissance</Label>
-                                                <Input type="date" name="dateOfBirth" id="dateOfBirth" value={memberToEdit.dateOfBirth || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="date" placeholder={memberToEdit.dateOfBirth || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -121,22 +111,22 @@ function DashHeader() {
                                                 <Label for="fullAddress">Adresse</Label>
                                                 <div className="row">
                                                     <div className="col-md-6">
-                                                    <Label for="fullAddress">N°</Label>
-                                                        <Input type="text" name="fullAddress.number" id="fullAddressNumber" value={memberToEdit.fullAddress?.number || ''} onChange={handleChange} placeholder="N° de rue" bsSize="sm" />
+                                                        <Label for="fullAddress">N°</Label>
+                                                        <Input type="text" placeholder={memberToEdit.fullAddress?.number || ''} bsSize="sm" />
                                                     </div>
                                                     <div className="col-md-6">
-                                                    <Label for="fullAddress">Rue</Label>
-                                                        <Input type="text" name="fullAddress.street" id="fullAddressStreet" value={memberToEdit.fullAddress?.street || ''} onChange={handleChange} placeholder="Rue" bsSize="sm" />
+                                                        <Label for="fullAddress">Rue</Label>
+                                                        <Input type="text" placeholder={memberToEdit.fullAddress?.street || ''} bsSize="sm" />
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-md-6">
-                                                    <Label for="fullAddress">Code postal</Label>
-                                                        <Input type="text" name="fullAddress.ZIPcode" id="fullAddressZIPcode" value={memberToEdit.fullAddress?.ZIPcode || ''} onChange={handleChange} placeholder="Code postal" bsSize="sm" />
+                                                        <Label for="fullAddress">Code postal</Label>
+                                                        <Input type="text" placeholder={memberToEdit.fullAddress?.ZIPcode || ''} bsSize="sm" />
                                                     </div>
                                                     <div className="col-md-6">
-                                                    <Label for="fullAddress">Ville</Label>
-                                                        <Input type="text" name="fullAddress.city" id="fullAddressCity" value={memberToEdit.fullAddress?.city || ''} onChange={handleChange} placeholder="Ville" bsSize="sm" />
+                                                        <Label for="fullAddress">Ville</Label>
+                                                        <Input type="text" placeholder={memberToEdit.fullAddress?.city || ''} bsSize="sm" />
                                                     </div>
                                                 </div>
                                             </FormGroup>
@@ -147,13 +137,13 @@ function DashHeader() {
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="instagram">Instagram (@)</Label>
-                                                <Input type="text" name="instagram" id="instagram" value={memberToEdit.instagram || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="text" placeholder={memberToEdit.instagram || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="picture">Photo</Label>
-                                                <Input type="text" name="picture" id="picture" value={memberToEdit.picture || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="text" placeholder={memberToEdit.picture || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -162,13 +152,13 @@ function DashHeader() {
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="siret">Siret</Label>
-                                                <Input type="text" name="siret" id="siret" value={memberToEdit.siret || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="text" placeholder={memberToEdit.siret || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="IBAN">IBAN</Label>
-                                                <Input type="text" name="IBAN" id="IBAN" value={memberToEdit.IBAN || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="text" placeholder={memberToEdit.IBAN || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -177,7 +167,7 @@ function DashHeader() {
                                         <div className="col-md-6">
                                             <FormGroup>
                                                 <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
-                                                <Input type="date" name="joiningDate" id="joiningDate" value={memberToEdit.joiningDate || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="date" placeholder={memberToEdit.joiningDate || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-md-6">
@@ -185,7 +175,7 @@ function DashHeader() {
                                                 <div className="col-md-12">
                                                     <FormGroup check>
                                                         <Label check >
-                                                            <Input type="checkbox" name="drivingLicense" id="drivingLicense" checked={memberToEdit.drivingLicense || false} onChange={handleChange} />{' '}
+                                                            <Input type="checkbox" checked={memberToEdit.drivingLicense || false} />
                                                             Permis de conduire
                                                         </Label>
                                                     </FormGroup>
@@ -193,7 +183,7 @@ function DashHeader() {
                                                 <div className="col-md-12">
                                                     <FormGroup check>
                                                         <Label check>
-                                                            <Input type="checkbox" name="motorized" id="motorized" checked={memberToEdit.motorized || false} onChange={handleChange} />{' '}
+                                                            <Input type="checkbox" name="motorized" id="motorized" checked={memberToEdit.motorized || false} />{' '}
                                                             Véhiculé.e
                                                         </Label>
                                                     </FormGroup>
@@ -206,7 +196,7 @@ function DashHeader() {
                                         <div className="col-md-12">
                                             <FormGroup>
                                                 <Label for="notes">Notes</Label>
-                                                <Input type="textarea" name="notes" id="notes" value={memberToEdit.notes || ''} onChange={handleChange} bsSize="sm" />
+                                                <Input type="textarea" placeholder={memberToEdit.notes || ''} bsSize="sm" />
                                             </FormGroup>
                                         </div>
                                     </div>

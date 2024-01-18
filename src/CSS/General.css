@@ -304,6 +304,15 @@
     box-shadow: none;
 }
 
+/* FORMS */
+
+.thank-you-message{
+    color: #8C5CBC;
+    font-size: larger;
+    font-style: italic;
+    margin-top: 15px;
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 992px) and (max-width: 1199.98px) {}

@@ -19,19 +19,19 @@ function TeamDash() {
   const [memberToDelete, setMemberToDelete] = useState(null);
   const [validationMessage, setValidationMessage] = useState('');
 
-  const [fullName, setFullName] = useState('');
-  const [role, setRole] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [joiningDate, setJoiningDate] = useState('');
-  const [notes, setNotes] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [fullName, setFullName] = useState(memberToEdit.fullName || '');
+  const [role, setRole] = useState(memberToEdit.role || '');
+  const [phoneNumber, setPhoneNumber] = useState(memberToEdit.phoneNumber || '');
+  const [email, setEmail] = useState(memberToEdit.email || '');
+  const [password, setPassword] = useState(memberToEdit.password || '');
+  const [joiningDate, setJoiningDate] = useState(memberToEdit.joiningDate || '');
+  const [notes, setNotes] = useState(memberToEdit.notes || '');
+  const [dateOfBirth, setDateOfBirth] = useState(memberToEdit.dateOfBirth || '');
   const [fullAddress, setFullAddress] = useState({
-    number: null,
-    street: null,
-    ZIPcode: null,
-    city: null,
+    number: memberToEdit.number || '',
+    street: memberToEdit.street || '',
+    ZIPcode: memberToEdit.ZIPcode || '',
+    city: memberToEdit.city || '',
   });
   const [instagram, setInstagram] = useState('');
   const [picture, setPicture] = useState(null);
@@ -43,6 +43,30 @@ function TeamDash() {
   useEffect(() => {
     dispatch(getAllMembers())
   }, [dispatch])
+
+  useEffect(() => {
+    if (memberToEdit) {
+      setFullName(memberToEdit.fullName || '');
+      setRole(memberToEdit.role || '');
+      setPhoneNumber(memberToEdit.phoneNumber || '');
+      setEmail(memberToEdit.email || '');
+      setPassword(memberToEdit.password || '');
+      setJoiningDate(memberToEdit.joiningDate || '');
+      setNotes(memberToEdit.notes || '');
+      setDateOfBirth(memberToEdit.dateOfBirth || '');
+      setFullAddress({
+        number: memberToEdit.fullAddress?.number || '',
+        street: memberToEdit.fullAddress?.street || '',
+        ZIPcode: memberToEdit.fullAddress?.ZIPcode || '',
+        city: memberToEdit.fullAddress?.city || '',
+      });
+      setInstagram(memberToEdit.instagram || '');
+      setSiret(memberToEdit.siret || '');
+      setIBAN(memberToEdit.IBAN || '');
+      setDrivingLicense(memberToEdit.drivingLicense || false);
+      setMotorized(memberToEdit.motorized || false);
+    }
+  }, [memberToEdit]);
 
   setTimeout(() => {
     console.log("team", team);
@@ -56,7 +80,7 @@ function TeamDash() {
   const handleEdit = () => {
     console.log(fullAddress);
     if (memberToEdit && memberToEdit._id) {
-      dispatch(updateMember(memberToEdit._id, fullName, phoneNumber, email, password, dateOfBirth, JSON.stringify(fullAddress), instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture));
+      dispatch(updateMember(memberToEdit._id, fullName, phoneNumber, email, password, dateOfBirth, fullAddress.ZIPcode, fullAddress.city, fullAddress.number, fullAddress.street, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture));
       setShowEditModal(false);
     }
   };
@@ -79,8 +103,8 @@ function TeamDash() {
 
   const handleAdd = () => {
     if (!fullName || !role || !phoneNumber || !email || !password || !joiningDate) {
-      console.error('Tous les champs doivent être renseignés');
-      setValidationMessage('Tous les champs doivent être renseignés');
+      console.error('Les champs * doivent être renseignés');
+      setValidationMessage('Les champs * doivent être renseignés');
       return;
     }
     dispatch(addMember(fullName, role, phoneNumber, email, password, joiningDate, notes));
@@ -112,12 +136,12 @@ function TeamDash() {
           </tr>
         </thead>
         <tbody>
-          {team && team.map((teamMember) => (
+          {team && team?.map((teamMember) => (
             <tr key={teamMember._id}>
               <td scope="row">{teamMember.fullName}</td>
               <td>{teamMember.email}</td>
               {console.log(teamMember.fullAddress)}
-              <td>{teamMember.fullAddress ? (JSON.parse(teamMember.fullAddress).city + ' ' + JSON.parse(teamMember.fullAddress).ZIPcode) : '-'}</td>
+              <td>{teamMember.fullAddress ? (teamMember.fullAddress.city + ' ' + teamMember.fullAddress.ZIPcode) : '-'}</td>
               <td>{teamMember.drivingLicense ? "oui" : "non"}, {teamMember.motorized ? "oui" : "non"}</td>
               <td>{teamMember.role}</td>
               <td>
@@ -139,14 +163,14 @@ function TeamDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="fullName">Nom complet</Label>
-                        <Input type="text" placeholder={memberToEdit.fullName || ''} onChange={(e) => setFullName(e.target.value)} bsSize="sm" disabled />
+                        <Label for="fullName">Nom complet *</Label>
+                        <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="role">Rôle</Label>
-                        <Input type="select" placeholder={memberToEdit.role || ''} onChange={(e) => setRole(e.target.value)} bsSize="sm">
+                        <Label for="role">Rôle *</Label>
+                        <Input type="select" value={role} onChange={(e) => setRole(e.target.value)} bsSize="sm" required >
                           <option value="admin">Admin</option>
                           <option value="masseur">Masseur</option>
                         </Input>
@@ -157,14 +181,14 @@ function TeamDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="phoneNumber">Numéro de téléphone</Label>
-                        <Input type="text" placeholder={memberToEdit.phoneNumber || ''} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" />
+                        <Label for="phoneNumber">Numéro de téléphone *</Label>
+                        <Input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="email">Email</Label>
-                        <Input type="email" placeholder={memberToEdit.email || ''} onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
+                        <Label for="email">Email *</Label>
+                        <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -172,14 +196,14 @@ function TeamDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="password">Mot de passe</Label>
-                        <Input type="password" placeholder={memberToEdit.password || ''} onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
+                        <Label for="password">Mot de passe *</Label>
+                        <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="dateOfBirth">Date de naissance</Label>
-                        <Input type="date" placeholder={memberToEdit.dateOfBirth || ''} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" disabled />
+                        <Input type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>
@@ -190,22 +214,22 @@ function TeamDash() {
                         <Label for="fullAddress">Adresse</Label>
                         <div className="row">
                           <div className="col-md-6">
-                          <Label for="fullAddress">N°</Label>
-                            <Input type="text" placeholder={memberToEdit.fullAddress?.number || ''} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, number: e.target.value }))} bsSize="sm" />
+                            <Label for="fullAddress">N°</Label>
+                            <Input type="text" value={fullAddress.number} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, number: e.target.value }))} bsSize="sm" />
                           </div>
                           <div className="col-md-6">
-                          <Label for="fullAddress">Rue</Label>
-                            <Input type="text" placeholder={memberToEdit.fullAddress?.street || ''} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, street: e.target.value }))} bsSize="sm" />
+                            <Label for="fullAddress">Rue</Label>
+                            <Input type="text" value={fullAddress.street} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, street: e.target.value }))} bsSize="sm" />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
-                          <Label for="fullAddress">Code postal</Label>
-                            <Input type="text" placeholder={memberToEdit.fullAddress?.ZIPcode || ''} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, ZIPcode: e.target.value }))} bsSize="sm" />
+                            <Label for="fullAddress">Code postal</Label>
+                            <Input type="text" value={fullAddress.ZIPcode} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, ZIPcode: e.target.value }))} bsSize="sm" />
                           </div>
                           <div className="col-md-6">
-                          <Label for="fullAddress">Ville</Label>
-                            <Input type="text" placeholder={memberToEdit.fullAddress?.city || ''} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
+                            <Label for="fullAddress">Ville</Label>
+                            <Input type="text" value={fullAddress.city} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
                           </div>
                         </div>
                       </FormGroup>
@@ -216,13 +240,13 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="instagram">Instagram (@)</Label>
-                        <Input type="text" placeholder={memberToEdit.instagram || ''} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
+                        <Input type="text" value={instagram} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="picture">Photo</Label>
-                        <Input type="file" placeholder={memberToEdit.picture || ''} onChange={(e) => setPicture(e.target.files[0])} bsSize="sm" />
+                        <Input type="file" value={picture} onChange={(e) => setPicture(e.target.files[0])} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -231,13 +255,13 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="siret">Siret</Label>
-                        <Input type="text" placeholder={memberToEdit.siret || ''} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
+                        <Input type="text" value={siret} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="IBAN">IBAN</Label>
-                        <Input type="text" placeholder={memberToEdit.IBAN || ''} onChange={(e) => setIBAN(e.target.value)} bsSize="sm" />
+                        <Input type="text" value={IBAN} onChange={(e) => setIBAN(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -246,7 +270,7 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
-                        <Input type="date" placeholder={memberToEdit.joiningDate || ''} onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
+                        <Input type="date" value={joiningDate} onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -275,7 +299,7 @@ function TeamDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" placeholder={memberToEdit.notes || ''} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                        <Input type="textarea" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -288,8 +312,8 @@ function TeamDash() {
                     Annuler
                   </Button>
                   {validationMessage && (
-                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
+                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                  )}
                 </ModalFooter>
               </Form>
             )}
@@ -327,13 +351,13 @@ function TeamDash() {
                 <div className="row">
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="fullName">Nom complet</Label>
+                      <Label for="fullName">Nom complet *</Label>
                       <Input type="text" onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="role">Rôle</Label>
+                      <Label for="role">Rôle *</Label>
                       <Input type="select" onChange={(e) => setRole(e.target.value)} bsSize="sm" required>
                         <option value="admin">Admin</option>
                         <option value="masseur">Masseur</option>
@@ -345,13 +369,13 @@ function TeamDash() {
                 <div className="row">
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="phoneNumber">Numéro de téléphone</Label>
+                      <Label for="phoneNumber">Numéro de téléphone *</Label>
                       <Input type="text" onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="email">Email</Label>
+                      <Label for="email">Email *</Label>
                       <Input type="email" onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
@@ -360,14 +384,14 @@ function TeamDash() {
                 <div className="row">
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="password">Mot de passe</Label>
+                      <Label for="password">Mot de passe *</Label>
                       <Input type="password" onChange={(e) => setPassword(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
-                      <Input type="date" onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" required />
+                      <Label for="joiningDate">Date de début chez Loukoumotiv' *</Label>
+                      <Input type="date" onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm"/>
                     </FormGroup>
                   </div>
                 </div>

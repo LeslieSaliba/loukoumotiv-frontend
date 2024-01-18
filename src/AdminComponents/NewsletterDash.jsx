@@ -108,8 +108,8 @@ function NewsletterDash() {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <FormGroup>
-                                            <Label for="email">Email</Label>
-                                            <Input type="email" onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
+                                            <Label for="email">Email *</Label>
+                                            <Input type="email" onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                                         </FormGroup>
                                     </div>
                                 </div>

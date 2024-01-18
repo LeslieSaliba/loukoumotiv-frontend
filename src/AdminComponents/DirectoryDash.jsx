@@ -64,8 +64,8 @@ function DirectoryDash() {
 
   const handleAdd = () => {
     if (!fullName || !email || !phoneNumber || !position) {
-      console.error('Tous les champs doivent être renseignés');
-      setValidationMessage('Tous les champs doivent être renseignés');
+      console.error('Les champs * doivent être renseignés');
+      setValidationMessage('Les champs * doivent être renseignés');
       return;
     }
 
@@ -123,13 +123,13 @@ function DirectoryDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="fullName">Nom</Label>
+                        <Label for="fullName">Nom *</Label>
                         <Input type="text" placeholder={contactToEdit.fullName || ''} onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="type">Email</Label>
+                        <Label for="type">Email *</Label>
                         <Input type="text" placeholder={contactToEdit.email || ''} onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
@@ -138,13 +138,13 @@ function DirectoryDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="place">Numéro de téléphone</Label>
+                        <Label for="place">Numéro de téléphone *</Label>
                         <Input type="text" placeholder={contactToEdit.phoneNumber || ''} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="position">Poste / activité </Label>
+                        <Label for="position">Poste / activité *</Label>
                         <Input type="text" placeholder={contactToEdit.position || ''} onChange={(e) => setPosition(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
@@ -153,7 +153,7 @@ function DirectoryDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="position">Entreprise</Label>
+                        <Label for="position">Entreprise (si applicable)</Label>
                         <Input type="text" placeholder={contactToEdit.companyName || ''} onChange={(e) => setCompanyName(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
@@ -215,13 +215,13 @@ function DirectoryDash() {
                 <div className="row">
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="fullName">Nom</Label>
+                      <Label for="fullName">Nom *</Label>
                       <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="email">Email</Label>
+                      <Label for="email">Email *</Label>
                       <Input type="email" onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
@@ -230,13 +230,13 @@ function DirectoryDash() {
                 <div className="row">
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="phoneNumber">Numéro de téléphone</Label>
+                      <Label for="phoneNumber">Numéro de téléphone *</Label>
                       <Input type="text" onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="position">Poste / activité </Label>
+                      <Label for="position">Poste / activité *</Label>
                       <Input type="text" onChange={(e) => setPosition(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>

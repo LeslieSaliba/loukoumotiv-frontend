@@ -5,6 +5,7 @@ export const getAllMembers = () => {
         axios.get(`${process.env.REACT_APP_URL}/team/getAll`)
             .then((response) => {
                 const teamMembers = response.data.teamMembers
+                console.log(response)
                 dispatch({
                     type: "getAllMembers",
                     payload: teamMembers,
@@ -60,6 +61,7 @@ export const login = (email, password) => {
                         payload: { token, id, role },
                     });
                     localStorage.setItem("token", token);
+                    localStorage.setItem("id", id);
                     resolve();
                 })
                 .catch((error) => {
