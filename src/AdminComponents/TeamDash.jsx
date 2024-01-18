@@ -44,30 +44,6 @@ function TeamDash() {
     dispatch(getAllMembers())
   }, [dispatch])
 
-  useEffect(() => {
-    if (memberToEdit) {
-      setFullName(memberToEdit.fullName || '');
-      setRole(memberToEdit.role || '');
-      setPhoneNumber(memberToEdit.phoneNumber || '');
-      setEmail(memberToEdit.email || '');
-      setPassword(memberToEdit.password || '');
-      setJoiningDate(memberToEdit.joiningDate || '');
-      setNotes(memberToEdit.notes || '');
-      setDateOfBirth(memberToEdit.dateOfBirth || '');
-      setFullAddress({
-        number: memberToEdit.fullAddress?.number || '',
-        street: memberToEdit.fullAddress?.street || '',
-        ZIPcode: memberToEdit.fullAddress?.ZIPcode || '',
-        city: memberToEdit.fullAddress?.city || '',
-      });
-      setInstagram(memberToEdit.instagram || '');
-      setSiret(memberToEdit.siret || '');
-      setIBAN(memberToEdit.IBAN || '');
-      setDrivingLicense(memberToEdit.drivingLicense || false);
-      setMotorized(memberToEdit.motorized || false);
-    }
-  }, [memberToEdit]);
-
   setTimeout(() => {
     console.log("team", team);
   }, 5000);
@@ -80,7 +56,7 @@ function TeamDash() {
   const handleEdit = () => {
     console.log(fullAddress);
     if (memberToEdit && memberToEdit._id) {
-      dispatch(updateMember(memberToEdit._id, fullName, phoneNumber, email, password, dateOfBirth, fullAddress.ZIPcode, fullAddress.city, fullAddress.number, fullAddress.street, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture));
+      dispatch(updateMember(memberToEdit._id, fullName, role, phoneNumber, email, password, dateOfBirth, fullAddress.ZIPcode, fullAddress.city, fullAddress.number, fullAddress.street, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture));
       setShowEditModal(false);
     }
   };
