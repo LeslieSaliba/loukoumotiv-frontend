@@ -15,6 +15,7 @@ function NewsletterDash() {
     const [contactToUnsubscribe, setContactToUnsubscribe] = useState(null);
     const [showSubscribeModal, setShowSubscribeModal] = useState(false);
     const [email, setEmail] = useState('');
+    const [validationMessage, setValidationMessage] = useState('');
 
     useEffect(() => {
         dispatch(getAllSubscribers())
@@ -41,8 +42,16 @@ function NewsletterDash() {
     }
 
     const handleSubscribe = () => {
-        dispatch(subscribeToNewsletter());
+        if (!email) {
+            console.error('Renseignez un mail à inscrire à la newsletter');
+            setValidationMessage('Renseignez un mail à inscrire à la newsletter');
+            return;
+        }
+
+        dispatch(subscribeToNewsletter(email));
         setShowSubscribeModal(false);
+
+        setEmail('');
     };
 
     return (
@@ -100,7 +109,7 @@ function NewsletterDash() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="email">Email</Label>
-                                            <Input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
+                                            <Input type="email" onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
@@ -112,6 +121,9 @@ function NewsletterDash() {
                                 <Button className='cancel-button' onClick={toggleSubscribeModal}>
                                     Annuler
                                 </Button>
+                                {validationMessage && (
+                                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                                )}
                             </ModalFooter>
                         </Form>
                     </Modal>

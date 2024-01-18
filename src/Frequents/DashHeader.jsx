@@ -121,17 +121,21 @@ function DashHeader() {
                                                 <Label for="fullAddress">Adresse</Label>
                                                 <div className="row">
                                                     <div className="col-md-6">
+                                                    <Label for="fullAddress">N°</Label>
                                                         <Input type="text" name="fullAddress.number" id="fullAddressNumber" value={memberToEdit.fullAddress?.number || ''} onChange={handleChange} placeholder="N° de rue" bsSize="sm" />
                                                     </div>
                                                     <div className="col-md-6">
+                                                    <Label for="fullAddress">Rue</Label>
                                                         <Input type="text" name="fullAddress.street" id="fullAddressStreet" value={memberToEdit.fullAddress?.street || ''} onChange={handleChange} placeholder="Rue" bsSize="sm" />
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-md-6">
+                                                    <Label for="fullAddress">Code postal</Label>
                                                         <Input type="text" name="fullAddress.ZIPcode" id="fullAddressZIPcode" value={memberToEdit.fullAddress?.ZIPcode || ''} onChange={handleChange} placeholder="Code postal" bsSize="sm" />
                                                     </div>
                                                     <div className="col-md-6">
+                                                    <Label for="fullAddress">Ville</Label>
                                                         <Input type="text" name="fullAddress.city" id="fullAddressCity" value={memberToEdit.fullAddress?.city || ''} onChange={handleChange} placeholder="Ville" bsSize="sm" />
                                                     </div>
                                                 </div>

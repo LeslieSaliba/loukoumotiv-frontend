@@ -15,8 +15,9 @@ function DirectoryDash() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [contactToEdit, setcontactToEdit] = useState({});
+  const [contactToEdit, setContactToEdit] = useState({});
   const [contactToDelete, setContactToDelete] = useState(null);
+  const [validationMessage, setValidationMessage] = useState('');
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -34,24 +35,15 @@ function DirectoryDash() {
   }, 5000);
 
   const toggleEditModal = (contact) => {
-    setcontactToEdit(contact);
+    setContactToEdit(contact);
     setShowEditModal(!showEditModal)
   }
 
   const handleEdit = () => {
     if (contactToEdit && contactToEdit._id) {
-      dispatch(updateContact(contactToEdit._id, contactToEdit));
+      dispatch(updateContact(contactToEdit._id, fullName, email, phoneNumber, position, companyName, notes));
       setShowEditModal(false);
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const fieldValue = type === 'checkbox' ? checked : value;
-    setcontactToEdit((prevContact) => ({
-      ...prevContact,
-      [name]: fieldValue,
-    }));
   };
 
   const toggleDeleteModal = (Id, fullName) => {
@@ -71,8 +63,21 @@ function DirectoryDash() {
   }
 
   const handleAdd = () => {
-    dispatch(addContact());
+    if (!fullName || !email || !phoneNumber || !position) {
+      console.error('Tous les champs doivent être renseignés');
+      setValidationMessage('Tous les champs doivent être renseignés');
+      return;
+    }
+
+    dispatch(addContact(fullName, email, phoneNumber, position, companyName, notes));
     setShowAddModal(false)
+
+    setFullName('');
+    setEmail('');
+    setPhoneNumber('');
+    setPosition('');
+    setCompanyName('');
+    setNotes('');
   }
 
   return (
@@ -119,43 +124,37 @@ function DirectoryDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="fullName">Nom</Label>
-                        <Input type="text" name="fullName" id="fullName" value={contactToEdit.fullName || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="text" placeholder={contactToEdit.fullName || ''} onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Email</Label>
-                        <Input type="text" name="email" id="email" value={contactToEdit.email || ''} onChange={handleChange} placeholder="Email" bsSize="sm" />
+                        <Input type="text" placeholder={contactToEdit.email || ''} onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
 
                   <div className="row">
                     <div className="col-md-6">
-                    <FormGroup>
+                      <FormGroup>
                         <Label for="place">Numéro de téléphone</Label>
-                        <Input type="text" name="phoneNumber" id="phoneNumber" value={contactToEdit.phoneNumber || ''} onChange={handleChange} placeholder="Numéro de téléphone" bsSize="sm" />
+                        <Input type="text" placeholder={contactToEdit.phoneNumber || ''} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="position">Poste</Label>
-                        <Input type="text" name="position" id="position" value={contactToEdit.position || ''} onChange={handleChange} bsSize="sm" />
+                        <Label for="position">Poste / activité </Label>
+                        <Input type="text" placeholder={contactToEdit.position || ''} onChange={(e) => setPosition(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
 
                   <div className="row">
-                    <div className="col-md-6">
-                    <FormGroup>
-                        <Label for="place">Numéro de téléphone</Label>
-                        <Input type="text" name="phoneNumber" id="phoneNumber" value={contactToEdit.phoneNumber || ''} onChange={handleChange} placeholder="Numéro de téléphone" bsSize="sm" />
-                      </FormGroup>
-                    </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="position">Entreprise</Label>
-                        <Input type="text" name="companyName" id="companyName" value={contactToEdit.companyName || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="text" placeholder={contactToEdit.companyName || ''} onChange={(e) => setCompanyName(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -164,7 +163,7 @@ function DirectoryDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" name="notes" id="notes" value={contactToEdit.notes || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="textarea" placeholder={contactToEdit.notes || ''} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -176,6 +175,9 @@ function DirectoryDash() {
                   <Button className='cancel-button' onClick={toggleEditModal}>
                     Annuler
                   </Button>
+                  {validationMessage && (
+                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                )}
                 </ModalFooter>
               </Form>
             )}
@@ -214,37 +216,37 @@ function DirectoryDash() {
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="fullName">Nom</Label>
-                      <Input type="text" name="fullName" id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" />
+                      <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="email">Email</Label>
-                      <Input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" bsSize="sm" />
+                      <Input type="email" onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                 </div>
 
                 <div className="row">
                   <div className="col-md-6">
-                  <FormGroup>
+                    <FormGroup>
                       <Label for="phoneNumber">Numéro de téléphone</Label>
-                      <Input type="text" name="phoneNumber" id="phoneNumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="Numéro de téléphone" bsSize="sm" />
+                      <Input type="text" onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
-                  <FormGroup>
-                      <Label for="position">Poste</Label>
-                      <Input type="text" name="position" id="position" value={position} onChange={(e) => setPosition(e.target.value)} bsSize="sm" />
+                    <FormGroup>
+                      <Label for="position">Poste / activité </Label>
+                      <Input type="text" onChange={(e) => setPosition(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                 </div>
 
                 <div className="row">
                   <div className="col-md-6">
-                  <FormGroup>
-                      <Label for="companyName">Entreprise</Label>
-                      <Input type="text" name="companyName" id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Entreprise (si applicable)" bsSize="sm" />
+                    <FormGroup>
+                      <Label for="companyName">Entreprise (si applicable)</Label>
+                      <Input type="text" onChange={(e) => setCompanyName(e.target.value)} bsSize="sm" />
                     </FormGroup>
                   </div>
                 </div>
@@ -253,7 +255,7 @@ function DirectoryDash() {
                   <div className="col-md-12">
                     <FormGroup>
                       <Label for="notes">Notes</Label>
-                      <Input type="textarea" name="notes" id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                      <Input type="textarea" onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                     </FormGroup>
                   </div>
                 </div>
@@ -265,6 +267,9 @@ function DirectoryDash() {
                 <Button className='cancel-button' onClick={toggleAddModal}>
                   Annuler
                 </Button>
+                {validationMessage && (
+                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                )}
               </ModalFooter>
             </Form>
           </Modal>

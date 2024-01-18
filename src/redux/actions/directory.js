@@ -64,8 +64,8 @@ export const deleteContact = (Id) => {
     }
 }
 
-export const updateContact = (Id, fullName, phoneNumber, email, password, dateOfBirth, fullAddress, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture) => {
-    const updatedContact = { fullName, phoneNumber, email, password, dateOfBirth, fullAddress, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture }
+export const updateContact = (Id, fullName, email, phoneNumber, position, companyName, notes) => {
+    const updatedContact = { Id, fullName, email, phoneNumber, position, companyName, notes}
     return (dispatch) => {
         axios.put(`${process.env.REACT_APP_URL}/directory/update/${Id}`, updatedContact)
             .then((response) => {

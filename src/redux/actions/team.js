@@ -69,8 +69,8 @@ export const login = (email, password) => {
     };
 };
 
-export const addMember = (fullName, role, email, phoneNumber, password) => {
-    const newMember = { fullName, role, email, phoneNumber, password }
+export const addMember = (fullName, role, phoneNumber, email, password, joiningDate, notes) => {
+    const newMember = { fullName, role, email, phoneNumber, password, joiningDate, notes }
     return (dispatch) => {
         axios.post(`${process.env.REACT_APP_URL}/team/add`, newMember)
             .then((response) => {
@@ -118,9 +118,28 @@ export const deleteMember = (Id) => {
 }
 
 export const updateMember = (Id, fullName, phoneNumber, email, password, dateOfBirth, fullAddress, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture) => {
-    const updatedMember = { fullName, phoneNumber, email, password, dateOfBirth, fullAddress, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture }
+    const formData = new FormData();
+    formData.append('fullName', fullName);
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('dateOfBirth', dateOfBirth);
+    formData.append('fullAddress', fullAddress);
+    formData.append('instagram', instagram);
+    formData.append('siret', siret);
+    formData.append('IBAN', IBAN);
+    formData.append('joiningDate', joiningDate);
+    formData.append('drivingLicense', drivingLicense);
+    formData.append('motorized', motorized);
+    formData.append('notes', notes);
+    formData.append('file', picture);
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL}/team/update/${Id}`, updatedMember)
+        console.log(formData);
+        axios.put(`${process.env.REACT_APP_URL}/team/update/${Id}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
             .then((response) => {
                 const member = response.data.teamMember
                 const id = response.data.Id

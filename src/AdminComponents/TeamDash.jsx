@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { getAllMembers, getMemberById, login, addMember, getByRole, deleteMember, updateMember, switchToMasseur, switchToAdmin } from '../redux/actions/team'
+import { getAllMembers, getMemberById, addMember, getByRole, deleteMember, updateMember, switchToMasseur, switchToAdmin } from '../redux/actions/team'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -8,7 +8,6 @@ import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
-import add from '../assets/icones/ajouter_noir.png'
 
 function TeamDash() {
   const dispatch = useDispatch();
@@ -18,6 +17,7 @@ function TeamDash() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [memberToEdit, setMemberToEdit] = useState({});
   const [memberToDelete, setMemberToDelete] = useState(null);
+  const [validationMessage, setValidationMessage] = useState('');
 
   const [fullName, setFullName] = useState('');
   const [role, setRole] = useState('');
@@ -26,6 +26,19 @@ function TeamDash() {
   const [password, setPassword] = useState('');
   const [joiningDate, setJoiningDate] = useState('');
   const [notes, setNotes] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [fullAddress, setFullAddress] = useState({
+    number: null,
+    street: null,
+    ZIPcode: null,
+    city: null,
+  });
+  const [instagram, setInstagram] = useState('');
+  const [picture, setPicture] = useState(null);
+  const [siret, setSiret] = useState('');
+  const [IBAN, setIBAN] = useState('');
+  const [drivingLicense, setDrivingLicense] = useState(false);
+  const [motorized, setMotorized] = useState(false);
 
   useEffect(() => {
     dispatch(getAllMembers())
@@ -41,19 +54,11 @@ function TeamDash() {
   }
 
   const handleEdit = () => {
+    console.log(fullAddress);
     if (memberToEdit && memberToEdit._id) {
-      dispatch(updateMember(memberToEdit._id, memberToEdit));
+      dispatch(updateMember(memberToEdit._id, fullName, phoneNumber, email, password, dateOfBirth, JSON.stringify(fullAddress), instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture));
       setShowEditModal(false);
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const fieldValue = type === 'checkbox' ? checked : value;
-    setMemberToEdit((prevMember) => ({
-      ...prevMember,
-      [name]: fieldValue,
-    }));
   };
 
   const toggleDeleteModal = (Id, fullName) => {
@@ -73,8 +78,21 @@ function TeamDash() {
   }
 
   const handleAdd = () => {
-    dispatch(addMember());
-    setShowAddModal(false)
+    if (!fullName || !role || !phoneNumber || !email || !password || !joiningDate) {
+      console.error('Tous les champs doivent être renseignés');
+      setValidationMessage('Tous les champs doivent être renseignés');
+      return;
+    }
+    dispatch(addMember(fullName, role, phoneNumber, email, password, joiningDate, notes));
+    setShowAddModal(false);
+
+    setFullName('');
+    setRole('');
+    setPhoneNumber('');
+    setEmail('');
+    setPassword('');
+    setJoiningDate('');
+    setNotes('');
   }
 
   return (
@@ -98,7 +116,8 @@ function TeamDash() {
             <tr key={teamMember._id}>
               <td scope="row">{teamMember.fullName}</td>
               <td>{teamMember.email}</td>
-              <td>{teamMember.fullAddress ? (teamMember.fullAddress.city + ' ' + teamMember.fullAddress.ZIPcode) : '-'}</td>
+              {console.log(teamMember.fullAddress)}
+              <td>{teamMember.fullAddress ? (JSON.parse(teamMember.fullAddress).city + ' ' + JSON.parse(teamMember.fullAddress).ZIPcode) : '-'}</td>
               <td>{teamMember.drivingLicense ? "oui" : "non"}, {teamMember.motorized ? "oui" : "non"}</td>
               <td>{teamMember.role}</td>
               <td>
@@ -121,13 +140,13 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="fullName">Nom complet</Label>
-                        <Input type="text" name="fullName" id="fullName" value={memberToEdit.fullName || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="text" placeholder={memberToEdit.fullName || ''} onChange={(e) => setFullName(e.target.value)} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="role">Rôle</Label>
-                        <Input type="select" name="role" id="role" value={memberToEdit.role || ''} onChange={handleChange} bsSize="sm">
+                        <Input type="select" placeholder={memberToEdit.role || ''} onChange={(e) => setRole(e.target.value)} bsSize="sm">
                           <option value="admin">Admin</option>
                           <option value="masseur">Masseur</option>
                         </Input>
@@ -139,13 +158,13 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="phoneNumber">Numéro de téléphone</Label>
-                        <Input type="text" name="phoneNumber" id="phoneNumber" value={memberToEdit.phoneNumber || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="text" placeholder={memberToEdit.phoneNumber || ''} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="email">Email</Label>
-                        <Input type="email" name="email" id="email" value={memberToEdit.email || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="email" placeholder={memberToEdit.email || ''} onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -154,13 +173,13 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="password">Mot de passe</Label>
-                        <Input type="password" name="password" id="password" value={memberToEdit.password || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="password" placeholder={memberToEdit.password || ''} onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="dateOfBirth">Date de naissance</Label>
-                        <Input type="date" name="dateOfBirth" id="dateOfBirth" value={memberToEdit.dateOfBirth || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="date" placeholder={memberToEdit.dateOfBirth || ''} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>
@@ -171,18 +190,22 @@ function TeamDash() {
                         <Label for="fullAddress">Adresse</Label>
                         <div className="row">
                           <div className="col-md-6">
-                            <Input type="text" name="fullAddress.number" id="fullAddressNumber" value={memberToEdit.fullAddress?.number || ''} onChange={handleChange} placeholder="N° de rue" bsSize="sm" />
+                          <Label for="fullAddress">N°</Label>
+                            <Input type="text" placeholder={memberToEdit.fullAddress?.number || ''} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, number: e.target.value }))} bsSize="sm" />
                           </div>
                           <div className="col-md-6">
-                            <Input type="text" name="fullAddress.street" id="fullAddressStreet" value={memberToEdit.fullAddress?.street || ''} onChange={handleChange} placeholder="Rue" bsSize="sm" />
+                          <Label for="fullAddress">Rue</Label>
+                            <Input type="text" placeholder={memberToEdit.fullAddress?.street || ''} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, street: e.target.value }))} bsSize="sm" />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
-                            <Input type="text" name="fullAddress.ZIPcode" id="fullAddressZIPcode" value={memberToEdit.fullAddress?.ZIPcode || ''} onChange={handleChange} placeholder="Code postal" bsSize="sm" />
+                          <Label for="fullAddress">Code postal</Label>
+                            <Input type="text" placeholder={memberToEdit.fullAddress?.ZIPcode || ''} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, ZIPcode: e.target.value }))} bsSize="sm" />
                           </div>
                           <div className="col-md-6">
-                            <Input type="text" name="fullAddress.city" id="fullAddressCity" value={memberToEdit.fullAddress?.city || ''} onChange={handleChange} placeholder="Ville" bsSize="sm" />
+                          <Label for="fullAddress">Ville</Label>
+                            <Input type="text" placeholder={memberToEdit.fullAddress?.city || ''} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
                           </div>
                         </div>
                       </FormGroup>
@@ -193,13 +216,13 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="instagram">Instagram (@)</Label>
-                        <Input type="text" name="instagram" id="instagram" value={memberToEdit.instagram || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="text" placeholder={memberToEdit.instagram || ''} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="picture">Photo</Label>
-                        <Input type="text" name="picture" id="picture" value={memberToEdit.picture || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="file" placeholder={memberToEdit.picture || ''} onChange={(e) => setPicture(e.target.files[0])} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -208,13 +231,13 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="siret">Siret</Label>
-                        <Input type="text" name="siret" id="siret" value={memberToEdit.siret || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="text" placeholder={memberToEdit.siret || ''} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="IBAN">IBAN</Label>
-                        <Input type="text" name="IBAN" id="IBAN" value={memberToEdit.IBAN || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="text" placeholder={memberToEdit.IBAN || ''} onChange={(e) => setIBAN(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -223,7 +246,7 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
-                        <Input type="date" name="joiningDate" id="joiningDate" value={memberToEdit.joiningDate || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="date" placeholder={memberToEdit.joiningDate || ''} onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -231,7 +254,7 @@ function TeamDash() {
                         <div className="col-md-12">
                           <FormGroup check>
                             <Label check >
-                              <Input type="checkbox" name="drivingLicense" id="drivingLicense" checked={memberToEdit.drivingLicense || false} onChange={handleChange} />{' '}
+                              <Input type="checkbox" onChange={(e) => setDrivingLicense(true)} />
                               Permis de conduire
                             </Label>
                           </FormGroup>
@@ -239,7 +262,7 @@ function TeamDash() {
                         <div className="col-md-12">
                           <FormGroup check>
                             <Label check>
-                              <Input type="checkbox" name="motorized" id="motorized" checked={memberToEdit.motorized || false} onChange={handleChange} />{' '}
+                              <Input type="checkbox" onChange={(e) => setMotorized(false)} />
                               Véhiculé.e
                             </Label>
                           </FormGroup>
@@ -252,7 +275,7 @@ function TeamDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" name="notes" id="notes" value={memberToEdit.notes || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="textarea" placeholder={memberToEdit.notes || ''} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -264,6 +287,9 @@ function TeamDash() {
                   <Button className='cancel-button' onClick={toggleEditModal}>
                     Annuler
                   </Button>
+                  {validationMessage && (
+                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                )}
                 </ModalFooter>
               </Form>
             )}
@@ -272,25 +298,25 @@ function TeamDash() {
       )}
 
       {showDeleteModal && (
-          <div className=''>
-            <Modal isOpen={toggleDeleteModal} toggle={toggleDeleteModal}>
-              <ModalHeader toggle={toggleDeleteModal}>Retirer un loukoum de la boîte</ModalHeader>
-              <ModalBody>
-                {memberToDelete && (
-                  <p>Êtes-vous sûr de vouloir supprimer '{memberToDelete.fullName}' de l'équipe ?</p>
-                )}
-              </ModalBody>
-              <ModalFooter>
-                <Button className='action-button' onClick={() => handleDelete()}>
-                  Confirmer
-                </Button>
-                <Button className='cancel-button' onClick={toggleDeleteModal}>
-                  Annuler
-                </Button>
-              </ModalFooter>
-            </Modal>
-          </div>
-        )}
+        <div className=''>
+          <Modal isOpen={toggleDeleteModal} toggle={toggleDeleteModal}>
+            <ModalHeader toggle={toggleDeleteModal}>Retirer un loukoum de la boîte</ModalHeader>
+            <ModalBody>
+              {memberToDelete && (
+                <p>Êtes-vous sûr de vouloir supprimer '{memberToDelete.fullName}' de l'équipe ?</p>
+              )}
+            </ModalBody>
+            <ModalFooter>
+              <Button className='action-button' onClick={() => handleDelete()}>
+                Confirmer
+              </Button>
+              <Button className='cancel-button' onClick={toggleDeleteModal}>
+                Annuler
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+      )}
 
       {showAddModal && (
         <div>
@@ -302,13 +328,13 @@ function TeamDash() {
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="fullName">Nom complet</Label>
-                      <Input type="text" name="fullName" id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" />
+                      <Input type="text" onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="role">Rôle</Label>
-                      <Input type="select" name="role" id="role" value={role} onChange={(e) => setRole(e.target.value)} bsSize="sm">
+                      <Input type="select" onChange={(e) => setRole(e.target.value)} bsSize="sm" required>
                         <option value="admin">Admin</option>
                         <option value="masseur">Masseur</option>
                       </Input>
@@ -320,13 +346,13 @@ function TeamDash() {
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="phoneNumber">Numéro de téléphone</Label>
-                      <Input type="text" name="phoneNumber" id="phoneNumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" />
+                      <Input type="text" onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="email">Email</Label>
-                      <Input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
+                      <Input type="email" onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                 </div>
@@ -335,13 +361,13 @@ function TeamDash() {
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="password">Mot de passe</Label>
-                      <Input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
+                      <Input type="password" onChange={(e) => setPassword(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
-                      <Input type="date" name="joiningDate" id="joiningDate" value={joiningDate} onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
+                      <Input type="date" onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                 </div>
@@ -349,7 +375,7 @@ function TeamDash() {
                   <div className="col-md-12">
                     <FormGroup>
                       <Label for="notes">Notes</Label>
-                      <Input type="textarea" name="notes" id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                      <Input type="textarea" onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                     </FormGroup>
                   </div>
                 </div>
@@ -361,6 +387,9 @@ function TeamDash() {
                 <Button className='cancel-button' onClick={toggleAddModal}>
                   Annuler
                 </Button>
+                {validationMessage && (
+                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                )}
               </ModalFooter>
             </Form>
           </Modal>

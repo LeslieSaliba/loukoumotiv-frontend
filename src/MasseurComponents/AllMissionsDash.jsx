@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { getAllMissions, getMissionById, getMissionByType, registerToMission, dropMission } from '../redux/actions/missions';
-import { getMemberById } from '../redux/actions/team';
-import { getPartnerById } from '../redux/actions/partners';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -10,7 +8,7 @@ import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 import registered from '../assets/icones/inscrit_noir.png';
 import not_registered from '../assets/icones/désinscrit_noir.png';
-import see_details from '../assets/icones/ajouter_noir.png';
+import see_details from '../assets/icones/voir_noir.png';
 
 function AllMissionsDash() {
   const dispatch = useDispatch();
@@ -21,9 +19,8 @@ function AllMissionsDash() {
   const [missionToSee, setMissionToSee] = useState({});
   const [missionToRegisterTo, setMissionToRegisterTo] = useState(null);
   const [missionToDrop, setMissionToDrop] = useState(null);
-  const [partnerNames, setPartnerNames] = useState({});
-  const [registeredMembersNames, setRegisteredMembersNames] = useState({});
   const [teamMemberId, setTeamMemberId] = useState('');
+  const [validationMessage, setValidationMessage] = useState('');
 
   useEffect(() => {
     dispatch(getAllMissions())
@@ -84,7 +81,7 @@ function AllMissionsDash() {
             missions.map((mission) => (
               <tr key={mission._id}>
                 <td scope="row">{mission.title}</td>
-                <td>{mission.partner}</td>
+                <td>{mission.partner.name}</td>
                 <td>{mission.type}</td>
                 <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
                 <td>{mission.time.hours}</td>
@@ -276,6 +273,9 @@ function AllMissionsDash() {
               <Button className='cancel-button' onClick={toggleRegisterModal}>
                 Annuler
               </Button>
+              {validationMessage && (
+                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                )}
             </ModalFooter>
           </Modal>
         </div>

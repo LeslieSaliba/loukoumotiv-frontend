@@ -17,19 +17,24 @@ function PartnersDash() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [partnerToEdit, setPartnerToEdit] = useState({});
   const [partnerToDelete, setPartnerToDelete] = useState(null);
+  const [validationMessage, setValidationMessage] = useState('');
 
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [website, setWebsite] = useState('');
-  const [place, setPlace] = useState('');
-  const [streetNumber, setStreetNumber] = useState('');
-  const [street, setStreet] = useState('');
-  const [ZIPcode, setZIPcode] = useState('');
-  const [city, setCity] = useState('');
-  const [contactName, setContactName] = useState('');
-  const [number, setNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [position, setPosition] = useState('');
+  const [location, setLocation] = useState({
+    place: null,
+    number: null,
+    street: null,
+    ZIPcode: null,
+    city: null,
+  })
+  const [referenceContact, setReferenceContact] = useState({
+    name: null,
+    number: null,
+    email: null,
+    position: null,
+  })
   const [notes, setNotes] = useState('');
 
   useEffect(() => {
@@ -47,18 +52,9 @@ function PartnersDash() {
 
   const handleEdit = () => {
     if (partnerToEdit && partnerToEdit._id) {
-      dispatch(updatePartner(partnerToEdit._id, partnerToEdit));
+      dispatch(updatePartner(partnerToEdit._id, name, type, location, website, referenceContact, notes));
       setShowEditModal(false);
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const fieldValue = type === 'checkbox' ? checked : value;
-    setPartnerToEdit((prevPartner) => ({
-      ...prevPartner,
-      [name]: fieldValue,
-    }));
   };
 
   const toggleDeleteModal = (Id, name) => {
@@ -78,8 +74,21 @@ function PartnersDash() {
   }
 
   const handleAdd = () => {
-    dispatch(addPartner());
+    if (!name || !type || !location || !website || !referenceContact) {
+      console.error('Tous les champs doivent être renseignés');
+      setValidationMessage('Tous les champs doivent être renseignés');
+      return;
+    }
+
+    dispatch(addPartner(name, type, location, website, referenceContact, notes));
     setShowAddModal(false)
+
+    setName('');
+    setType('');
+    setWebsite('');
+    setLocation('')
+    setReferenceContact('');
+    setNotes('');
   }
 
   return (
@@ -124,13 +133,13 @@ function PartnersDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="fullName">Nom</Label>
-                        <Input type="text" name="name" id="name" value={partnerToEdit.name || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="text" placeholder={partnerToEdit.name || ''} onChange={(e) => setName(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Type</Label>
-                        <Input type="select" name="type" id="type" value={partnerToEdit.type || ''} onChange={handleChange} bsSize="sm">
+                        <Input type="select" placeholder={partnerToEdit.type || ''} onChange={(e) => setType(e.target.value)} bsSize="sm" required >
                           <option value="event">Event</option>
                           <option value="corporate">Corporate</option>
                           <option value="social">Social</option>
@@ -141,15 +150,15 @@ function PartnersDash() {
 
                   <div className="row">
                     <div className="col-md-6">
-                    <FormGroup>
+                      <FormGroup>
                         <Label for="place">Précision sur le lieu</Label>
-                        <Input type="text" name="location.place" id="locationPlace" value={partnerToEdit.location?.place || ''} onChange={handleChange} placeholder="Précision sur le lieu" bsSize="sm" />
+                        <Input type="text" placeholder={partnerToEdit.location?.place || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="website">Site internet</Label>
-                        <Input type="text" name="website" id="website" value={partnerToEdit.website || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="text" placeholder={partnerToEdit.website || ''} onChange={(e) => setWebsite(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -160,18 +169,22 @@ function PartnersDash() {
                         <Label for="address">Adresse</Label>
                         <div className="row">
                           <div className="col-md-6">
-                            <Input type="text" name="location.number" id="locationNumber" value={partnerToEdit.location?.number || ''} onChange={handleChange} placeholder="N° de rue" bsSize="sm" />
+                            <Label for="address">N°</Label>
+                            <Input type="text" placeholder={partnerToEdit.location?.number || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                            <Input type="text" name="location.street" id="locationStreet" value={partnerToEdit.location?.street || ''} onChange={handleChange} placeholder="Rue" bsSize="sm" />
+                            <Label for="address">Rue</Label>
+                            <Input type="text" placeholder={partnerToEdit.location?.street || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
-                            <Input type="text" name="location.ZIPcode" id="locationZIPcode" value={partnerToEdit.location?.ZIPcode || ''} onChange={handleChange} placeholder="Code postal" bsSize="sm" />
+                            <Label for="address">Code postal</Label>
+                            <Input type="text" placeholder={partnerToEdit.location?.ZIPcode || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                            <Input type="text" name="location.city" id="locationCity" value={partnerToEdit.location?.city || ''} onChange={handleChange} placeholder="Ville" bsSize="sm" />
+                            <Label for="address">Ville</Label>
+                            <Input type="text" placeholder={partnerToEdit.location?.city || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                       </FormGroup>
@@ -184,18 +197,22 @@ function PartnersDash() {
                         <Label for="address">Contact de référence</Label>
                         <div className="row">
                           <div className="col-md-6">
-                            <Input type="text" name="referenceContact.name" id="referenceContactName" value={partnerToEdit.referenceContact?.name || ''} onChange={handleChange} placeholder="Nom" bsSize="sm" />
+                          <Label for="name">Nom</Label>
+                            <Input type="text" placeholder={partnerToEdit.referenceContact?.name || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, name: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                            <Input type="text" name="referenceContact.number" id="referenceContactNumber" value={partnerToEdit.referenceContact?.number || ''} onChange={handleChange} placeholder="Numéro" bsSize="sm" />
+                          <Label for="number">Numéro de téléphone</Label>
+                            <Input type="text" placeholder={partnerToEdit.referenceContact?.number || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, number: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
-                            <Input type="text" name="referenceContact.email" id="referenceContactEmail" value={partnerToEdit.referenceContact?.email || ''} onChange={handleChange} placeholder="Email" bsSize="sm" />
+                          <Label for="email">Email</Label>
+                            <Input type="text" placeholder={partnerToEdit.referenceContact?.email || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, email: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                            <Input type="text" name="referenceContact.position" id="referenceContactPosition" value={partnerToEdit.referenceContact?.position || ''} onChange={handleChange} placeholder="Poste" bsSize="sm" />
+                          <Label for="position">Poste</Label>
+                            <Input type="text" placeholder={partnerToEdit.referenceContact?.position || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, position: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                       </FormGroup>
@@ -206,7 +223,7 @@ function PartnersDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" name="notes" id="notes" value={partnerToEdit.notes || ''} onChange={handleChange} bsSize="sm" />
+                        <Input type="textarea" placeholder={partnerToEdit.notes || ''} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -218,6 +235,9 @@ function PartnersDash() {
                   <Button className='cancel-button' onClick={toggleEditModal}>
                     Annuler
                   </Button>
+                  {validationMessage && (
+                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                )}
                 </ModalFooter>
               </Form>
             )}
@@ -256,13 +276,13 @@ function PartnersDash() {
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="fullName">Nom</Label>
-                      <Input type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} bsSize="sm" />
+                      <Input type="text" onChange={(e) => setName(e.target.value)} bsSize="sm" />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="type">Type</Label>
-                      <Input type="select" name="type" id="type" value={type} onChange={(e) => setType(e.target.value)} bsSize="sm">
+                      <Input type="select" onChange={(e) => setType(e.target.value)} bsSize="sm">
                         <option value="event">Event</option>
                         <option value="corporate">Corporate</option>
                         <option value="social">Social</option>
@@ -273,15 +293,15 @@ function PartnersDash() {
 
                 <div className="row">
                   <div className="col-md-6">
-                  <FormGroup>
+                    <FormGroup>
                       <Label for="place">Précision sur le lieu</Label>
-                      <Input type="text" name="location.place" id="locationPlace" value={place} onChange={(e) => setPlace(e.target.value)} placeholder="Précision sur le lieu" bsSize="sm" />
+                      <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">
-                  <FormGroup>
+                    <FormGroup>
                       <Label for="website">Site internet</Label>
-                      <Input type="text" name="website" id="website" value={website} onChange={(e) => setWebsite(e.target.value)} bsSize="sm" />
+                      <Input type="text" onChange={(e) => setWebsite(e.target.value)} bsSize="sm" />
                     </FormGroup>
                   </div>
                 </div>
@@ -292,18 +312,22 @@ function PartnersDash() {
                       <Label for="address">Adresse</Label>
                       <div className="row">
                         <div className="col-md-6">
-                          <Input type="text" name="location.number" id="locationNumber" value={streetNumber} onChange={(e) => setStreetNumber(e.target.value)} placeholder="N° de rue" bsSize="sm" />
+                          <Label for="fullAddress">N°</Label>
+                          <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" />
                         </div>
                         <div className="col-md-6">
-                          <Input type="text" name="location.street" id="locationStreet" value={street} onChange={(e) => setStreet(e.target.value)} placeholder="Rue" bsSize="sm" />
+                          <Label for="fullAddress">Rue</Label>
+                          <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" />
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-md-6">
-                          <Input type="text" name="location.ZIPcode" id="locationZIPcode" value={ZIPcode} onChange={(e) => setZIPcode(e.target.value)} placeholder="Code postal" bsSize="sm" />
+                          <Label for="fullAddress">Code postal</Label>
+                          <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" />
                         </div>
                         <div className="col-md-6">
-                          <Input type="text" name="location.city" id="locationCity" value={city} onChange={(e) => setCity(e.target.value)} placeholder="Ville" bsSize="sm" />
+                          <Label for="fullAddress">Ville</Label>
+                          <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" />
                         </div>
                       </div>
                     </FormGroup>
@@ -316,18 +340,22 @@ function PartnersDash() {
                       <Label for="address">Contact de référence</Label>
                       <div className="row">
                         <div className="col-md-6">
-                          <Input type="text" name="referenceContact.name" id="referenceContactName" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Nom" bsSize="sm" />
+                          <Label for="referenceContact">Nom complet</Label>
+                          <Input type="text" onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, name: e.target.value }))} bsSize="sm" />
                         </div>
                         <div className="col-md-6">
-                          <Input type="text" name="referenceContact.number" id="referenceContactNumber" value={number} onChange={(e) => setNumber(e.target.value)} placeholder="Numéro" bsSize="sm" />
+                          <Label for="referenceContact">Numéro de téléphone</Label>
+                          <Input type="text" onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, number: e.target.value }))} bsSize="sm" />
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-md-6">
-                          <Input type="text" name="referenceContact.email" id="referenceContactEmail" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" bsSize="sm" />
+                          <Label for="referenceContact">Email</Label>
+                          <Input type="text" onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, email: e.target.value }))} bsSize="sm" />
                         </div>
                         <div className="col-md-6">
-                          <Input type="text" name="referenceContact.position" id="referenceContactPosition" value={position} onChange={(e) => setPosition(e.target.value)} placeholder="Poste" bsSize="sm" />
+                          <Label for="referenceContact">Poste</Label>
+                          <Input type="text" onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, position: e.target.value }))} bsSize="sm" />
                         </div>
                       </div>
                     </FormGroup>
@@ -338,7 +366,7 @@ function PartnersDash() {
                   <div className="col-md-12">
                     <FormGroup>
                       <Label for="notes">Notes</Label>
-                      <Input type="textarea" name="notes" id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                      <Input type="textarea" onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                     </FormGroup>
                   </div>
                 </div>
@@ -350,6 +378,9 @@ function PartnersDash() {
                 <Button className='cancel-button' onClick={toggleAddModal}>
                   Annuler
                 </Button>
+                {validationMessage && (
+                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                )}
               </ModalFooter>
             </Form>
           </Modal>
