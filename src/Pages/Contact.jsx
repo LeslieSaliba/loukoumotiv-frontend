@@ -5,6 +5,7 @@ import MobileHeader from '../Frequents/MobileHeader';
 import HeroContact from '../ContactComponents/HeroContact';
 import QuotationContact from '../ContactComponents/QuotationContact';
 import Footer from '../Frequents/Footer';
+import MobileFooter from '../Frequents/MobileFooter';
 
 function Contact() {
     useEffect(() => {
@@ -23,7 +24,12 @@ function Contact() {
                 <HeroContact />
             </div>
             <QuotationContact />
-            <Footer />
+            <div className='d-none d-md-block'>
+                <Footer />
+            </div>
+            <div className='d-md-none'>
+                <MobileFooter />
+            </div>
         </div >
     );
 }

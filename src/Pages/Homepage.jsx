@@ -7,16 +7,17 @@ import BienfaitsHomepage from '../HomepageComponents/BienfaitsHomepage';
 import BannerHomepage from '../HomepageComponents/BannerHomepage';
 import ClientsHomepage from '../HomepageComponents/ClientsHomepage';
 import Footer from '../Frequents/Footer';
+import MobileFooter from '../Frequents/MobileFooter';
 
 function Homepage() {
     useEffect(() => {
         window.scrollTo(0, 0);
-      }, []);
+    }, []);
 
     return (
         <div>
             <div className='hero-bg-homepage'>
-            <div className='d-none d-md-block'> 
+                <div className='d-none d-md-block'>
                     <Header />
                 </div>
                 <div className='d-md-none'>
@@ -27,7 +28,12 @@ function Homepage() {
             <BienfaitsHomepage />
             <BannerHomepage />
             <ClientsHomepage />
-            <Footer />
+            <div className='d-none d-md-block'>
+                <Footer />
+            </div>
+            <div className='d-md-none'>
+                <MobileFooter />
+            </div>
         </div >
     );
 }

@@ -7,6 +7,7 @@ import StepsMission from '../MissionComponents/StepsMission';
 import FAQMission from '../MissionComponents/FAQMission';
 import GalleryMission from '../MissionComponents/GalleryMission';
 import Footer from '../Frequents/Footer';
+import MobileFooter from '../Frequents/MobileFooter';
 
 function Mission() {
     useEffect(() => {
@@ -27,7 +28,12 @@ function Mission() {
             <StepsMission />
             <FAQMission />
             <GalleryMission />
-            <Footer />
+            <div className='d-none d-md-block'>
+                <Footer />
+            </div>
+            <div className='d-md-none'>
+                <MobileFooter />
+            </div>
         </div >
     );
 }

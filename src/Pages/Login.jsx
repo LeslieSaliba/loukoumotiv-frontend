@@ -6,6 +6,7 @@ import HeroLogin from '../LoginComponents/HeroLogin';
 import JoinFormLogin from '../LoginComponents/JoinFormLogin';
 import LoginLogin from '../LoginComponents/LoginLogin';
 import Footer from '../Frequents/Footer';
+import MobileFooter from '../Frequents/MobileFooter';
 
 function Login() {
     useEffect(() => {
@@ -25,7 +26,12 @@ function Login() {
             </div>
             <JoinFormLogin />
             <LoginLogin />
-            <Footer />
+            <div className='d-none d-md-block'>
+                <Footer />
+            </div>
+            <div className='d-md-none'>
+                <MobileFooter />
+            </div>
         </div >
     );
 }

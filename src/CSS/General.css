@@ -304,9 +304,18 @@
     box-shadow: none;
 }
 
+/* MOBILE FOOTER */
+
+.mobile-footer {
+    background-color: #8C5CBC;
+    color: #FFF;
+    text-align: center;
+    height: 55px;
+}
+
 /* FORMS */
 
-.thank-you-message{
+.thank-you-message {
     color: #8C5CBC;
     font-size: larger;
     font-style: italic;

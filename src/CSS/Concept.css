@@ -50,6 +50,14 @@
 
 /* TESTIMONIAL */
 
+.testimonial-container {
+    height: 360px
+}
+
+.testimonial-title{
+    margin-top: 75px;
+}
+
 .single-testimonial {
     width: 60%;
     margin: 0 auto;
@@ -79,6 +87,18 @@
     .loukoum-container {
         flex-direction: column;
     }
+
+    .testimonial-container{
+        padding: 25px;
+    }
+
+    .testimonial-title{
+        margin-top: 55px;
+    }
+
+    .single-testimonial{
+        width: 75%;
+    }
 }
 
 @media (max-width: 575.98px) {
@@ -94,5 +114,17 @@
 
     .loukoum-container {
         flex-direction: column;
+    }
+
+    .testimonial-container{
+        padding: 25px;
+    }
+
+    .testimonial-title{
+        margin-top: 55px;
+    }
+
+    .single-testimonial{
+        width: 75%;
     }
 }

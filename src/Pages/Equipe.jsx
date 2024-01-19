@@ -7,6 +7,7 @@ import CoreEquipe from '../EquipeComponents/CoreEquipe';
 import BannerEquipe from '../EquipeComponents/BannerEquipe';
 import InstagramEquipe from '../EquipeComponents/InstagramEquipe';
 import Footer from '../Frequents/Footer';
+import MobileFooter from '../Frequents/MobileFooter';
 
 function Equipe() {
     useEffect(() => {
@@ -27,7 +28,12 @@ function Equipe() {
             <CoreEquipe />
             <BannerEquipe />
             <InstagramEquipe />
-            <Footer />
+            <div className='d-none d-md-block'>
+                <Footer />
+            </div>
+            <div className='d-md-none'>
+                <MobileFooter />
+            </div>
         </div >
     );
 }

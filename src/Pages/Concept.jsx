@@ -7,6 +7,7 @@ import OffreConcept from '../ConceptComponents/OffreConcept';
 import BannerConcept from '../ConceptComponents/BannerConcept';
 import TestimonialConcept from '../ConceptComponents/TestimonialConcept';
 import Footer from '../Frequents/Footer';
+import MobileFooter from '../Frequents/MobileFooter';
 
 function Concept() {
     useEffect(() => {
@@ -27,7 +28,12 @@ function Concept() {
             <OffreConcept />
             <BannerConcept />
             <TestimonialConcept />
-            <Footer />
+            <div className='d-none d-md-block'>
+                <Footer />
+            </div>
+            <div className='d-md-none'>
+                <MobileFooter />
+            </div>
         </div >
     );
 }

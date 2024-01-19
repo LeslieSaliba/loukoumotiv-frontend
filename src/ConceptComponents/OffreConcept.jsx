@@ -10,7 +10,7 @@ function OffreConcept() {
     return (
         <div className='container bienfaits-container offre-container d-lg-flex d-md-block text-photo-bloc'>
             <div className='texte-du-bloc'>
-                <h4 className='oswald'>xxx</h4>
+                <h4 className='oswald'>Un voyage à bord de la Loukoumotiv'</h4>
                 <div className='bullets-bienfaits'>
                     <div className='d-flex'>
                         <img className='loukoum-icon' src={loukoum} alt="loukoum" />

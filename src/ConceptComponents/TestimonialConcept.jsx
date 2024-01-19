@@ -10,22 +10,22 @@ function TestimonialConcept() {
     const testimonialData = [
         {
             review: `Les séances de massage de Loukoumotiv ont été une révélation pour mon équipe. Une pause bien-être qui a boosté la productivité et l'ambiance au bureau. Une initiative précieuse pour notre entreprise.`,
-            reviewer: 'Marie xxx',
-            status: ', xxx',
+            reviewer: 'Marie Perrault',
+            status: ', DRH chez EDF',
         },
         {
             review: `Une vraie bouffée d'oxygène ! Un moment de détente qui a apaisé mes tensions et m'a permis de retrouver un équilibre.`,
-            reviewer: 'Nicolas xxx',
+            reviewer: 'Nicolas Garcia',
             status: ' ',
         },
         {
             review: `Introduire Loukoumotiv dans notre stratégie de bien-être a été une décision judicieuse. Les retours positifs des employés ont été unanime : moins de stress, plus de concentration.`,
-            reviewer: 'Sarah xxx',
-            status: ', Orange',
+            reviewer: 'Sarah Siano',
+            status: ', reponsable partenariats chez Orange',
         },
         {
             review: `La présence de Loukoumotiv a ajouté une dimension de détente incroyable à notre festival. Les artistes et l'équipe ont pu se ressourcer entre les performances, et le public en redemande ! Encore merci à Glenn et ses équipes.`,
-            reviewer: 'xxx',
+            reviewer: 'Marc Salem',
             status: ', manager du Cabaret Sauvage',
         },
     ]
@@ -52,9 +52,9 @@ function TestimonialConcept() {
     };
 
     return (
-        <div className='container clients-container'>
+        <div className='container clients-container testimonial-container'>
             <div className='d-flex justify-content-between align-items-center'>
-                <h4 className='oswald clients-title'>Retours d'expérience</h4>
+                <h4 className='oswald clients-title testimonial-title'>Retours d'expérience</h4>
                 <div className='d-flex clients-arrows'>
                     <p onClick={handlePrevious} disabled={startIndex === 0}>
                         &lt;
