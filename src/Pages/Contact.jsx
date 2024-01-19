@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import '../CSS/bootstrap.min.css';
 import Header from '../Frequents/Header';
 import MobileHeader from '../Frequents/MobileHeader';
@@ -6,7 +7,10 @@ import QuotationContact from '../ContactComponents/QuotationContact';
 import Footer from '../Frequents/Footer';
 
 function Contact() {
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+      
     return (
         <div>
             <div className='hero-bg-contact'>

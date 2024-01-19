@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import '../CSS/bootstrap.min.css';
 import DashHeader from '../Frequents/DashHeader';
@@ -6,7 +7,10 @@ import AllMissionsMasseurDash from '../MasseurComponents/AllMissionsMasseurDash'
 import MyMissionsMasseurDash from '../MasseurComponents/MyMissionsMasseurDash';
 
 function MasseurDashboard() {
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+      
     return (
         <div>
             <DashHeader />

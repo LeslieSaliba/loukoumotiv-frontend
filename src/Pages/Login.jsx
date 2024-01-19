@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import '../CSS/bootstrap.min.css';
 import Header from '../Frequents/Header';
 import MobileHeader from '../Frequents/MobileHeader';
@@ -7,6 +8,9 @@ import LoginLogin from '../LoginComponents/LoginLogin';
 import Footer from '../Frequents/Footer';
 
 function Login() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
 
     return (
         <div>

@@ -8,7 +8,6 @@ import Contact from './Pages/Contact';
 import Login from './Pages/Login';
 import AdminDashboard from './Pages/AdminDashboard';
 import MasseurDashboard from './Pages/MasseurDashboard';
-import Test from './Dashboards/Test';
 
 function App() {
   return (
@@ -21,7 +20,6 @@ function App() {
       <Route path="/se-connecter" element={<Login />} />
       <Route path="/admin/*" element={<AdminDashboard />} />
       <Route path="/masseur/*" element={<MasseurDashboard />} />
-      <Route path="/test" element={<Test />} />
     </Routes>
   );
 }

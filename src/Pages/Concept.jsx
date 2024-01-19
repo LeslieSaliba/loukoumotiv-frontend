@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import '../CSS/bootstrap.min.css';
 import Header from '../Frequents/Header';
 import MobileHeader from '../Frequents/MobileHeader';
@@ -8,7 +9,10 @@ import TestimonialConcept from '../ConceptComponents/TestimonialConcept';
 import Footer from '../Frequents/Footer';
 
 function Concept() {
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+      
     return (
         <div>
             <div className='hero-bg-concept'>

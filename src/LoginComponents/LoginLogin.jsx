@@ -24,7 +24,7 @@ function LoginLogin() {
 
     useEffect(() => {
         if (role === "admin") {
-            navigate('/admin/missions')
+            navigate('/admin/toutes-les-missions')
         } else if (role === 'masseur') {
             navigate('/masseur/toutes-les-missions')
         }

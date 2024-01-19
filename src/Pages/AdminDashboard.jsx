@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import '../CSS/bootstrap.min.css';
 import AdminHeader from '../Frequents/DashHeader';
@@ -10,7 +11,10 @@ import DirectoryDash from '../AdminComponents/DirectoryDash';
 import NewsletterDash from '../AdminComponents/NewsletterDash';
 
 function AdminDashboard() {
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+      
     return (
         <div>
             <AdminHeader />
