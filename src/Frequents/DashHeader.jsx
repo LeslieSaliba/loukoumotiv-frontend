@@ -16,10 +16,10 @@ function DashHeader() {
     const team = useSelector((state) => state.team);
     const [showEditModal, setShowEditModal] = useState(false);
     const [memberToEdit, setMemberToEdit] = useState({});
-    const Id = localStorage.getItem('id');
+    const LoggedMemberId = localStorage.getItem('id');
 
     useEffect(() => {
-        dispatch(getMemberById(Id))
+        dispatch(getMemberById(LoggedMemberId))
     }, [dispatch])
 
     const handleLogout = () => {

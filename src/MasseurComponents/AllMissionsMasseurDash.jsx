@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { getAllMissions, getMissionById, getMissionByType, DropMission, dropMission } from '../redux/actions/missions';
+import { getAllMissions, getMissionById, getMissionByType, registerToMission, dropMission } from '../redux/actions/missions';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -10,14 +10,17 @@ import registered from '../assets/icones/inscrit_noir.png';
 import not_registered from '../assets/icones/désinscrit_noir.png';
 import see_details from '../assets/icones/voir_noir.png';
 
-function AllMissionsDash() {
+function AllMissionsMasseurDash() {
   const dispatch = useDispatch();
-  const missions = useSelector((state) => state.missions);
+  const missions = useSelector((state) => state.missions.filter(mission => mission.status === 'to do'));
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showDropModal, setShowDropModal] = useState(false);
   const [missionToSee, setMissionToSee] = useState({});
+  const [missionToRegisterTo, setMissionToRegisterTo] = useState(null);
   const [missionToDrop, setMissionToDrop] = useState(null);
   const [teamMemberId, setTeamMemberId] = useState('');
+  const [validationMessage, setValidationMessage] = useState('');
 
   useEffect(() => {
     dispatch(getAllMissions())
@@ -35,6 +38,19 @@ function AllMissionsDash() {
   const handleSee = () => {
     if (missionToSee && missionToSee._id) {
       setShowDetailsModal(false);
+    }
+  };
+
+  const toggleRegisterModal = (Id, title, teamMemberId) => {
+    setMissionToRegisterTo({ Id, title });
+    setTeamMemberId(''); 
+    setShowRegisterModal(!showRegisterModal)
+  }
+
+  const handleRegister = (e) => {
+    if (missionToRegisterTo && missionToRegisterTo.Id) {
+      dispatch(registerToMission(missionToRegisterTo.Id, teamMemberId));
+      setShowRegisterModal(false);
     }
   };
 
@@ -79,7 +95,7 @@ function AllMissionsDash() {
                     className="table-action-icon"
                     src={not_registered}
                     alt="s'inscrire"
-                    onClick={() => toggleDropModal(mission._id, mission.title)}
+                    onClick={() => toggleRegisterModal(mission._id, mission.title)}
                   />
                 </td>
               </tr>
@@ -104,7 +120,7 @@ function AllMissionsDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Type</Label>
-                        <Input type="select" name="type" id="type" value={missionToSee.type || ''} bsSize="sm" disabled >
+                        <Input type="select" name="type" id="type" value={missionToSee.type || ''} bsSize="sm" disabled>
                           <option value="event">Événementiel</option>
                           <option value="corporate">En entreprise</option>
                           <option value="social">Social</option>
@@ -123,7 +139,7 @@ function AllMissionsDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="place">Précision sur le lieu</Label>
-                        <Input type="email" name="place" id="place" value={missionToSee.place || ''} bsSize="sm" disabled/>
+                        <Input type="email" name="place" id="place" value={missionToSee.place || ''} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>
@@ -147,7 +163,7 @@ function AllMissionsDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="description">Description</Label>
-                        <Input type="text" name="description" id="description" value={missionToSee.description || ''} bsSize="sm"  disabled />
+                        <Input type="text" name="description" id="description" value={missionToSee.description || ''} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -172,7 +188,7 @@ function AllMissionsDash() {
                         </div>
                         <div className="row">
                           <div className="col-md-6">
-                            <Input type="text" name="location.ZIPcode" id="locationZIPcode" value={missionToSee.location?.ZIPcode || ''} placeholder="Code postal" bsSize="sm" disabled />
+                            <Input type="text" name="location.ZIPcode" id="locationZIPcode" value={missionToSee.location?.ZIPcode || ''} placeholder="Code postal" bsSize="sm" disabled/>
                           </div>
                           <div className="col-md-6">
                             <Input type="text" name="location.city" id="locationCity" value={missionToSee.location?.city || ''} placeholder="Ville" bsSize="sm" disabled />
@@ -236,7 +252,36 @@ function AllMissionsDash() {
         </div>
       )}
 
-      {showDropModal && (
+      {showRegisterModal && (
+        <div className=''>
+          <Modal isOpen={toggleRegisterModal} toggle={toggleRegisterModal}>
+            <ModalHeader toggle={toggleRegisterModal}>S'inscrire à une mission</ModalHeader>
+            <ModalBody>
+              {missionToRegisterTo && (
+                <div>
+                  <p>Êtes-vous sûr.e de vouloir vous inscrire à la mission '{missionToRegisterTo.title}' ?</p>
+                  <p>Vous recevrez une confirmation d'inscription sous quelques jours.
+                    <br /> Si vous avez un empêchement ou ne souhaitez plus participer à la mission, vous devrez passer par l'un des administrateurs.
+                  </p>
+                </div>
+              )}
+            </ModalBody>
+            <ModalFooter>
+              <Button className='action-button' onClick={() => handleRegister()}>
+                Confirmer
+              </Button>
+              <Button className='cancel-button' onClick={toggleRegisterModal}>
+                Annuler
+              </Button>
+              {validationMessage && (
+                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                )}
+            </ModalFooter>
+          </Modal>
+        </div>
+      )}
+
+{showDropModal && (
         <div className=''>
           <Modal isOpen={toggleDropModal} toggle={toggleDropModal}>
             <ModalHeader toggle={toggleDropModal}>S'inscrire à une mission</ModalHeader>
@@ -261,4 +306,4 @@ function AllMissionsDash() {
   );
 }
 
-export default AllMissionsDash;
+export default AllMissionsMasseurDash;

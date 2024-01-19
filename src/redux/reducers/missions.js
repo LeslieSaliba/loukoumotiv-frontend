@@ -19,6 +19,8 @@ const missionsReducer = (state = [], action) => {
             return action.payload;
         case "getMissionsByTeamBillingStatus":
             return action.payload;
+            case "getMissionsByTeamMember":
+            return action.payload;
         case "registerToMission":
             return state.map((mission) =>
                 mission._id === action.payload.id ? action.payload.mission : mission);

@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 
 function NavAdminDash() {
-    const [selectedSection, setSelectedSection] = useState('Missions');
+    const [selectedSection, setSelectedSection] = useState('Toutes les missions');
     const [hoveredSection, setHoveredSection] = useState(null);
     const navigate = useNavigate();
 
     const handleNavigation = (section) => {
+        const encodedSection = encodeURIComponent(section.toLowerCase().replace(/\s+/g, '-'));
         setSelectedSection(section);
-        navigate(`/admin/${section.toLowerCase()}`);
-    };
+        navigate(`/admin/${encodedSection}`);
+      };
 
     return (
         <div className="oswald d-flex">
             <div className="container-fluid navbar-bg d-flex align-items-center justify-content-between">
                 <ul className="d-flex align-items-center oswald navbar-dash">
-                    {['Missions', 'Partenaires', 'Équipe', 'Répertoire', 'Newsletter'].map((section, index) => (
+                    {['Toutes les missions', 'Mes missions', 'Partenaires', 'Équipe', 'Répertoire', 'Newsletter'].map((section, index) => (
                         <li
                             key={index}
                             onClick={() => handleNavigation(section)}

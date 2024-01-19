@@ -2,7 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import '../CSS/bootstrap.min.css';
 import AdminHeader from '../Frequents/DashHeader';
 import NavAdminDash from '../AdminComponents/NavAdminDash'
-import MissionsDash from '../AdminComponents/MissionsDash';
+import AllMissionsAdminDash from '../AdminComponents/AllMissionsAdminDash';
+import MyMissionsAdminDash from '../AdminComponents/MyMissionsAdminDash';
 import PartnersDash from '../AdminComponents/PartnersDash';
 import TeamDash from '../AdminComponents/TeamDash';
 import DirectoryDash from '../AdminComponents/DirectoryDash';
@@ -16,8 +17,9 @@ function AdminDashboard() {
             <div className='container'>
                 <NavAdminDash />
                 <Routes>
-                    <Route path="missions" element={<MissionsDash />} />
-                    <Route path="partenaires" element={<PartnersDash />} />
+                    <Route path="toutes-les-missions" element={<AllMissionsAdminDash />} />
+                    <Route path="mes-missions" element={<MyMissionsAdminDash />} />
+                    <Route path="toutes-les-missions" element={<AllMissionsAdminDash />} /><Route path="partenaires" element={<PartnersDash />} />
                     <Route path="équipe" element={<TeamDash />} />
                     <Route path="répertoire" element={<DirectoryDash />} />
                     <Route path="newsletter" element={<NewsletterDash />} />

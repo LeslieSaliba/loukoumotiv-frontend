@@ -147,6 +147,22 @@ export const getMissionsByTeamBillingStatus = (teamBilling) => {
     }
 }
 
+export const getMissionsByTeamMember = (teamMemberId) => {
+    return (dispatch) => {
+        axios.get(`${process.env.REACT_APP_URL}/missions/getMissionsByTeamMember/${teamMemberId}`)
+            .then((response) => {
+                const missions = response.data.missions
+                dispatch({
+                    type: "getMissionsByTeamMember",
+                    payload: missions,
+                });
+            })
+            .catch((error) => {
+                console.error(`Erreur lors de l'affichage des missions du membre (Id : ${teamMemberId})`, error)
+            })
+    }
+}
+
 export const registerToMission = (missionId, teamMemberId) => {
     const newRegistration = { missionId, teamMemberId }
     return (dispatch) => {

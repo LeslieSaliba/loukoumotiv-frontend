@@ -11,7 +11,7 @@ import '../CSS/bootstrap.min.css';
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
 
-function MissionsDash() {
+function AllMissionsAdminDash() {
   const dispatch = useDispatch();
   const missions = useSelector((state) => state.missions);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -116,6 +116,7 @@ function MissionsDash() {
         <thead>
           <tr>
             <th scope="col">Titre</th>
+            <th scope="col">Statut &#8597;</th>
             <th scope="col">Partenaire</th>
             <th scope="col">Type</th>
             <th scope="col">Date(s)</th>
@@ -131,6 +132,18 @@ function MissionsDash() {
             missions.map((mission) => (
               <tr key={mission._id}>
                 <td scope="row">{mission.title}</td>
+                <td>{(() => {
+                  switch (mission.status) {
+                    case 'to do':
+                      return 'À venir';
+                    case 'done':
+                      return 'Fait';
+                    case 'cancelled':
+                      return 'Annulée';
+                    default:
+                      return mission.status;
+                  }
+                })()}</td>
                 <td>{mission.partner.name}</td>
                 <td>{mission.type}</td>
                 <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
@@ -163,7 +176,7 @@ function MissionsDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="title">Titre *</Label>
-                        <Input type="text" placeholder={missionToEdit.title || ''} onChange={(e) => setTitle(e.target.value)}  bsSize="sm" required />
+                        <Input type="text" placeholder={missionToEdit.title || ''} onChange={(e) => setTitle(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -197,7 +210,7 @@ function MissionsDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="date">Date *</Label>
-                        <Input type="date" placeholder={missionToEdit.date || ''} onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: e.target.value }))}  bsSize="sm" required />
+                        <Input type="date" placeholder={missionToEdit.date || ''} onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -218,7 +231,7 @@ function MissionsDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="remuneration">Rémunération *</Label>
-                        <Input type="text" placeholder={missionToEdit.remuneration || ''} onChange={(e) => setRemuneration(e.target.value)} bsSize="sm" required/>
+                        <Input type="text" placeholder={missionToEdit.remuneration || ''} onChange={(e) => setRemuneration(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -230,21 +243,21 @@ function MissionsDash() {
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">N° *</Label>
-                            <Input type="text" placeholder={missionToEdit.location?.number || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required/>
+                            <Input type="text" placeholder={missionToEdit.location?.number || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Rue *</Label>
-                            <Input type="text" placeholder={missionToEdit.location?.street || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))}  bsSize="sm" required />
+                            <Input type="text" placeholder={missionToEdit.location?.street || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">Code postal *</Label>
-                            <Input type="text" placeholder={missionToEdit.location?.ZIPcode || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required/>
+                            <Input type="text" placeholder={missionToEdit.location?.ZIPcode || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Ville *</Label>
-                            <Input type="text" placeholder={missionToEdit.location?.city || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required/>
+                            <Input type="text" placeholder={missionToEdit.location?.city || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                       </FormGroup>
@@ -255,7 +268,7 @@ function MissionsDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="requiredMembers">Masseurs requis *</Label>
-                        <Input type="number" placeholder={missionToEdit.requiredMembers || ''} onChange={(e) => setRequiredMembers(e.target.value)}  bsSize="sm" required />
+                        <Input type="number" placeholder={missionToEdit.requiredMembers || ''} onChange={(e) => setRequiredMembers(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -276,7 +289,7 @@ function MissionsDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="status">Statut</Label>
-                        <Input type="select" placeholder={missionToEdit.status || ''} onChange={(e) => setStatus(e.target.value)}  bsSize="sm">
+                        <Input type="select" placeholder={missionToEdit.status || ''} onChange={(e) => setStatus(e.target.value)} bsSize="sm">
                           <option value="to do">À venir</option>
                           <option value="done">Fait</option>
                           <option value="cancelled">Annulée</option>
@@ -325,8 +338,8 @@ function MissionsDash() {
                     Annuler
                   </Button>
                   {validationMessage && (
-                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
+                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                  )}
                 </ModalFooter>
               </Form>
             )}
@@ -540,4 +553,4 @@ function MissionsDash() {
   );
 }
 
-export default MissionsDash;
+export default AllMissionsAdminDash;
