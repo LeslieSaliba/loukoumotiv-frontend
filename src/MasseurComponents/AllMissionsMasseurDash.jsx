@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { getUserID } from '../userInfo/getTeamData';
 import { getAllMissions, getMissionById, getMissionByType, registerToMission, dropMission } from '../redux/actions/missions';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
@@ -19,8 +20,28 @@ function AllMissionsMasseurDash() {
   const [missionToSee, setMissionToSee] = useState({});
   const [missionToRegisterTo, setMissionToRegisterTo] = useState(null);
   const [missionToDrop, setMissionToDrop] = useState(null);
-  const [teamMemberId, setTeamMemberId] = useState('');
   const [validationMessage, setValidationMessage] = useState('');
+  const LoggedMemberId = getUserID();
+
+  const [title, setTitle] = useState(missionToSee.title || '');
+  const [status, setStatus] = useState(missionToSee.status || '');
+  const [partner, setPartner] = useState(missionToSee.partner || '');
+  const [type, setType] = useState(missionToSee.type || '');
+  const [time, setTime] = useState({
+    date: missionToSee.date || '',
+    hours: [missionToSee.hours || ''],
+  });
+  const [description, setDescription] = useState(missionToSee.description || '');
+  const [location, setLocation] = useState({
+    place: missionToSee.place || '',
+    number: missionToSee.number || '',
+    street: missionToSee.street || '',
+    ZIPcode: missionToSee.ZIPcode || '',
+    city: missionToSee.city || '',
+  });
+  const [remuneration, setRemuneration] = useState(missionToSee.remuneration || '');
+  const [requiredMembers, setRequiredMembers] = useState(missionToSee.requiredMembers || '');
+  const [capacity, setCapacity] = useState(missionToSee.capacity || '');
 
   useEffect(() => {
     dispatch(getAllMissions())
@@ -41,69 +62,70 @@ function AllMissionsMasseurDash() {
     }
   };
 
-  const toggleRegisterModal = (Id, title, teamMemberId) => {
+  const toggleRegisterModal = (Id, title, LoggedMemberId) => {
     setMissionToRegisterTo({ Id, title });
-    setTeamMemberId('');
     setShowRegisterModal(!showRegisterModal)
   }
 
   const handleRegister = (e) => {
     if (missionToRegisterTo && missionToRegisterTo.Id) {
-      dispatch(registerToMission(missionToRegisterTo.Id, teamMemberId));
+      dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId));
       setShowRegisterModal(false);
     }
   };
 
-  const toggleDropModal = (Id, title, teamMemberId) => {
+  const toggleDropModal = (Id, title) => {
     setMissionToDrop({ Id, title });
-    setTeamMemberId('');
     setShowDropModal(!showDropModal)
   }
 
   return (
     <div className="container ">
       <div className='scrollable-table'>
-      <div className='container-table'>
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Titre</th>
-              <th scope="col">Partenaire</th>
-              <th scope="col">Type</th>
-              <th scope="col">Date(s)</th>
-              <th scope="col">Heures</th>
-              <th scope="col">Masseurs requis</th>
-              <th scope="col">Rémunération</th>
-              <th scope="col">Détails</th>
-              <th scope="col">S'inscrire</th>
-            </tr>
-          </thead>
-          <tbody>
-            {missions &&
-              missions.map((mission) => (
-                <tr key={mission._id}>
-                  <td scope="row">{mission.title}</td>
-                  <td>{mission.partner.name}</td>
-                  <td>{mission.type}</td>
-                  <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
-                  <td>{mission.time.hours}</td>
-                  <td>{mission.requiredMembers}</td>
-                  <td>{mission.remuneration}</td>
-                  <td>
-                    <img className="table-action-icon" src={see_details} alt="détails" onClick={() => toggleDetailsModal(mission)} />
-                  </td>
-                  <td>
-                    <img
-                      className="table-action-icon"
-                      src={not_registered}
-                      alt="s'inscrire"
-                      onClick={() => toggleRegisterModal(mission._id, mission.title)}
-                    />
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className='container-table'>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Titre</th>
+                <th scope="col">Partenaire</th>
+                <th scope="col">Type</th>
+                <th scope="col">Date(s)</th>
+                <th scope="col">Heures</th>
+                <th scope="col">Masseurs requis</th>
+                <th scope="col">Rémunération</th>
+                <th scope="col">Détails</th>
+                <th scope="col">S'inscrire</th>
+              </tr>
+            </thead>
+            <tbody>
+              {missions &&
+                missions.map((mission) => (
+                  <tr key={mission._id}>
+                    <td scope="row">{mission.title}</td>
+                    <td>{mission.partner.name}</td>
+                    <td>{mission.type}</td>
+                    <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
+                    <td>
+                      {mission.time.hours.map((hour, index) => (
+                        <div key={index}>{hour}</div>
+                      ))}
+                    </td>
+                    <td>{mission.requiredMembers}</td>
+                    <td>{mission.remuneration}</td>
+                    <td>
+                      <img className="table-action-icon" src={see_details} alt="détails" onClick={() => toggleDetailsModal(mission)} />
+                    </td>
+                    <td>
+                      {mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
+                        <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title)} />
+                      ) : (
+                        <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -112,19 +134,40 @@ function AllMissionsMasseurDash() {
           <Modal isOpen={toggleDetailsModal} toggle={toggleDetailsModal}>
             {missionToSee && (
               < Form className="form-modal">
-                <ModalHeader toggle={toggleDetailsModal}>Mettre à jour la mission</ModalHeader>
+                <ModalHeader toggle={toggleDetailsModal}>Détails de la mission</ModalHeader>
                 <ModalBody>
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="title">Titre</Label>
-                        <Input type="text" name="title" id="title" value={missionToSee.title || ''} bsSize="sm" disabled />
+                        <Input type="text" value={title} bsSize="sm" disabled />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="status">Statut</Label>
+                        <Input type="select" value={status} bsSize="sm" disabled >
+                          <option value=""></option>
+                          <option value="to do">À venir</option>
+                          <option value="done">Fait</option>
+                          <option value="cancelled">Annulée</option>
+                        </Input>
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="partner">Partenaire</Label>
+                        <Input type="email" value={partner.name}bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Type</Label>
-                        <Input type="select" name="type" id="type" value={missionToSee.type || ''} bsSize="sm" disabled>
+                        <Input type="select" value={type} bsSize="sm" disabled >
+                          <option value=""></option>
                           <option value="event">Événementiel</option>
                           <option value="corporate">En entreprise</option>
                           <option value="social">Social</option>
@@ -136,44 +179,38 @@ function AllMissionsMasseurDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="partner">Partenaire</Label>
-                        <Input type="email" name="partner" id="partner" value={missionToSee.partner || ''} bsSize="sm" disabled />
+                        <Label for="date">Date</Label>
+                        <Input type="text" value={time.date} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="hours">Horaires</Label>
+                        <Input type="text" value={time.hours} bsSize="sm" disabled />
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="place">Précision sur le lieu</Label>
-                        <Input type="email" name="place" id="place" value={missionToSee.place || ''} bsSize="sm" disabled />
-                      </FormGroup>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-6">
-                      <FormGroup>
-                        <Label for="date">Date</Label>
-                        <Input type="date" name="date" id="date" value={missionToSee.date || ''} bsSize="sm" disabled />
-                      </FormGroup>
-                    </div>
-                    <div className="col-md-6">
-                      <FormGroup>
-                        <Label for="hours">Hours</Label>
-                        <Input type="text" name="hours" id="hours" value={missionToSee.hours || ''} bsSize="sm" disabled />
-                      </FormGroup>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-6">
-                      <FormGroup>
-                        <Label for="description">Description</Label>
-                        <Input type="text" name="description" id="description" value={missionToSee.description || ''} bsSize="sm" disabled />
+                        <Input type="email" value={location.place} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="remuneration">Rémunération</Label>
-                        <Input type="text" name="remuneration" id="remuneration" value={missionToSee.remuneration || ''} bsSize="sm" disabled />
+                        <Input type="text" value={remuneration} bsSize="sm" disabled />
+                      </FormGroup>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-12">
+                      <FormGroup>
+                        <Label for="description">Description</Label>
+                        <Input type="textarea" value={description} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>
@@ -184,18 +221,22 @@ function AllMissionsMasseurDash() {
                         <Label for="fullAddress">Adresse</Label>
                         <div className="row">
                           <div className="col-md-6">
-                            <Input type="text" name="location.number" id="locationNumber" value={missionToSee.location?.number || ''} placeholder="N° de rue" bsSize="sm" disabled />
+                            <Label for="fullAddress">N°</Label>
+                            <Input type="text" value={location?.number} placeholder="N° de rue" bsSize="sm" disabled />
                           </div>
                           <div className="col-md-6">
-                            <Input type="text" name="location.street" id="locationStreet" value={missionToSee.location?.street || ''} placeholder="Rue" bsSize="sm" disabled />
+                            <Label for="fullAddress">Rue</Label>
+                            <Input type="text" value={location?.street} placeholder="Rue" bsSize="sm" disabled />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
-                            <Input type="text" name="location.ZIPcode" id="locationZIPcode" value={missionToSee.location?.ZIPcode || ''} placeholder="Code postal" bsSize="sm" disabled />
+                            <Label for="fullAddress">Code postal</Label>
+                            <Input type="text" value={location?.ZIPcode} placeholder="Code postal" bsSize="sm" disabled />
                           </div>
                           <div className="col-md-6">
-                            <Input type="text" name="location.city" id="locationCity" value={missionToSee.location?.city || ''} placeholder="Ville" bsSize="sm" disabled />
+                            <Label for="fullAddress">Ville</Label>
+                            <Input type="text" value={location?.city} placeholder="Ville" bsSize="sm" disabled />
                           </div>
                         </div>
                       </FormGroup>
@@ -206,44 +247,17 @@ function AllMissionsMasseurDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="requiredMembers">Masseurs requis</Label>
-                        <Input type="number" name="requiredMembers" id="requiredMembers" value={missionToSee.requiredMembers || ''} bsSize="sm" disabled />
+                        <Input type="number" value={requiredMembers} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="capacity">Jauge</Label>
-                        <Input type="text" name="capacity" id="capacity" value={missionToSee.capacity || ''} bsSize="sm" disabled />
+                        <Input type="text" value={capacity} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>
 
-                  <div className="row">
-                    <div className="col-md-6">
-                      <FormGroup>
-                        <Label for="registeredMembers">Masseurs inscrits</Label>
-                        <Input type="text" name="registeredMembers" id="registeredMembers" value={missionToSee.registeredMembers || ''} bsSize="sm" disabled />
-                      </FormGroup>
-                    </div>
-                    <div className="col-md-6">
-                      <FormGroup>
-                        <Label for="status">Statut</Label>
-                        <Input type="select" name="status" id="status" value={missionToSee.status || ''} bsSize="sm" disabled >
-                          <option value="to do">À venir</option>
-                          <option value="done">Fait</option>
-                          <option value="cancelled">Annulée</option>
-                        </Input>
-                      </FormGroup>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-12">
-                      <FormGroup>
-                        <Label for="notes">Notes</Label>
-                        <Input type="textarea" name="notes" id="notes" value={missionToSee.notes || ''} bsSize="sm" disabled />
-                      </FormGroup>
-                    </div>
-                  </div>
                 </ModalBody>
                 <ModalFooter>
                   <Button className='action-button' onClick={toggleDetailsModal}>
@@ -264,7 +278,8 @@ function AllMissionsMasseurDash() {
               {missionToRegisterTo && (
                 <div>
                   <p>Êtes-vous sûr.e de vouloir vous inscrire à la mission '{missionToRegisterTo.title}' ?</p>
-                  <p>Vous recevrez une confirmation d'inscription sous quelques jours.
+                  <p className='font-italic'>Vous recevrez une confirmation d'inscription sous quelques jours.
+                    <br />
                     <br /> Si vous avez un empêchement ou ne souhaitez plus participer à la mission, vous devrez passer par l'un des administrateurs.
                   </p>
                 </div>

@@ -144,6 +144,7 @@ function PartnersDash() {
                       <FormGroup>
                         <Label for="type">Type *</Label>
                         <Input type="select" placeholder={partnerToEdit.type || ''} onChange={(e) => setType(e.target.value)} bsSize="sm" required >
+                          <option value=""></option>
                           <option value="event">Event</option>
                           <option value="corporate">Corporate</option>
                           <option value="social">Social</option>
@@ -287,6 +288,7 @@ function PartnersDash() {
                     <FormGroup>
                       <Label for="type">Type *</Label>
                       <Input type="select" onChange={(e) => setType(e.target.value)} bsSize="sm">
+                        <option value=""></option>
                         <option value="event">Event</option>
                         <option value="corporate">Corporate</option>
                         <option value="social">Social</option>

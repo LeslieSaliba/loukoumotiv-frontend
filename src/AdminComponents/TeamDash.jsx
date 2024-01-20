@@ -34,10 +34,10 @@ function TeamDash() {
     ZIPcode: memberToEdit.ZIPcode || '',
     city: memberToEdit.city || '',
   });
-  const [instagram, setInstagram] = useState('');
+  const [instagram, setInstagram] = useState(memberToEdit.instagram || '');
   const [picture, setPicture] = useState(null);
-  const [siret, setSiret] = useState('');
-  const [IBAN, setIBAN] = useState('');
+  const [siret, setSiret] = useState(memberToEdit.siret || '');
+  const [IBAN, setIBAN] = useState(memberToEdit.IBAN || '');
   const [drivingLicense, setDrivingLicense] = useState(false);
   const [motorized, setMotorized] = useState(false);
 
@@ -154,6 +154,7 @@ function TeamDash() {
                       <FormGroup>
                         <Label for="role">Rôle *</Label>
                         <Input type="select" value={role} onChange={(e) => setRole(e.target.value)} bsSize="sm" required >
+                        <option value=""></option>
                           <option value="admin">Admin</option>
                           <option value="masseur">Masseur</option>
                         </Input>
@@ -343,6 +344,7 @@ function TeamDash() {
                     <FormGroup>
                       <Label for="role">Rôle *</Label>
                       <Input type="select" onChange={(e) => setRole(e.target.value)} bsSize="sm" required>
+                      <option value=""></option>
                         <option value="admin">Admin</option>
                         <option value="masseur">Masseur</option>
                       </Input>
