@@ -8,6 +8,7 @@ import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
+import add from '../assets/icones/ajouter_blanc.png';
 
 function PartnersDash() {
   const dispatch = useDispatch();
@@ -94,33 +95,36 @@ function PartnersDash() {
   return (
     <div className="container ">
       <div className='d-flex justify-content-end'>
-        <button className="action-button add-button" onClick={() => { toggleAddModal() }}>Ajouter un partenaire</button>
+        <button className="action-button add-button d-none d-md-block" onClick={() => { toggleAddModal() }}>Ajouter un partenaire</button>
+        <button className='action-button add-button d-block d-md-none' onClick={() => { toggleAddModal() }}><img src={add} alt="ajouter" className='add-dash' /></button>
       </div>
-      <table className="table scrollable-table">
-        <thead>
-          <tr>
-            <th scope="col">Nom</th>
-            <th scope="col">Type</th>
-            <th scope="col">Localisation</th>
-            <th scope="col">Contact</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {partners && partners.map((partner) => (
-            <tr key={partner._id}>
-              <td scope="row">{partner.name}</td>
-              <td>{partner.type}</td>
-              <td>{partner.location ? (partner.location.city + ' ' + partner.location.ZIPcode) : '-'}</td>
-              <td>{partner.referenceContact ? (partner.referenceContact.name + ',' + partner.referenceContact.position) : '-'}</td>
-              <td>
-                <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(partner) }} />
-                <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(partner._id, partner.name) }} />
-              </td>
+      <div className='scrollable-table'>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Type</th>
+              <th scope="col">Localisation</th>
+              <th scope="col">Contact</th>
+              <th scope="col">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {partners && partners.map((partner) => (
+              <tr key={partner._id}>
+                <td scope="row">{partner.name}</td>
+                <td>{partner.type}</td>
+                <td>{partner.location ? (partner.location.city + ' ' + partner.location.ZIPcode) : '-'}</td>
+                <td>{partner.referenceContact ? (partner.referenceContact.name + ',' + partner.referenceContact.position) : '-'}</td>
+                <td>
+                  <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(partner) }} />
+                  <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(partner._id, partner.name) }} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {showEditModal && (
         <div>
@@ -197,21 +201,21 @@ function PartnersDash() {
                         <Label for="address">Contact de référence</Label>
                         <div className="row">
                           <div className="col-md-6">
-                          <Label for="name">Nom *</Label>
+                            <Label for="name">Nom *</Label>
                             <Input type="text" placeholder={partnerToEdit.referenceContact?.name || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, name: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                          <Label for="number">Numéro de téléphone *</Label>
+                            <Label for="number">Numéro de téléphone *</Label>
                             <Input type="text" placeholder={partnerToEdit.referenceContact?.number || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, number: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
-                          <Label for="email">Email *</Label>
+                            <Label for="email">Email *</Label>
                             <Input type="text" placeholder={partnerToEdit.referenceContact?.email || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, email: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
-                          <Label for="position">Poste *</Label>
+                            <Label for="position">Poste *</Label>
                             <Input type="text" placeholder={partnerToEdit.referenceContact?.position || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, position: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
@@ -236,8 +240,8 @@ function PartnersDash() {
                     Annuler
                   </Button>
                   {validationMessage && (
-                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
+                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                  )}
                 </ModalFooter>
               </Form>
             )}

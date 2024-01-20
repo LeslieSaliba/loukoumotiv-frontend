@@ -34,6 +34,7 @@
     font-family: 'Oswald', sans-serif;
     font-weight: bold;
     font-size: 25px;
+    text-align: center;
 }
 
 .profile-dash {
@@ -47,10 +48,72 @@
     transform: scale(1.1);
 }
 
+.deconnexion-dash {
+    max-height: 35px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.deconnexion-dash:hover {
+    transform: scale(1.1);
+}
+
+/* NAVBAR DASH */
+
+.nav-dropdown-dash {
+    margin: 25px 0;
+    color: #8C5CBC;
+    border-color: #8C5CBC;
+    background-color: #FFF;
+    border-color: #8C5CBC;
+}
+
+.nav-dropdown-dash:focus {
+    margin: 25px 0;
+    color: #6A3E96;
+    border-color: #6A3E96;
+    background-color: #FFF;
+    border-color: #6A3E96;
+}
+
+.dropdown-menu {
+    background-color: #FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.40);
+}
+
+.dropdown-item {
+    color: #8C5CBC;
+}
+
+.dropdown-item:hover {
+    text-decoration: underline;
+    color: #6A3E96;
+}
+
+.dropdown-toggle:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.add-dash{
+    max-height: 35px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.add-dash:hover{
+    transform: scale(1.1);
+}
+
 /* TABLE */
 
 .scrollable-table {
     overflow-x: auto;
+    white-space: nowrap;
+}
+
+.container-table{
+    white-space: nowrap;
 }
 
 .scrollable-table tr,
@@ -130,4 +193,62 @@
 
 .permis-checkbox {
     margin-top: 20px;
+}
+
+
+/* RESPONSIVE */
+
+@media (min-width: 992px) and (max-width: 1199.98px) {}
+
+@media (min-width: 768px) and (max-width: 991.98px) {}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+    .hello-dash {
+        font-size: 18px;
+        width: 30%;
+    }
+
+    /* .responsive-dash-header {
+        display: flex;
+        align-content: center;
+        align-items: center;
+    } */
+
+    /* .navbar-bg {
+        justify-content: center !important;
+        align-items: center !important;
+    } */
+
+    /* .navbar-dash {
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        row-gap: 7px;
+    } */
+}
+
+@media (max-width: 575.98px) {
+    .hello-dash {
+        font-size: 18px;
+        width: 30%;
+    }
+
+    /* .responsive-dash-header {
+        display: flex;
+        align-content: center;
+        align-items: center;
+    } */
+
+    /* .navbar-bg {
+        justify-content: center !important;
+        align-items: center !important;
+    } */
+
+    /* .navbar-dash {
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        row-gap: 7px;
+    } */
 }

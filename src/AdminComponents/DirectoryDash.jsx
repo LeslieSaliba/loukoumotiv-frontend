@@ -8,6 +8,7 @@ import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
+import add from '../assets/icones/ajouter_blanc.png';
 
 function DirectoryDash() {
   const dispatch = useDispatch();
@@ -83,35 +84,38 @@ function DirectoryDash() {
   return (
     <div className="container ">
       <div className='d-flex justify-content-end'>
-        <button className="action-button add-button" onClick={() => { toggleAddModal() }}>Ajouter un contact</button>
+        <button className="action-button add-button d-none d-md-block" onClick={() => { toggleAddModal() }}>Ajouter un contact</button>
+        <button className='action-button add-button d-block d-md-none' onClick={() => { toggleAddModal() }}><img src={add} alt="ajouter" className='add-dash' /></button>
       </div>
-      <table className="table scrollable-table">
-        <thead>
-          <tr>
-            <th scope="col">Nom</th>
-            <th scope="col">Email</th>
-            <th scope="col">Numéro de téléphone</th>
-            <th scope="col">Poste</th>
-            <th scope="col">Entreprise</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {directory && directory.map((contact) => (
-            <tr key={contact._id}>
-              <td scope="row">{contact.fullName}</td>
-              <td>{contact.email}</td>
-              <td>{contact.phoneNumber}</td>
-              <td>{contact.position}</td>
-              <td>{contact.companyName ? contact.companyName : '-'}</td>
-              <td>
-                <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(contact) }} />
-                <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(contact._id, contact.fullName) }} />
-              </td>
+      <div className='scrollable-table'>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Email</th>
+              <th scope="col">Numéro de téléphone</th>
+              <th scope="col">Poste</th>
+              <th scope="col">Entreprise</th>
+              <th scope="col">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {directory && directory.map((contact) => (
+              <tr key={contact._id}>
+                <td scope="row">{contact.fullName}</td>
+                <td>{contact.email}</td>
+                <td>{contact.phoneNumber}</td>
+                <td>{contact.position}</td>
+                <td>{contact.companyName ? contact.companyName : '-'}</td>
+                <td>
+                  <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(contact) }} />
+                  <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(contact._id, contact.fullName) }} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {showEditModal && (
         <div>
@@ -176,8 +180,8 @@ function DirectoryDash() {
                     Annuler
                   </Button>
                   {validationMessage && (
-                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
+                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                  )}
                 </ModalFooter>
               </Form>
             )}

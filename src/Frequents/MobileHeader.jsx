@@ -98,11 +98,11 @@ function MobileHeader() {
                             <Link to='/equipe'><li>Équipe</li></Link>
                             <Link to='/mission'><li>Mission</li></Link>
                             {isLoggedIn ? (
-                                <button className='oswald white-button' onClick={() => navigateToRole(role)}>
+                                <button className='oswald white-button responsive-connecter-espace' onClick={() => navigateToRole(role)}>
                                     Mon espace
                                 </button>
                             ) : (
-                                <Link to='/se-connecter'><button className='oswald white-button'>Nous rejoindre</button></Link>
+                                <Link to='/se-connecter'><button className='oswald white-button responsive-connecter-espace'>Nous rejoindre</button></Link>
                             )}
                             <Link to='/contact'><li><button className='oswald mauve-button'>Prendre une pause</button></li></Link>
                         </ul>

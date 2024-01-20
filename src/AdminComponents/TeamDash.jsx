@@ -8,6 +8,7 @@ import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
+import add from '../assets/icones/ajouter_blanc.png';
 
 function TeamDash() {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ function TeamDash() {
   }, [dispatch])
 
   setTimeout(() => {
-    console.log("team", team);
+    console.log("team: ", team);
   }, 5000);
 
   const toggleEditModal = (teamMember) => {
@@ -54,7 +55,11 @@ function TeamDash() {
   }
 
   const handleEdit = () => {
-    console.log(fullAddress);
+    if (!role || !phoneNumber || !email || !password) {
+      console.error('Les champs * doivent être renseignés');
+      setValidationMessage('Les champs * doivent être renseignés');
+      return;
+    }
     if (memberToEdit && memberToEdit._id) {
       dispatch(updateMember(memberToEdit._id, fullName, role, phoneNumber, email, password, dateOfBirth, fullAddress.ZIPcode, fullAddress.city, fullAddress.number, fullAddress.street, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture));
       setShowEditModal(false);
@@ -98,36 +103,38 @@ function TeamDash() {
   return (
     <div className="container ">
       <div className='d-flex justify-content-end'>
-        <button className="action-button add-button" onClick={() => { toggleAddModal() }}>Ajouter un membre</button>
+        <button className="action-button add-button d-none d-md-block" onClick={() => { toggleAddModal() }}>Ajouter un membre</button>
+        <button className='action-button add-button d-block d-md-none' onClick={() => { toggleAddModal() }}><img src={add} alt="ajouter" className='add-dash' /></button>
       </div>
-      <table className="table scrollable-table">
-        <thead>
-          <tr>
-            <th scope="col">Nom</th>
-            <th scope="col">Email</th>
-            <th scope="col">Localisation</th>
-            <th scope="col">Permis, véhiculé.e</th>
-            <th scope="col">Role</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {team && team?.map((teamMember) => (
-            <tr key={teamMember._id}>
-              <td scope="row">{teamMember.fullName}</td>
-              <td>{teamMember.email}</td>
-              {console.log(teamMember.fullAddress)}
-              <td>{teamMember.fullAddress ? (teamMember.fullAddress.city + ' ' + teamMember.fullAddress.ZIPcode) : '-'}</td>
-              <td>{teamMember.drivingLicense ? "oui" : "non"}, {teamMember.motorized ? "oui" : "non"}</td>
-              <td>{teamMember.role}</td>
-              <td>
-                <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(teamMember) }} />
-                <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(teamMember._id, teamMember.fullName) }} />
-              </td>
+      <div className='scrollable-table'>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Email</th>
+              <th scope="col">Localisation</th>
+              <th scope="col">Permis, véhiculé.e</th>
+              <th scope="col">Role</th>
+              <th scope="col">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {team && team.map((teamMember) => (
+              <tr key={teamMember._id}>
+                <td scope="row">{teamMember.fullName}</td>
+                <td>{teamMember.email}</td>
+                <td>{teamMember.fullAddress ? (teamMember.fullAddress.city + ' ' + teamMember.fullAddress.ZIPcode) : '-'}</td>
+                <td>{teamMember.drivingLicense ? "oui" : "non"}, {teamMember.motorized ? "oui" : "non"}</td>
+                <td>{teamMember.role}</td>
+                <td>
+                  <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(teamMember) }} />
+                  <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(teamMember._id, teamMember.fullName) }} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {showEditModal && (
         <div>
@@ -140,7 +147,7 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="fullName">Nom complet *</Label>
-                        <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" disabled />
+                        <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -222,7 +229,8 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="picture">Photo</Label>
-                        <Input type="file" value={picture} onChange={(e) => setPicture(e.target.files[0])} bsSize="sm" />
+                        <img src={picture} alt="test" />
+                        <Input type="file" onChange={(e) => setPicture(e.target.files[0])} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -262,7 +270,7 @@ function TeamDash() {
                         <div className="col-md-12">
                           <FormGroup check>
                             <Label check>
-                              <Input type="checkbox" onChange={(e) => setMotorized(false)} />
+                              <Input type="checkbox" onChange={(e) => setMotorized(true)} />
                               Véhiculé.e
                             </Label>
                           </FormGroup>
@@ -367,7 +375,7 @@ function TeamDash() {
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="joiningDate">Date de début chez Loukoumotiv' *</Label>
-                      <Input type="date" onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm"/>
+                      <Input type="date" onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
                     </FormGroup>
                   </div>
                 </div>

@@ -61,7 +61,7 @@ export const login = (email, password) => {
                         payload: { token, id, role },
                     });
                     localStorage.setItem("token", token);
-                    localStorage.setItem("id", id);
+                    // localStorage.setItem("id", id);
                     resolve();
                 })
                 .catch((error) => {

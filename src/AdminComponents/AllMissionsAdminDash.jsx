@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { getAllMissions, getMissionById, addMission, getMissionByType, deleteMission, updateMission, getMissionsByStatus, getMissionsByPartnerBillingStatus, getMissionsByTeamBillingStatus, registerToMission, dropMission } from '../redux/actions/missions';
-import { getMemberById } from '../redux/actions/team';
-import { getPartnerById } from '../redux/actions/partners';
+import { getAllPartners, getPartnerById } from '../redux/actions/partners';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -10,9 +9,11 @@ import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
+import add from '../assets/icones/ajouter_blanc.png';
 
 function AllMissionsAdminDash() {
   const dispatch = useDispatch();
+  const partners = useSelector((state) => state.partners);
   const missions = useSelector((state) => state.missions);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -46,8 +47,12 @@ function AllMissionsAdminDash() {
   const [notes, setNotes] = useState('');
 
   useEffect(() => {
-    dispatch(getAllMissions())
+    dispatch(getAllMissions());
+    dispatch(getAllPartners());
   }, [dispatch])
+
+  const partnerIds = partners.map(partner => partner._id);
+  console.log("partners: ", partnerIds);
 
   setTimeout(() => {
     console.log("missions", missions);
@@ -110,60 +115,63 @@ function AllMissionsAdminDash() {
   return (
     <div className="container ">
       <div className='d-flex justify-content-end'>
-        <button className="action-button add-button" onClick={() => { toggleAddModal() }}>Ajouter une mission</button>
+        <button className="action-button add-button d-none d-md-block" onClick={() => { toggleAddModal() }}>Ajouter une mission</button>
+        <button className='action-button add-button d-block d-md-none' onClick={() => { toggleAddModal() }}><img src={add} alt="ajouter" className='add-dash' /></button>
       </div>
-      <table className="table scrollable-table">
-        <thead>
-          <tr>
-            <th scope="col">Titre</th>
-            <th scope="col">Statut &#8597;</th>
-            <th scope="col">Partenaire</th>
-            <th scope="col">Type</th>
-            <th scope="col">Date(s)</th>
-            <th scope="col">Heures</th>
-            <th scope="col">Masseurs requis</th>
-            <th scope="col">Masseurs inscrits</th>
-            <th scope="col">Rémunération</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {missions &&
-            missions.map((mission) => (
-              <tr key={mission._id}>
-                <td scope="row">{mission.title}</td>
-                <td>{(() => {
-                  switch (mission.status) {
-                    case 'to do':
-                      return 'À venir';
-                    case 'done':
-                      return 'Fait';
-                    case 'cancelled':
-                      return 'Annulée';
-                    default:
-                      return mission.status;
-                  }
-                })()}</td>
-                <td>{mission.partner.name}</td>
-                <td>{mission.type}</td>
-                <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
-                <td>{mission.time.hours}</td>
-                <td>{mission.requiredMembers}</td>
-                <td>{mission.registeredMembers.fullName}</td>
-                <td>{mission.remuneration}</td>
-                <td>
-                  <img className="table-action-icon" src={edit} alt="modifier" onClick={() => toggleEditModal(mission)} />
-                  <img
-                    className="table-action-icon"
-                    src={remove}
-                    alt="supprimer"
-                    onClick={() => toggleDeleteModal(mission._id, mission.title)}
-                  />
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <div className='scrollable-table'>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Titre</th>
+              <th scope="col">Statut &#8597;</th>
+              <th scope="col">Partenaire</th>
+              <th scope="col">Type</th>
+              <th scope="col">Date(s)</th>
+              <th scope="col">Heures</th>
+              <th scope="col">Masseurs requis</th>
+              <th scope="col">Masseurs inscrits</th>
+              <th scope="col">Rémunération</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {missions &&
+              missions.map((mission) => (
+                <tr key={mission._id}>
+                  <td scope="row">{mission.title}</td>
+                  <td>{(() => {
+                    switch (mission.status) {
+                      case 'to do':
+                        return 'À venir';
+                      case 'done':
+                        return 'Fait';
+                      case 'cancelled':
+                        return 'Annulée';
+                      default:
+                        return mission.status;
+                    }
+                  })()}</td>
+                  <td>{mission.partner.name}</td>
+                  <td>{mission.type}</td>
+                  <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
+                  <td>{mission.time.hours}</td>
+                  <td>{mission.requiredMembers}</td>
+                  <td>{mission.registeredMembers.fullName}</td>
+                  <td>{mission.remuneration}</td>
+                  <td>
+                    <img className="table-action-icon" src={edit} alt="modifier" onClick={() => toggleEditModal(mission)} />
+                    <img
+                      className="table-action-icon"
+                      src={remove}
+                      alt="supprimer"
+                      onClick={() => toggleDeleteModal(mission._id, mission.title)}
+                    />
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
 
       {showEditModal && (
         <div>
@@ -195,7 +203,11 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="partner">Partenaire *</Label>
-                        <Input type="email" placeholder={missionToEdit.partner || ''} onChange={(e) => setPartner(e.target.value)} bsSize="sm" required />
+                        <Input type="select" placeholder={missionToEdit.partner || ''} onChange={(e) => setPartner(e.target.value)} bsSize="sm" required >
+                          {partners && partners.map((partner, index) => (
+                            <option key={index} value={partner._id}>{partner.name}</option>
+                          ))}
+                        </Input>
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -345,7 +357,8 @@ function AllMissionsAdminDash() {
             )}
           </Modal>
         </div>
-      )}
+      )
+      }
 
       {
         showDeleteModal && (
@@ -367,187 +380,194 @@ function AllMissionsAdminDash() {
               </ModalFooter>
             </Modal>
           </div>
-        )}
+        )
+      }
 
-      {showAddModal && (
-        <div>
-          <Modal isOpen={toggleAddModal} toggle={toggleAddModal}>
-            < Form className="form-modal">
-              <ModalHeader toggle={toggleAddModal}>Ajouter une nouvelle mission</ModalHeader>
-              <ModalBody>
-                <div className="row">
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="title">Titre *</Label>
-                      <Input type="text" onChange={(e) => setTitle(e.target.value)} bsSize="sm" required />
-                    </FormGroup>
+      {
+        showAddModal && (
+          <div>
+            <Modal isOpen={toggleAddModal} toggle={toggleAddModal}>
+              < Form className="form-modal">
+                <ModalHeader toggle={toggleAddModal}>Ajouter une nouvelle mission</ModalHeader>
+                <ModalBody>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="title">Titre *</Label>
+                        <Input type="text" onChange={(e) => setTitle(e.target.value)} bsSize="sm" required />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="type">Type *</Label>
+                        <Input type="select" onChange={(e) => setType(e.target.value)} bsSize="sm" required >
+                          <option value="event">Événementiel</option>
+                          <option value="corporate">En entreprise</option>
+                          <option value="social">Social</option>
+                        </Input>
+                      </FormGroup>
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="type">Type *</Label>
-                      <Input type="select" onChange={(e) => setType(e.target.value)} bsSize="sm" required >
-                        <option value="event">Événementiel</option>
-                        <option value="corporate">En entreprise</option>
-                        <option value="social">Social</option>
-                      </Input>
-                    </FormGroup>
-                  </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="partner">Partenaire *</Label>
-                      <Input type="text" onChange={(e) => setPartner(e.target.value)} bsSize="sm" required />
-                    </FormGroup>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="partner">Partenaire *</Label>
+                        <Input type="select" placeholder={missionToEdit.partner || ''} onChange={(e) => setPartner(e.target.value)} bsSize="sm" required >
+                          {partners && partners.map((partner, index) => (
+                            <option key={index} value={partner._id}>{partner.name}</option>
+                          ))}
+                        </Input>
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="place">Précision sur le lieu *</Label>
+                        <Input type="email" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
+                      </FormGroup>
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="place">Précision sur le lieu *</Label>
-                      <Input type="email" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
-                    </FormGroup>
-                  </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="date">Date *</Label>
-                      <Input type="date" onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: e.target.value }))} bsSize="sm" required />
-                    </FormGroup>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="date">Date *</Label>
+                        <Input type="date" onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: e.target.value }))} bsSize="sm" required />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="hours">Horaires *</Label>
+                        <Input type="text" onChange={(e) => setTime((prevTime) => ({ ...prevTime, hours: e.target.value }))} bsSize="sm" required />
+                      </FormGroup>
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="hours">Horaires *</Label>
-                      <Input type="text" onChange={(e) => setTime((prevTime) => ({ ...prevTime, hours: e.target.value }))} bsSize="sm" required />
-                    </FormGroup>
-                  </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="description">Description *</Label>
-                      <Input type="text" onChange={(e) => setDescription(e.target.value)} bsSize="sm" required />
-                    </FormGroup>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="description">Description *</Label>
+                        <Input type="text" onChange={(e) => setDescription(e.target.value)} bsSize="sm" required />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="remuneration">Rémunération *</Label>
+                        <Input type="text" onChange={(e) => setRemuneration(e.target.value)} bsSize="sm" required />
+                      </FormGroup>
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="remuneration">Rémunération *</Label>
-                      <Input type="text" onChange={(e) => setRemuneration(e.target.value)} bsSize="sm" required />
-                    </FormGroup>
-                  </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-12">
-                    <FormGroup>
-                      <Label for="fullAddress">Adresse</Label>
-                      <div className="row">
-                        <div className="col-md-6">
-                          <Label for="siret">N° *</Label>
-                          <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
+                  <div className="row">
+                    <div className="col-md-12">
+                      <FormGroup>
+                        <Label for="fullAddress">Adresse</Label>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <Label for="siret">N° *</Label>
+                            <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
+                          </div>
+                          <div className="col-md-6">
+                            <Label for="siret">Rue *</Label>
+                            <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
+                          </div>
                         </div>
-                        <div className="col-md-6">
-                          <Label for="siret">Rue *</Label>
-                          <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
+                        <div className="row">
+                          <div className="col-md-6">
+                            <Label for="siret">Code postal *</Label>
+                            <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
+                          </div>
+                          <div className="col-md-6">
+                            <Label for="siret">Ville *</Label>
+                            <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
+                          </div>
                         </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-6">
-                          <Label for="siret">Code postal *</Label>
-                          <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
-                        </div>
-                        <div className="col-md-6">
-                          <Label for="siret">Ville *</Label>
-                          <Input type="text" onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
-                        </div>
-                      </div>
-                    </FormGroup>
+                      </FormGroup>
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="requiredMembers">Masseurs requis *</Label>
-                      <Input type="number" onChange={(e) => setRequiredMembers(e.target.value)} bsSize="sm" required />
-                    </FormGroup>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="requiredMembers">Masseurs requis *</Label>
+                        <Input type="number" onChange={(e) => setRequiredMembers(e.target.value)} bsSize="sm" required />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="capacity">Jauge *</Label>
+                        <Input type="text" onChange={(e) => setCapacity(e.target.value)} bsSize="sm" required />
+                      </FormGroup>
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="capacity">Jauge *</Label>
-                      <Input type="text" onChange={(e) => setCapacity(e.target.value)} bsSize="sm" required />
-                    </FormGroup>
-                  </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="registeredMembers">Masseurs inscrits</Label>
-                      <Input type="text" onChange={(e) => setRegisteredMembers(e.target.value)} bsSize="sm" />
-                    </FormGroup>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="registeredMembers">Masseurs inscrits</Label>
+                        <Input type="text" onChange={(e) => setRegisteredMembers(e.target.value)} bsSize="sm" />
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="status">Statut</Label>
+                        <Input type="select" onChange={(e) => setStatus(e.target.value)} bsSize="sm">
+                          <option value="to do">À venir</option>
+                          <option value="done">Fait</option>
+                          <option value="cancelled">Annulée</option>
+                        </Input>
+                      </FormGroup>
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="status">Statut</Label>
-                      <Input type="select" onChange={(e) => setStatus(e.target.value)} bsSize="sm">
-                        <option value="to do">À venir</option>
-                        <option value="done">Fait</option>
-                        <option value="cancelled">Annulée</option>
-                      </Input>
-                    </FormGroup>
-                  </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="teamBilling">Facturation équipe</Label>
-                      <Input type="select" onChange={(e) => setTeamBilling(e.target.value)} bsSize="sm">
-                        <option value="to do">À faire</option>
-                        <option value="in progress">En cours</option>
-                        <option value="done">Fait</option>
-                      </Input>
-                    </FormGroup>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="teamBilling">Facturation équipe</Label>
+                        <Input type="select" onChange={(e) => setTeamBilling(e.target.value)} bsSize="sm">
+                          <option value="to do">À faire</option>
+                          <option value="in progress">En cours</option>
+                          <option value="done">Fait</option>
+                        </Input>
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-6">
+                      <FormGroup>
+                        <Label for="partnerBilling">Facturation partenaire</Label>
+                        <Input type="select" onChange={(e) => setPartnerBilling(e.target.value)} bsSize="sm">
+                          <option value="to do">À faire</option>
+                          <option value="in progress">En cours</option>
+                          <option value="done">Fait</option>
+                        </Input>
+                      </FormGroup>
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <FormGroup>
-                      <Label for="partnerBilling">Facturation partenaire</Label>
-                      <Input type="select" onChange={(e) => setPartnerBilling(e.target.value)} bsSize="sm">
-                        <option value="to do">À faire</option>
-                        <option value="in progress">En cours</option>
-                        <option value="done">Fait</option>
-                      </Input>
-                    </FormGroup>
-                  </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-12">
-                    <FormGroup>
-                      <Label for="notes">Notes</Label>
-                      <Input type="textarea" onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
-                    </FormGroup>
+                  <div className="row">
+                    <div className="col-md-12">
+                      <FormGroup>
+                        <Label for="notes">Notes</Label>
+                        <Input type="textarea" onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                      </FormGroup>
+                    </div>
                   </div>
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button className='action-button' onClick={() => handleAdd()}>
-                  Ajouter
-                </Button>
-                <Button className='cancel-button' onClick={toggleAddModal}>
-                  Annuler
-                </Button>
-                {validationMessage && (
-                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
-              </ModalFooter>
-            </Form>
-          </Modal>
-        </div>
-      )}
+                </ModalBody>
+                <ModalFooter>
+                  <Button className='action-button' onClick={() => handleAdd()}>
+                    Ajouter
+                  </Button>
+                  <Button className='cancel-button' onClick={toggleAddModal}>
+                    Annuler
+                  </Button>
+                  {validationMessage && (
+                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
+                  )}
+                </ModalFooter>
+              </Form>
+            </Modal>
+          </div>
+        )
+      }
 
     </div >
   );

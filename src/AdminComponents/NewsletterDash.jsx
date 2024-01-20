@@ -7,6 +7,7 @@ import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 import remove from '../assets/icones/supprimer_noir.png';
+import add from '../assets/icones/ajouter_blanc.png';
 
 function NewsletterDash() {
     const dispatch = useDispatch();
@@ -57,26 +58,29 @@ function NewsletterDash() {
     return (
         <div className="container ">
             <div className='d-flex justify-content-end'>
-                <button className="action-button add-button" onClick={() => { toggleSubscribeModal() }}>Inscrire à la newsletter</button>
+                <button className="action-button add-button d-none d-md-block" onClick={() => { toggleSubscribeModal() }}>Inscrire à la newsletter</button>
+                <button className='action-button add-button d-block d-md-none' onClick={() => { toggleSubscribeModal() }}><img src={add} alt="ajouter" className='add-dash' /></button>
             </div>
-            <table className="table scrollable-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Email</th>
-                        <th scope="col">Désinscrire</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {newsletter && newsletter.map((contact) => (
-                        <tr key={contact._id}>
-                            <td scope="row">{contact.email}</td>
-                            <td>
-                                <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleUnsubscribeModal(contact._id, contact.email) }} />
-                            </td>
+            <div className='scrollable-table'>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Email</th>
+                            <th scope="col">Désinscrire</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {newsletter && newsletter.map((contact) => (
+                            <tr key={contact._id}>
+                                <td scope="row">{contact.email}</td>
+                                <td>
+                                    <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleUnsubscribeModal(contact._id, contact.email) }} />
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {showUnsubscribeModal && (
                 <div className=''>

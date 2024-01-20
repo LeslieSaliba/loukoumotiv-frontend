@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { getUserID } from '../userInfo/getTeamData';
 import { getMemberById, updateMember } from '../redux/actions/team'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
@@ -9,6 +10,7 @@ import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
 import logo from '../assets/logo_blanc.png';
 import profile from '../assets/icones/profil_blanc.png';
+import deconnexion from '../assets/icones/deconnexion_mauve.png';
 
 function DashHeader() {
     const navigate = useNavigate();
@@ -16,11 +18,11 @@ function DashHeader() {
     const team = useSelector((state) => state.team);
     const [showEditModal, setShowEditModal] = useState(false);
     const [memberToEdit, setMemberToEdit] = useState({});
-    const LoggedMemberId = localStorage.getItem('id');
+    const LoggedMemberId = getUserID(); 
 
-    useEffect(() => {
-        dispatch(getMemberById(LoggedMemberId))
-    }, [dispatch])
+    // useEffect(() => {
+    //     dispatch(getMemberById(LoggedMemberId))
+    // }, [dispatch])
 
     const handleLogout = () => {
         localStorage.clear();
@@ -44,9 +46,10 @@ function DashHeader() {
             <div className='container d-flex align-items-center justify-content-between'>
                 <div><Link to='/'><img src={logo} alt="LOUKOUMOTIV'" className='logo-dashboard' /></Link></div>
                 <div className='hello-dash'>Hello {team.fullName}</div>
-                <div>
+                <div className='responsive-dash-header d-flex align-items-center'>
                     <img src={profile} alt="profil" className='profile-dash' onClick={() => { toggleEditModal(team._id) }} />
-                    <button className='white-button' onClick={handleLogout}>Se déconnecter</button>
+                    <button className='white-button d-none d-md-block' onClick={handleLogout}>Se déconnecter</button>
+                    <button className='white-button d-block d-md-none' onClick={handleLogout}><img src={deconnexion} alt="se déconnecter" className='deconnexion-dash' /></button>
                 </div>
             </div>
 
