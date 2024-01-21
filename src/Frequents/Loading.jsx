@@ -1,10 +1,10 @@
 import React from "react";
 import ReactLoading from "react-loading";
 
-const Example = () => (
+const Loading = () => (
   <div className="loading">
-    <ReactLoading type="bars" color="red" />
+    <ReactLoading type="spin" color="#8C5CBC" />
   </div>
 );
 
-export default Example;
+export default Loading;

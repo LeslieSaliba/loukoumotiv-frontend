@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Loading from '../Frequents/Loading';
 import { useSelector, useDispatch } from "react-redux";
 import { getUserID } from '../userInfo/getTeamData';
 import { getMissionsByTeamMember } from '../redux/actions/missions';
@@ -13,6 +14,7 @@ import see_details from '../assets/icones/voir_noir.png';
 function MyMissionsMasseurDash() {
   const dispatch = useDispatch();
   const missions = useSelector((state) => state.missions);
+  const [loading, setLoading] = useState(true);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showDropModal, setShowDropModal] = useState(false);
   const [missionToSee, setMissionToSee] = useState({});
@@ -40,12 +42,21 @@ function MyMissionsMasseurDash() {
   const [capacity, setCapacity] = useState(missionToSee.capacity || '');
 
   useEffect(() => {
-    dispatch(getMissionsByTeamMember(LoggedMemberId))
+    const fetchData = async () => {
+      try {
+        dispatch(getMissionsByTeamMember(LoggedMemberId))
+        setLoading(false);
+      } catch (error) {
+        console.error('Erreur', error);
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [dispatch])
 
-  setTimeout(() => {
-    console.log("missions", missions);
-  }, 5000);
+  // setTimeout(() => {
+  //   console.log("missions", missions);
+  // }, 5000);
 
   const toggleDetailsModal = (mission) => {
     setMissionToSee(mission);
@@ -83,7 +94,13 @@ function MyMissionsMasseurDash() {
               </tr>
             </thead>
             <tbody>
-              {missions.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className='text-center'>
+                    <Loading />
+                  </td>
+                </tr>
+              ) : missions.length === 0 ? (
                 <tr>
                   <td colSpan="9" className='text-center font-italic no-result-message'>Vous n'êtes encore inscrit à aucune mission Loukoumotiv'. <br />
                     <br />Inscrivez-vous via l'onglet 'Toutes les missions'.</td>
@@ -93,17 +110,17 @@ function MyMissionsMasseurDash() {
                   <tr key={mission._id}>
                     <td scope="row">{mission.title}</td>
                     <td>{(() => {
-                    switch (mission.status) {
-                      case 'to do':
-                        return 'À venir';
-                      case 'done':
-                        return 'Fait';
-                      case 'cancelled':
-                        return 'Annulée';
-                      default:
-                        return mission.status;
-                    }
-                  })()}</td>
+                      switch (mission.status) {
+                        case 'to do':
+                          return 'À venir';
+                        case 'done':
+                          return 'Fait';
+                        case 'cancelled':
+                          return 'Annulée';
+                        default:
+                          return mission.status;
+                      }
+                    })()}</td>
                     <td>{mission.partner.name}</td>
                     <td>{mission.type}</td>
                     <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
@@ -141,13 +158,13 @@ function MyMissionsMasseurDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="title">Titre</Label>
-                        <Input type="text" value={title} bsSize="sm" disabled />
+                        <Input type="text" value={missionToSee.title} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="status">Statut</Label>
-                        <Input type="select" value={status} bsSize="sm" disabled >
+                        <Input type="select" value={missionToSee.status} bsSize="sm" disabled >
                           <option value=""></option>
                           <option value="to do">À venir</option>
                           <option value="done">Fait</option>
@@ -161,13 +178,13 @@ function MyMissionsMasseurDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="partner">Partenaire</Label>
-                        <Input type="email" value={partner.name}bsSize="sm" disabled />
+                        <Input type="email" value={missionToSee.partner.name} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Type</Label>
-                        <Input type="select" value={type} bsSize="sm" disabled >
+                        <Input type="select" value={missionToSee.type} bsSize="sm" disabled >
                           <option value=""></option>
                           <option value="event">Événementiel</option>
                           <option value="corporate">En entreprise</option>
@@ -181,13 +198,13 @@ function MyMissionsMasseurDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="date">Date</Label>
-                        <Input type="text" value={time.date} bsSize="sm" disabled />
+                        <Input type="text" value={missionToSee.time?.date} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="hours">Horaires</Label>
-                        <Input type="text" value={time.hours} bsSize="sm" disabled />
+                        <Input type="text" value={missionToSee.time?.hours} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>
@@ -196,13 +213,13 @@ function MyMissionsMasseurDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="place">Précision sur le lieu</Label>
-                        <Input type="email" value={location.place} bsSize="sm" disabled />
+                        <Input type="email" value={missionToSee.location?.place} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="remuneration">Rémunération</Label>
-                        <Input type="text" value={remuneration} bsSize="sm" disabled />
+                        <Input type="text" value={missionToSee.remuneration} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>
@@ -211,7 +228,7 @@ function MyMissionsMasseurDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="description">Description</Label>
-                        <Input type="textarea" value={description} bsSize="sm" disabled />
+                        <Input type="textarea" value={missionToSee.description} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>
@@ -223,21 +240,21 @@ function MyMissionsMasseurDash() {
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">N°</Label>
-                            <Input type="text" value={location?.number} placeholder="N° de rue" bsSize="sm" disabled />
+                            <Input type="text" value={missionToSee.location?.number} placeholder="N° de rue" bsSize="sm" disabled />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Rue</Label>
-                            <Input type="text" value={location?.street} placeholder="Rue" bsSize="sm" disabled />
+                            <Input type="text" value={missionToSee.location?.street} placeholder="Rue" bsSize="sm" disabled />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">Code postal</Label>
-                            <Input type="text" value={location?.ZIPcode} placeholder="Code postal" bsSize="sm" disabled />
+                            <Input type="text" value={missionToSee.location?.ZIPcode} placeholder="Code postal" bsSize="sm" disabled />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Ville</Label>
-                            <Input type="text" value={location?.city} placeholder="Ville" bsSize="sm" disabled />
+                            <Input type="text" value={missionToSee.location?.city} placeholder="Ville" bsSize="sm" disabled />
                           </div>
                         </div>
                       </FormGroup>
@@ -248,13 +265,13 @@ function MyMissionsMasseurDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="requiredMembers">Masseurs requis</Label>
-                        <Input type="number" value={requiredMembers} bsSize="sm" disabled />
+                        <Input type="number" value={missionToSee.requiredMembers} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="capacity">Jauge</Label>
-                        <Input type="text" value={capacity} bsSize="sm" disabled />
+                        <Input type="text" value={missionToSee.capacity} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>

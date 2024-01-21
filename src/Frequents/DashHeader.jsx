@@ -46,10 +46,10 @@ function DashHeader() {
     const [joiningDate, setJoiningDate] = useState(loggedMemberInfo.joiningDate || '');
     const [dateOfBirth, setDateOfBirth] = useState(loggedMemberInfo.dateOfBirth || '');
     const [fullAddress, setFullAddress] = useState({
-        number: loggedMemberInfo.fullAddress.number || '',
-        street: loggedMemberInfo.fullAddress.street || '',
-        ZIPcode: loggedMemberInfo.fullAddress.ZIPcode || '',
-        city: loggedMemberInfo.fullAddress.city || '',
+        number: loggedMemberInfo.fullAddress?.number || '',
+        street: loggedMemberInfo.fullAddress?.street || '',
+        ZIPcode: loggedMemberInfo.fullAddress?.ZIPcode || '',
+        city: loggedMemberInfo.fullAddress?.city || '',
     });
     const [instagram, setInstagram] = useState(loggedMemberInfo.instagram || '');
     const [picture, setPicture] = useState(null);
@@ -79,8 +79,6 @@ function DashHeader() {
         navigate('/');
     };
 
-    console.log("zero: ", loggedMemberInfo.fullName);
-
     const updateMember = async (loggedMemberId, loggedMemberInfo) => {
         console.log('User ID to be updated: ', loggedMemberId);
         try {
@@ -99,12 +97,8 @@ function DashHeader() {
         }
     };
 
-    console.log("first: ", loggedMemberInfo);
-
     const toggleEditModal = () => {
-        setShowEditModal(!showEditModal);
-        console.log("second: ", loggedMemberInfo);
-       
+        setShowEditModal(!showEditModal);       
     }
 
     const handleEdit = (loggedMemberId, updatedFields) => {

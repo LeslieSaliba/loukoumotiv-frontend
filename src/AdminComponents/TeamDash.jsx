@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Loading from '../Frequents/Loading';
 import { useSelector, useDispatch } from "react-redux";
 import { getAllMembers, addMember, deleteMember, updateMember } from '../redux/actions/team'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -13,6 +14,7 @@ import add from '../assets/icones/ajouter_blanc.png';
 function TeamDash() {
   const dispatch = useDispatch();
   const team = useSelector((state) => state.team);
+  const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -42,12 +44,21 @@ function TeamDash() {
   const [motorized, setMotorized] = useState(false);
 
   useEffect(() => {
-    dispatch(getAllMembers())
+    const fetchData = async () => {
+      try {
+        dispatch(getAllMembers())
+        setLoading(false);
+      } catch (error) {
+        console.error('Erreur', error);
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [dispatch])
 
-  setTimeout(() => {
-    console.log("team: ", team);
-  }, 5000);
+  // setTimeout(() => {
+  //   console.log("team: ", team);
+  // }, 5000);
 
   const toggleEditModal = (teamMember) => {
     setMemberToEdit(teamMember);
@@ -63,6 +74,7 @@ function TeamDash() {
     if (memberToEdit && memberToEdit._id) {
       dispatch(updateMember(memberToEdit._id, fullName, role, phoneNumber, email, password, dateOfBirth, fullAddress.ZIPcode, fullAddress.city, fullAddress.number, fullAddress.street, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture));
       setShowEditModal(false);
+      window.location.reload()
     }
   };
 
@@ -75,6 +87,7 @@ function TeamDash() {
     if (memberToDelete && memberToDelete.Id) {
       dispatch(deleteMember(memberToDelete.Id));
       setShowDeleteModal(false);
+      window.location.reload()
     }
   };
 
@@ -90,14 +103,14 @@ function TeamDash() {
     }
     dispatch(addMember(fullName, role, phoneNumber, email, password, joiningDate, notes));
     setShowAddModal(false);
-
-    setFullName('');
-    setRole('');
-    setPhoneNumber('');
-    setEmail('');
-    setPassword('');
-    setJoiningDate('');
-    setNotes('');
+    window.location.reload();
+    // setFullName('');
+    // setRole('');
+    // setPhoneNumber('');
+    // setEmail('');
+    // setPassword('');
+    // setJoiningDate('');
+    // setNotes('');
   }
 
   return (
@@ -119,7 +132,13 @@ function TeamDash() {
             </tr>
           </thead>
           <tbody>
-            {team.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="6" className='text-center'>
+                  <Loading />
+                </td>
+              </tr>
+            ) : team.length === 0 ? (
               <tr>
                 <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore créé les comptes de la team Loukoumotiv'. </td>
               </tr>

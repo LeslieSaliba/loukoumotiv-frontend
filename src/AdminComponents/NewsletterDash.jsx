@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Loading from '../Frequents/Loading';
 import { useSelector, useDispatch } from "react-redux";
 import { getAllSubscribers, subscribeToNewsletter, unsubscribeToNewsletter } from '../redux/actions/newsletter'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -12,6 +13,7 @@ import add from '../assets/icones/ajouter_blanc.png';
 function NewsletterDash() {
     const dispatch = useDispatch();
     const newsletter = useSelector((state) => state.newsletter);
+    const [loading, setLoading] = useState(true);
     const [showUnsubscribeModal, setShowUnsubscribeModal] = useState(false);
     const [contactToUnsubscribe, setContactToUnsubscribe] = useState(null);
     const [showSubscribeModal, setShowSubscribeModal] = useState(false);
@@ -19,12 +21,21 @@ function NewsletterDash() {
     const [validationMessage, setValidationMessage] = useState('');
 
     useEffect(() => {
-        dispatch(getAllSubscribers())
+        const fetchData = async () => {
+            try {
+                dispatch(getAllSubscribers())
+                setLoading(false);
+            } catch (error) {
+                console.error('Erreur', error);
+                setLoading(false);
+            }
+        };
+        fetchData();
     }, [dispatch])
 
-    setTimeout(() => {
-        console.log("newsletter", newsletter);
-    }, 5000);
+    // setTimeout(() => {
+    //     console.log("newsletter", newsletter);
+    // }, 5000);
 
     const toggleUnsubscribeModal = (Id, email) => {
         setContactToUnsubscribe({ Id, email });
@@ -35,6 +46,7 @@ function NewsletterDash() {
         if (contactToUnsubscribe && contactToUnsubscribe.Id) {
             dispatch(unsubscribeToNewsletter(contactToUnsubscribe.Id));
             setShowUnsubscribeModal(false);
+            window.location.reload()
         }
     };
 
@@ -48,11 +60,10 @@ function NewsletterDash() {
             setValidationMessage('Renseignez un mail à inscrire à la newsletter');
             return;
         }
-
         dispatch(subscribeToNewsletter(email));
         setShowSubscribeModal(false);
-
-        setEmail('');
+        window.location.reload()
+        // setEmail('');
     };
 
     return (
@@ -70,7 +81,13 @@ function NewsletterDash() {
                         </tr>
                     </thead>
                     <tbody>
-                        {newsletter.length === 0 ? (
+                        {loading ? (
+                            <tr>
+                                <td colSpan="6" className='text-center'>
+                                    <Loading />
+                                </td>
+                            </tr>
+                        ) : newsletter.length === 0 ? (
                             <tr>
                                 <td colSpan="9" className='text-center font-italic'>Il n'y a pas encore d'inscrits à la newsletter Loukoumotiv'</td>
                             </tr>

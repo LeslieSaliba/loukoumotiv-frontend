@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Loading from '../Frequents/Loading';
 import { useSelector, useDispatch } from "react-redux";
 import { getUserID } from '../userInfo/getTeamData';
 import { getAllMissions, addMission, deleteMission, updateMission, registerToMission, dropMission } from '../redux/actions/missions';
@@ -19,6 +20,7 @@ function AllMissionsAdminDash() {
   const dispatch = useDispatch();
   const partners = useSelector((state) => state.partners);
   const missions = useSelector((state) => state.missions);
+  const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -35,20 +37,20 @@ function AllMissionsAdminDash() {
   const [type, setType] = useState(missionToEdit.type || '');
   const [description, setDescription] = useState(missionToEdit.description || '');
   const [time, setTime] = useState({
-    date: missionToEdit.time.date || '',
-    hours: [missionToEdit.time.hours || ''],
+    date: missionToEdit.time?.date || '',
+    hours: [missionToEdit.time?.hours || ''],
   })
   const [location, setLocation] = useState({
-    place: missionToEdit.location.place || '',
-    number: missionToEdit.location.number || '',
-    street: missionToEdit.location.street || '',
-    ZIPcode: missionToEdit.location.ZIPcode || '',
-    city: missionToEdit.location.city || '',
+    place: missionToEdit.location?.place || '',
+    number: missionToEdit.location?.number || '',
+    street: missionToEdit.location?.street || '',
+    ZIPcode: missionToEdit.location?.ZIPcode || '',
+    city: missionToEdit.location?.city || '',
   })
-  const [partner, setPartner] = useState(missionToEdit.partner.name || '');
+  const [partner, setPartner] = useState(missionToEdit.partner?.name || '');
   const [capacity, setCapacity] = useState(missionToEdit.capacity || '');
   const [requiredMembers, setRequiredMembers] = useState(missionToEdit.requiredMembers || '');
-  const [registeredMembers, setRegisteredMembers] = useState([missionToEdit.registeredmembers.fullName || '']);
+  const [registeredMembers, setRegisteredMembers] = useState([missionToEdit.registeredmembers?.fullName || '']);
   const [remuneration, setRemuneration] = useState(missionToEdit.remuneration || '');
   const [status, setStatus] = useState(missionToEdit.status || '');
   const [teamBilling, setTeamBilling] = useState(missionToEdit.teamBilling || '');
@@ -56,16 +58,25 @@ function AllMissionsAdminDash() {
   const [notes, setNotes] = useState(missionToEdit.notes || '');
 
   useEffect(() => {
-    dispatch(getAllMissions());
-    dispatch(getAllPartners());
+    const fetchData = async () => {
+      try {
+        dispatch(getAllMissions());
+        dispatch(getAllPartners());
+        setLoading(false);
+      } catch (error) {
+        console.error('Erreur', error);
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [dispatch])
 
   const partnerIds = partners.map(partner => partner._id);
-  console.log("partners: ", partnerIds);
+  // console.log("partners: ", partnerIds);
 
-  setTimeout(() => {
-    console.log("missions", missions);
-  }, 5000);
+  // setTimeout(() => {
+  //   console.log("missions", missions);
+  // }, 5000);
 
   const toggleEditModal = (mission) => {
     setMissionToEdit(mission);
@@ -88,6 +99,7 @@ function AllMissionsAdminDash() {
     if (missionToDelete && missionToDelete.Id) {
       dispatch(deleteMission(missionToDelete.Id));
       setShowDeleteModal(false);
+      window.location.reload()
     }
   };
 
@@ -101,24 +113,23 @@ function AllMissionsAdminDash() {
       setValidationMessage('Les champs * doivent être renseignés');
       return;
     }
-
     dispatch(addMission(title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes));
     setShowAddModal(false)
-
-    setTitle('');
-    setType('');
-    setDescription('');
-    setTime({ date: null, hours: [] });
-    setLocation({ place: null, number: null, street: null, ZIPcode: null, city: null });
-    setPartner('');
-    setCapacity('');
-    setRequiredMembers('');
-    setRegisteredMembers([]);
-    setRemuneration('');
-    setStatus('');
-    setTeamBilling('');
-    setPartnerBilling('');
-    setNotes('');
+    window.location.reload()
+    // setTitle('');
+    // setType('');
+    // setDescription('');
+    // setTime({ date: null, hours: [] });
+    // setLocation({ place: null, number: null, street: null, ZIPcode: null, city: null });
+    // setPartner('');
+    // setCapacity('');
+    // setRequiredMembers('');
+    // setRegisteredMembers([]);
+    // setRemuneration('');
+    // setStatus('');
+    // setTeamBilling('');
+    // setPartnerBilling('');
+    // setNotes('');
   }
 
   const toggleRegisterModal = (Id, title) => {
@@ -130,6 +141,7 @@ function AllMissionsAdminDash() {
     if (missionToRegisterTo && missionToRegisterTo.Id) {
       dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId));
       setShowRegisterModal(false);
+      window.location.reload()
     }
   };
 
@@ -161,6 +173,8 @@ function AllMissionsAdminDash() {
     }
   }
 
+  console.log("mission to edit: ", missionToEdit);
+
   return (
     <div className="container ">
       <div className='d-flex justify-content-end'>
@@ -184,7 +198,13 @@ function AllMissionsAdminDash() {
             </tr>
           </thead>
           <tbody>
-            {missions.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="6" className='text-center'>
+                  <Loading />
+                </td>
+              </tr>
+            ) : missions.length === 0 ? (
               <tr>
                 <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore ajouté de missions Loukoumotiv'.</td>
               </tr>
@@ -255,13 +275,13 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="title">Titre *</Label>
-                        <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} bsSize="sm" required />
+                        <Input type="text" placeholder={missionToEdit.title} onChange={(e) => setTitle(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="status">Statut</Label>
-                        <Input type="select" value={status} onChange={(e) => setStatus(e.target.value)} bsSize="sm">
+                        <Input type="select" defaultValue={missionToEdit.status} onChange={(e) => setStatus(e.target.value)} bsSize="sm">
                           <option value=""></option>
                           <option value="to do">À venir</option>
                           <option value="done">Fait</option>
@@ -275,7 +295,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="partner">Partenaire *</Label>
-                        <Input type="select" value={partner} onChange={(e) => setPartner(e.target.value)} bsSize="sm" required >
+                        <Input type="select" value={missionToEdit.partner?.name} onChange={(e) => setPartner(e.target.value)} bsSize="sm" required >
                           <option value=""></option>
                           {partners && partners.map((partner, index) => (
                             <option key={index} value={partner._id}>{partner.name}</option>
@@ -286,7 +306,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Type *</Label>
-                        <Input type="select" value={type} onChange={(e) => setType(e.target.value)} bsSize="sm" required >
+                        <Input type="select" value={missionToEdit.type} onChange={(e) => setType(e.target.value)} bsSize="sm" required >
                           <option value=""></option>
                           <option value="event">Événementiel</option>
                           <option value="corporate">En entreprise</option>
@@ -300,13 +320,13 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="date">Date *</Label>
-                        <Input type="date" value={time.date} onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: e.target.value }))} bsSize="sm" required />
+                        <Input type="date" value={missionToEdit.time.date} onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="hours">Horaires *</Label>
-                        <Input type="text" value={time.hours} onChange={(e) => setTime((prevTime) => ({ ...prevTime, hours: e.target.value }))} bsSize="sm" required />
+                        <Input type="text" value={missionToEdit.time.hours} onChange={(e) => setTime((prevTime) => ({ ...prevTime, hours: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -315,13 +335,13 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="place">Précision sur le lieu *</Label>
-                        <Input type="email" value={location?.place} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
+                        <Input type="email" value={missionToEdit.location?.place} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="remuneration">Rémunération *</Label>
-                        <Input type="text" value={remuneration} onChange={(e) => setRemuneration(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={missionToEdit.remuneration} onChange={(e) => setRemuneration(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -330,7 +350,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="description">Description *</Label>
-                        <Input type="textarea" value={description} onChange={(e) => setDescription(e.target.value)} bsSize="sm" required />
+                        <Input type="textarea" value={missionToEdit.description} onChange={(e) => setDescription(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -342,21 +362,21 @@ function AllMissionsAdminDash() {
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">N° *</Label>
-                            <Input type="text" value={location?.number} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={missionToEdit.location?.number} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Rue *</Label>
-                            <Input type="text" value={location?.street} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={missionToEdit.location?.street} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">Code postal *</Label>
-                            <Input type="text" value={location?.ZIPcode} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={missionToEdit.location?.ZIPcode} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Ville *</Label>
-                            <Input type="text" value={location?.city} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={missionToEdit.location?.city} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                       </FormGroup>
@@ -367,13 +387,13 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="requiredMembers">Masseurs requis *</Label>
-                        <Input type="number" value={requiredMembers} onChange={(e) => setRequiredMembers(e.target.value)} bsSize="sm" required />
+                        <Input type="number" value={missionToEdit.requiredMembers} onChange={(e) => setRequiredMembers(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="capacity">Jauge *</Label>
-                        <Input type="text" value={capacity} onChange={(e) => setCapacity(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={missionToEdit.capacity} onChange={(e) => setCapacity(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -382,7 +402,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="teamBilling">Facturation équipe</Label>
-                        <Input type="select" value={teamBilling} onChange={(e) => setTeamBilling(e.target.value)} bsSize="sm">
+                        <Input type="select" value={missionToEdit.teamBilling} onChange={(e) => setTeamBilling(e.target.value)} bsSize="sm">
                           <option value=""></option>
                           <option value="to do">À faire</option>
                           <option value="in progress">En cours</option>
@@ -393,7 +413,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="partnerBilling">Facturation partenaire</Label>
-                        <Input type="select" value={partnerBilling} onChange={(e) => setPartnerBilling(e.target.value)} bsSize="sm">
+                        <Input type="select" value={missionToEdit.partnerBilling} onChange={(e) => setPartnerBilling(e.target.value)} bsSize="sm">
                           <option value=""></option>
                           <option value="to do">À faire</option>
                           <option value="in progress">En cours</option>
@@ -407,7 +427,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                        <Input type="textarea" value={missionToEdit.notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>

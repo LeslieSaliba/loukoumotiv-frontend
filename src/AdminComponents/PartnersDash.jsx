@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Loading from '../Frequents/Loading';
 import { useSelector, useDispatch } from "react-redux";
 import { getAllPartners, addPartner, deletePartner, updatePartner } from '../redux/actions/partners'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -13,6 +14,7 @@ import add from '../assets/icones/ajouter_blanc.png';
 function PartnersDash() {
   const dispatch = useDispatch();
   const partners = useSelector((state) => state.partners);
+  const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -24,27 +26,36 @@ function PartnersDash() {
   const [type, setType] = useState(partnerToEdit.type || '');
   const [website, setWebsite] = useState(partnerToEdit.website || '');
   const [location, setLocation] = useState({
-    place: partnerToEdit.location.place || '',
-    number: partnerToEdit.location.number || '',
-    street: partnerToEdit.location.street || '',
-    ZIPcode: partnerToEdit.location.ZIPcode || '',
-    city: partnerToEdit.location.city || '',
+    place: partnerToEdit.location?.place || '',
+    number: partnerToEdit.location?.number || '',
+    street: partnerToEdit.location?.street || '',
+    ZIPcode: partnerToEdit.location?.ZIPcode || '',
+    city: partnerToEdit.location?.city || '',
   })
   const [referenceContact, setReferenceContact] = useState({
-    name: partnerToEdit.referenceContact.name || '',
-    number: partnerToEdit.referenceContact.number || '',
-    email: partnerToEdit.referenceContact.email || '',
-    position: partnerToEdit.referenceContact.position || '',
+    name: partnerToEdit.referenceContact?.name || '',
+    number: partnerToEdit.referenceContact?.number || '',
+    email: partnerToEdit.referenceContact?.email || '',
+    position: partnerToEdit.referenceContact?.position || '',
   })
   const [notes, setNotes] = useState(partnerToEdit.notes || '');
 
   useEffect(() => {
-    dispatch(getAllPartners())
+    const fetchData = async () => {
+      try {
+        dispatch(getAllPartners())
+        setLoading(false);
+      } catch (error) {
+        console.error('Erreur', error);
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [dispatch])
 
-  setTimeout(() => {
-    console.log("partners", partners);
-  }, 5000);
+  // setTimeout(() => {
+  //   console.log("partners", partners);
+  // }, 5000);
 
   const toggleEditModal = (partner) => {
     setPartnerToEdit(partner);
@@ -55,6 +66,7 @@ function PartnersDash() {
     if (partnerToEdit && partnerToEdit._id) {
       dispatch(updatePartner(partnerToEdit._id, name, type, location, website, referenceContact, notes));
       setShowEditModal(false);
+      window.location.reload()
     }
   };
 
@@ -67,6 +79,7 @@ function PartnersDash() {
     if (partnerToDelete && partnerToDelete.Id) {
       dispatch(deletePartner(partnerToDelete.Id));
       setShowDeleteModal(false);
+      window.location.reload()
     }
   };
 
@@ -83,13 +96,13 @@ function PartnersDash() {
 
     dispatch(addPartner(name, type, location, website, referenceContact, notes));
     setShowAddModal(false)
-
-    setName('');
-    setType('');
-    setWebsite('');
-    setLocation('')
-    setReferenceContact('');
-    setNotes('');
+    window.location.reload()
+    // setName('');
+    // setType('');
+    // setWebsite('');
+    // setLocation('')
+    // setReferenceContact('');
+    // setNotes('');
   }
 
   return (
@@ -110,7 +123,13 @@ function PartnersDash() {
             </tr>
           </thead>
           <tbody>
-            {partners.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="6" className='text-center'>
+                  <Loading />
+                </td>
+              </tr>
+            ) : partners.length === 0 ? (
               <tr>
                 <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore ajouté de partenaires Loukoumotiv'.</td>
               </tr>
@@ -119,7 +138,7 @@ function PartnersDash() {
                 <td scope="row">{partner.name}</td>
                 <td>{partner.type}</td>
                 <td>{partner.location ? (partner.location.city + ' ' + partner.location.ZIPcode) : '-'}</td>
-                <td>{partner.referenceContact ? (partner.referenceContact.name + ',' + partner.referenceContact.position) : '-'}</td>
+                <td>{partner.referenceContact ? (partner.referenceContact.name + ', ' + partner.referenceContact.position) : '-'}</td>
                 <td>
                   <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(partner) }} />
                   <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(partner._id, partner.name) }} />

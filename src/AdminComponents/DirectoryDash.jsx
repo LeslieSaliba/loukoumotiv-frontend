@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Loading from '../Frequents/Loading';
 import { useSelector, useDispatch } from "react-redux";
 import { getAllContacts, addContact, deleteContact, updateContact } from '../redux/actions/directory'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -13,6 +14,7 @@ import add from '../assets/icones/ajouter_blanc.png';
 function DirectoryDash() {
   const dispatch = useDispatch();
   const directory = useSelector((state) => state.directory);
+  const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -28,12 +30,21 @@ function DirectoryDash() {
   const [notes, setNotes] = useState(contactToEdit.notes || '');
 
   useEffect(() => {
-    dispatch(getAllContacts())
+    const fetchData = async () => {
+      try {
+        dispatch(getAllContacts());
+        setLoading(false);
+      } catch (error) {
+        console.error('Erreur', error);
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [dispatch])
 
-  setTimeout(() => {
-    console.log("directory", directory);
-  }, 5000);
+  // setTimeout(() => {
+  //   console.log("directory", directory);
+  // }, 5000);
 
   const toggleEditModal = (contact) => {
     setContactToEdit(contact);
@@ -42,8 +53,21 @@ function DirectoryDash() {
 
   const handleEdit = () => {
     if (contactToEdit && contactToEdit._id) {
-      dispatch(updateContact(contactToEdit._id, fullName, email, phoneNumber, position, companyName, notes));
+      const updatedFullName = fullName !== '' ? fullName : contactToEdit.fullName;
+      const updatedEmail = email !== '' ? email : contactToEdit.email;
+      const updatedPhoneNumber = phoneNumber !== '' ? phoneNumber : contactToEdit.phoneNumber;
+      const updatedPosition = position !== '' ? position : contactToEdit.position;
+      const updatedCompanyName = companyName !== '' ? companyName : contactToEdit.companyName;
+      const updatedNotes = notes !== '' ? notes : contactToEdit.notes;
+      // console.log(updatedFullName);
+      // console.log(updatedEmail);
+      // console.log(updatedPhoneNumber);
+      // console.log(updatedPosition);
+      // console.log(updatedCompanyName);
+      // console.log(updatedNotes);
+      dispatch(updateContact(contactToEdit._id, updatedFullName, updatedEmail, updatedPhoneNumber, updatedPosition, updatedCompanyName, updatedNotes));
       setShowEditModal(false);
+      window.location.reload()
     }
   };
 
@@ -56,6 +80,7 @@ function DirectoryDash() {
     if (contactToDelete && contactToDelete.Id) {
       dispatch(deleteContact(contactToDelete.Id));
       setShowDeleteModal(false);
+      window.location.reload()
     }
   };
 
@@ -71,14 +96,14 @@ function DirectoryDash() {
     }
 
     dispatch(addContact(fullName, email, phoneNumber, position, companyName, notes));
-    setShowAddModal(false)
-
-    setFullName('');
-    setEmail('');
-    setPhoneNumber('');
-    setPosition('');
-    setCompanyName('');
-    setNotes('');
+    setShowAddModal(false); 
+    window.location.reload(); 
+    // setFullName('');
+    // setEmail('');
+    // setPhoneNumber('');
+    // setPosition('');
+    // setCompanyName('');
+    // setNotes('');
   }
 
   return (
@@ -100,25 +125,32 @@ function DirectoryDash() {
             </tr>
           </thead>
           <tbody>
-            {
-              directory.length === 0 ? (
-                <tr>
-                  <td colSpan="9" className='text-center font-italic'>Il n'y a pas encore de contact dans le répertoire Loukoumotiv'.</td>
+            {loading ? (
+              <tr>
+                <td colSpan="6" className='text-center'>
+                  <Loading />
+                </td>
+              </tr>
+            ) : directory.length === 0 ? (
+              <tr>
+                <td colSpan="6" className='text-center font-italic'>
+                  Il n'y a pas encore de contact dans le répertoire Loukoumotiv'.
+                </td>
+              </tr>
+            ) : (
+              directory.map((contact) => (
+                <tr key={contact._id}>
+                  <td scope="row">{contact.fullName}</td>
+                  <td>{contact.email}</td>
+                  <td>{contact.phoneNumber}</td>
+                  <td>{contact.position}</td>
+                  <td>{contact.companyName ? contact.companyName : '-'}</td>
+                  <td>
+                    <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(contact) }} />
+                    <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(contact._id, contact.fullName) }} />
+                  </td>
                 </tr>
-              ) : (
-                directory && directory.map((contact) => (
-                  <tr key={contact._id}>
-                    <td scope="row">{contact.fullName}</td>
-                    <td>{contact.email}</td>
-                    <td>{contact.phoneNumber}</td>
-                    <td>{contact.position}</td>
-                    <td>{contact.companyName ? contact.companyName : '-'}</td>
-                    <td>
-                      <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(contact) }} />
-                      <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(contact._id, contact.fullName) }} />
-                    </td>
-                  </tr>
-                )))}
+              )))}
           </tbody>
         </table>
       </div>
@@ -134,13 +166,13 @@ function DirectoryDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="fullName">Nom *</Label>
-                        <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
+                        <Input type="text" placeholder={contactToEdit.fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Email *</Label>
-                        <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
+                        <Input type="text" placeholder={contactToEdit.email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -149,13 +181,13 @@ function DirectoryDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="place">Numéro de téléphone *</Label>
-                        <Input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
+                        <Input type="text" placeholder={contactToEdit.phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="position">Poste / activité *</Label>
-                        <Input type="text" value={position} onChange={(e) => setPosition(e.target.value)} bsSize="sm" required />
+                        <Input type="text" placeholder={contactToEdit.position} onChange={(e) => setPosition(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -164,7 +196,7 @@ function DirectoryDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="position">Entreprise (si applicable)</Label>
-                        <Input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} bsSize="sm" />
+                        <Input type="text" placeholder={contactToEdit.companyName} onChange={(e) => setCompanyName(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -173,7 +205,7 @@ function DirectoryDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                        <Input type="textarea" placeholder={contactToEdit.notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
