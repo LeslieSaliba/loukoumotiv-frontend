@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { getAllContacts, getContactById, addContact, deleteContact, updateContact } from '../redux/actions/directory'
+import { getAllContacts, addContact, deleteContact, updateContact } from '../redux/actions/directory'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -20,12 +20,12 @@ function DirectoryDash() {
   const [contactToDelete, setContactToDelete] = useState(null);
   const [validationMessage, setValidationMessage] = useState('');
 
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [position, setPosition] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [notes, setNotes] = useState('');
+  const [fullName, setFullName] = useState(contactToEdit.fullName || '');
+  const [email, setEmail] = useState(contactToEdit.email || '');
+  const [phoneNumber, setPhoneNumber] = useState(contactToEdit.phoneNumber || '');
+  const [position, setPosition] = useState(contactToEdit.position || '');
+  const [companyName, setCompanyName] = useState(contactToEdit.companyName || '');
+  const [notes, setNotes] = useState(contactToEdit.notes || '');
 
   useEffect(() => {
     dispatch(getAllContacts())
@@ -100,19 +100,25 @@ function DirectoryDash() {
             </tr>
           </thead>
           <tbody>
-            {directory && directory.map((contact) => (
-              <tr key={contact._id}>
-                <td scope="row">{contact.fullName}</td>
-                <td>{contact.email}</td>
-                <td>{contact.phoneNumber}</td>
-                <td>{contact.position}</td>
-                <td>{contact.companyName ? contact.companyName : '-'}</td>
-                <td>
-                  <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(contact) }} />
-                  <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(contact._id, contact.fullName) }} />
-                </td>
-              </tr>
-            ))}
+            {
+              directory.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className='text-center font-italic'>Il n'y a pas encore de contact dans le répertoire Loukoumotiv'.</td>
+                </tr>
+              ) : (
+                directory && directory.map((contact) => (
+                  <tr key={contact._id}>
+                    <td scope="row">{contact.fullName}</td>
+                    <td>{contact.email}</td>
+                    <td>{contact.phoneNumber}</td>
+                    <td>{contact.position}</td>
+                    <td>{contact.companyName ? contact.companyName : '-'}</td>
+                    <td>
+                      <img className='table-action-icon' src={edit} alt="modifier" onClick={() => { toggleEditModal(contact) }} />
+                      <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(contact._id, contact.fullName) }} />
+                    </td>
+                  </tr>
+                )))}
           </tbody>
         </table>
       </div>
@@ -128,13 +134,13 @@ function DirectoryDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="fullName">Nom *</Label>
-                        <Input type="text" placeholder={contactToEdit.fullName || ''} onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Email *</Label>
-                        <Input type="text" placeholder={contactToEdit.email || ''} onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -143,13 +149,13 @@ function DirectoryDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="place">Numéro de téléphone *</Label>
-                        <Input type="text" placeholder={contactToEdit.phoneNumber || ''} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="position">Poste / activité *</Label>
-                        <Input type="text" placeholder={contactToEdit.position || ''} onChange={(e) => setPosition(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={position} onChange={(e) => setPosition(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -158,7 +164,7 @@ function DirectoryDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="position">Entreprise (si applicable)</Label>
-                        <Input type="text" placeholder={contactToEdit.companyName || ''} onChange={(e) => setCompanyName(e.target.value)} bsSize="sm" />
+                        <Input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -167,7 +173,7 @@ function DirectoryDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" placeholder={contactToEdit.notes || ''} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                        <Input type="textarea" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -220,7 +226,7 @@ function DirectoryDash() {
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="fullName">Nom *</Label>
-                      <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
+                      <Input type="text" onChange={(e) => setFullName(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                   <div className="col-md-6">

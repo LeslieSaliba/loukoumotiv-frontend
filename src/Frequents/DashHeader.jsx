@@ -46,10 +46,10 @@ function DashHeader() {
     const [joiningDate, setJoiningDate] = useState(loggedMemberInfo.joiningDate || '');
     const [dateOfBirth, setDateOfBirth] = useState(loggedMemberInfo.dateOfBirth || '');
     const [fullAddress, setFullAddress] = useState({
-        number: loggedMemberInfo.number || '',
-        street: loggedMemberInfo.street || '',
-        ZIPcode: loggedMemberInfo.ZIPcode || '',
-        city: loggedMemberInfo.city || '',
+        number: loggedMemberInfo.fullAddress.number || '',
+        street: loggedMemberInfo.fullAddress.street || '',
+        ZIPcode: loggedMemberInfo.fullAddress.ZIPcode || '',
+        city: loggedMemberInfo.fullAddress.city || '',
     });
     const [instagram, setInstagram] = useState(loggedMemberInfo.instagram || '');
     const [picture, setPicture] = useState(null);

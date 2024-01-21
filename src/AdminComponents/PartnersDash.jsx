@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { getAllPartners, getPartnerById, addPartner, getPartnerByType, deletePartner, updatePartner } from '../redux/actions/partners'
+import { getAllPartners, addPartner, deletePartner, updatePartner } from '../redux/actions/partners'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -20,23 +20,23 @@ function PartnersDash() {
   const [partnerToDelete, setPartnerToDelete] = useState(null);
   const [validationMessage, setValidationMessage] = useState('');
 
-  const [name, setName] = useState('');
-  const [type, setType] = useState('');
-  const [website, setWebsite] = useState('');
+  const [name, setName] = useState(partnerToEdit.name || '');
+  const [type, setType] = useState(partnerToEdit.type || '');
+  const [website, setWebsite] = useState(partnerToEdit.website || '');
   const [location, setLocation] = useState({
-    place: null,
-    number: null,
-    street: null,
-    ZIPcode: null,
-    city: null,
+    place: partnerToEdit.location.place || '',
+    number: partnerToEdit.location.number || '',
+    street: partnerToEdit.location.street || '',
+    ZIPcode: partnerToEdit.location.ZIPcode || '',
+    city: partnerToEdit.location.city || '',
   })
   const [referenceContact, setReferenceContact] = useState({
-    name: null,
-    number: null,
-    email: null,
-    position: null,
+    name: partnerToEdit.referenceContact.name || '',
+    number: partnerToEdit.referenceContact.number || '',
+    email: partnerToEdit.referenceContact.email || '',
+    position: partnerToEdit.referenceContact.position || '',
   })
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState(partnerToEdit.notes || '');
 
   useEffect(() => {
     dispatch(getAllPartners())
@@ -110,7 +110,11 @@ function PartnersDash() {
             </tr>
           </thead>
           <tbody>
-            {partners && partners.map((partner) => (
+            {partners.length === 0 ? (
+              <tr>
+                <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore ajouté de partenaires Loukoumotiv'.</td>
+              </tr>
+            ) : (partners && partners.map((partner) => (
               <tr key={partner._id}>
                 <td scope="row">{partner.name}</td>
                 <td>{partner.type}</td>
@@ -121,7 +125,7 @@ function PartnersDash() {
                   <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(partner._id, partner.name) }} />
                 </td>
               </tr>
-            ))}
+            )))}
           </tbody>
         </table>
       </div>
@@ -137,13 +141,13 @@ function PartnersDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="fullName">Nom *</Label>
-                        <Input type="text" placeholder={partnerToEdit.name || ''} onChange={(e) => setName(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={name} onChange={(e) => setName(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Type *</Label>
-                        <Input type="select" placeholder={partnerToEdit.type || ''} onChange={(e) => setType(e.target.value)} bsSize="sm" required >
+                        <Input type="select" value={type} onChange={(e) => setType(e.target.value)} bsSize="sm" required >
                           <option value=""></option>
                           <option value="event">Event</option>
                           <option value="corporate">Corporate</option>
@@ -157,13 +161,13 @@ function PartnersDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="place">Précision sur le lieu *</Label>
-                        <Input type="text" placeholder={partnerToEdit.location?.place || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
+                        <Input type="text" value={location?.place} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="website">Site internet *</Label>
-                        <Input type="text" placeholder={partnerToEdit.website || ''} onChange={(e) => setWebsite(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={website} onChange={(e) => setWebsite(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -175,21 +179,21 @@ function PartnersDash() {
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="address">N° *</Label>
-                            <Input type="text" placeholder={partnerToEdit.location?.number || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={location?.number} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="address">Rue *</Label>
-                            <Input type="text" placeholder={partnerToEdit.location?.street || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={location?.street} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="address">Code postal *</Label>
-                            <Input type="text" placeholder={partnerToEdit.location?.ZIPcode || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={location?.ZIPcode} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="address">Ville *</Label>
-                            <Input type="text" placeholder={partnerToEdit.location?.city || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={location?.city} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                       </FormGroup>
@@ -203,21 +207,21 @@ function PartnersDash() {
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="name">Nom *</Label>
-                            <Input type="text" placeholder={partnerToEdit.referenceContact?.name || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, name: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={referenceContact?.name} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, name: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="number">Numéro de téléphone *</Label>
-                            <Input type="text" placeholder={partnerToEdit.referenceContact?.number || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, number: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={referenceContact?.number} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, number: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="email">Email *</Label>
-                            <Input type="text" placeholder={partnerToEdit.referenceContact?.email || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, email: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={referenceContact?.email} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, email: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="position">Poste *</Label>
-                            <Input type="text" placeholder={partnerToEdit.referenceContact?.position || ''} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, position: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={referenceContact?.position} onChange={(e) => setReferenceContact((prevReferenceContact) => ({ ...prevReferenceContact, position: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                       </FormGroup>
@@ -228,7 +232,7 @@ function PartnersDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" placeholder={partnerToEdit.notes || ''} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                        <Input type="textarea" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>

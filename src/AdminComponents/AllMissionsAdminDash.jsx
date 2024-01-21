@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { getUserID } from '../userInfo/getTeamData';
-import { getAllMissions, getMissionById, addMission, getMissionByType, deleteMission, updateMission, getMissionsByStatus, getMissionsByPartnerBillingStatus, getMissionsByTeamBillingStatus, registerToMission, dropMission } from '../redux/actions/missions';
-import { getAllPartners, getPartnerById } from '../redux/actions/partners';
+import { getAllMissions, addMission, deleteMission, updateMission, registerToMission, dropMission } from '../redux/actions/missions';
+import { getAllPartners } from '../redux/actions/partners';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -31,29 +31,29 @@ function AllMissionsAdminDash() {
   const [missionToDrop, setMissionToDrop] = useState(null);
   const [validationMessage, setValidationMessage] = useState('');
 
-  const [title, setTitle] = useState('');
-  const [type, setType] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState(missionToEdit.title || '');
+  const [type, setType] = useState(missionToEdit.type || '');
+  const [description, setDescription] = useState(missionToEdit.description || '');
   const [time, setTime] = useState({
-    date: null,
-    hours: [],
+    date: missionToEdit.time.date || '',
+    hours: [missionToEdit.time.hours || ''],
   })
   const [location, setLocation] = useState({
-    place: null,
-    number: null,
-    street: null,
-    ZIPcode: null,
-    city: null,
+    place: missionToEdit.location.place || '',
+    number: missionToEdit.location.number || '',
+    street: missionToEdit.location.street || '',
+    ZIPcode: missionToEdit.location.ZIPcode || '',
+    city: missionToEdit.location.city || '',
   })
-  const [partner, setPartner] = useState('');
-  const [capacity, setCapacity] = useState('');
-  const [requiredMembers, setRequiredMembers] = useState('');
-  const [registeredMembers, setRegisteredMembers] = useState([]);
-  const [remuneration, setRemuneration] = useState('');
-  const [status, setStatus] = useState('');
-  const [teamBilling, setTeamBilling] = useState('');
-  const [partnerBilling, setPartnerBilling] = useState('');
-  const [notes, setNotes] = useState('');
+  const [partner, setPartner] = useState(missionToEdit.partner.name || '');
+  const [capacity, setCapacity] = useState(missionToEdit.capacity || '');
+  const [requiredMembers, setRequiredMembers] = useState(missionToEdit.requiredMembers || '');
+  const [registeredMembers, setRegisteredMembers] = useState([missionToEdit.registeredmembers.fullName || '']);
+  const [remuneration, setRemuneration] = useState(missionToEdit.remuneration || '');
+  const [status, setStatus] = useState(missionToEdit.status || '');
+  const [teamBilling, setTeamBilling] = useState(missionToEdit.teamBilling || '');
+  const [partnerBilling, setPartnerBilling] = useState(missionToEdit.partnerBilling || '');
+  const [notes, setNotes] = useState(missionToEdit.notes || '');
 
   useEffect(() => {
     dispatch(getAllMissions());
@@ -121,7 +121,7 @@ function AllMissionsAdminDash() {
     setNotes('');
   }
 
-  const toggleRegisterModal = (Id, title, LoggedMemberId) => {
+  const toggleRegisterModal = (Id, title) => {
     setMissionToRegisterTo({ Id, title });
     setShowRegisterModal(!showRegisterModal)
   }
@@ -144,6 +144,7 @@ function AllMissionsAdminDash() {
       const { _id: teamMemberId } = registeredMember;
       dispatch(dropMission(Id, teamMemberId));
       setShowDropModal(false);
+      window.location.reload()
     }
   }
 
@@ -156,6 +157,7 @@ function AllMissionsAdminDash() {
     if (missionToDrop && missionToDrop.Id && LoggedMemberId) {
       dispatch(dropMission(missionToDrop.Id, LoggedMemberId));
       setShowAutoDropModal(false);
+      window.location.reload()
     }
   }
 
@@ -182,7 +184,11 @@ function AllMissionsAdminDash() {
             </tr>
           </thead>
           <tbody>
-            {missions &&
+            {missions.length === 0 ? (
+              <tr>
+                <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore ajouté de missions Loukoumotiv'.</td>
+              </tr>
+            ) : (missions &&
               missions.map((mission) => (
                 <tr key={mission._id}>
                   <td scope="row">{mission.title}</td>
@@ -210,8 +216,8 @@ function AllMissionsAdminDash() {
                   {mission.registeredMembers.length > 0 ? (
                     mission.registeredMembers.map((member, index) => (
                       <div key={index}>
-                        {member.fullName}
                         <img className="table-action-icon drop-mission-member" src={remove} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title, member)} />
+                        {member.fullName}
                       </div>
                     ))
                   ) : (
@@ -219,11 +225,11 @@ function AllMissionsAdminDash() {
                   )}
                   <td>{mission.remuneration}</td>
                   <td>
-                  {mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
-                        <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleAutoDropModal(mission._id, mission.title)} />
-                      ) : (
-                        <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
-                      )}
+                    {mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
+                      <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleAutoDropModal(mission._id, mission.title)} />
+                    ) : (
+                      <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
+                    )}
                     <img className="table-action-icon" src={edit} alt="modifier" onClick={() => toggleEditModal(mission)} />
                     <img
                       className="table-action-icon"
@@ -233,7 +239,7 @@ function AllMissionsAdminDash() {
                     />
                   </td>
                 </tr>
-              ))}
+              )))}
           </tbody>
         </table>
       </div>
@@ -249,13 +255,13 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="title">Titre *</Label>
-                        <Input type="text" placeholder={missionToEdit.title || ''} onChange={(e) => setTitle(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="status">Statut</Label>
-                        <Input type="select" placeholder={missionToEdit.status || ''} onChange={(e) => setStatus(e.target.value)} bsSize="sm">
+                        <Input type="select" value={status} onChange={(e) => setStatus(e.target.value)} bsSize="sm">
                           <option value=""></option>
                           <option value="to do">À venir</option>
                           <option value="done">Fait</option>
@@ -269,7 +275,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="partner">Partenaire *</Label>
-                        <Input type="select" placeholder={missionToEdit.partner || ''} onChange={(e) => setPartner(e.target.value)} bsSize="sm" required >
+                        <Input type="select" value={partner} onChange={(e) => setPartner(e.target.value)} bsSize="sm" required >
                           <option value=""></option>
                           {partners && partners.map((partner, index) => (
                             <option key={index} value={partner._id}>{partner.name}</option>
@@ -280,7 +286,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="type">Type *</Label>
-                        <Input type="select" placeholder={missionToEdit.type || ''} onChange={(e) => setType(e.target.value)} bsSize="sm" required >
+                        <Input type="select" value={type} onChange={(e) => setType(e.target.value)} bsSize="sm" required >
                           <option value=""></option>
                           <option value="event">Événementiel</option>
                           <option value="corporate">En entreprise</option>
@@ -294,13 +300,13 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="date">Date *</Label>
-                        <Input type="date" placeholder={missionToEdit.date || ''} onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: e.target.value }))} bsSize="sm" required />
+                        <Input type="date" value={time.date} onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="hours">Horaires *</Label>
-                        <Input type="text" placeholder={missionToEdit.hours || ''} onChange={(e) => setTime((prevTime) => ({ ...prevTime, hours: e.target.value }))} bsSize="sm" required />
+                        <Input type="text" value={time.hours} onChange={(e) => setTime((prevTime) => ({ ...prevTime, hours: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -309,13 +315,13 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="place">Précision sur le lieu *</Label>
-                        <Input type="email" placeholder={missionToEdit.place || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
+                        <Input type="email" value={location?.place} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, place: e.target.value }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="remuneration">Rémunération *</Label>
-                        <Input type="text" placeholder={missionToEdit.remuneration || ''} onChange={(e) => setRemuneration(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={remuneration} onChange={(e) => setRemuneration(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -324,7 +330,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="description">Description *</Label>
-                        <Input type="textarea" placeholder={missionToEdit.description || ''} onChange={(e) => setDescription(e.target.value)} bsSize="sm" required />
+                        <Input type="textarea" value={description} onChange={(e) => setDescription(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -336,21 +342,21 @@ function AllMissionsAdminDash() {
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">N° *</Label>
-                            <Input type="text" placeholder={missionToEdit.location?.number || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={location?.number} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, number: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Rue *</Label>
-                            <Input type="text" placeholder={missionToEdit.location?.street || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={location?.street} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, street: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">Code postal *</Label>
-                            <Input type="text" placeholder={missionToEdit.location?.ZIPcode || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={location?.ZIPcode} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, ZIPcode: e.target.value }))} bsSize="sm" required />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Ville *</Label>
-                            <Input type="text" placeholder={missionToEdit.location?.city || ''} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
+                            <Input type="text" value={location?.city} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} bsSize="sm" required />
                           </div>
                         </div>
                       </FormGroup>
@@ -361,13 +367,13 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="requiredMembers">Masseurs requis *</Label>
-                        <Input type="number" placeholder={missionToEdit.requiredMembers || ''} onChange={(e) => setRequiredMembers(e.target.value)} bsSize="sm" required />
+                        <Input type="number" value={requiredMembers} onChange={(e) => setRequiredMembers(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="capacity">Jauge *</Label>
-                        <Input type="text" placeholder={missionToEdit.capacity || ''} onChange={(e) => setCapacity(e.target.value)} bsSize="sm" required />
+                        <Input type="text" value={capacity} onChange={(e) => setCapacity(e.target.value)} bsSize="sm" required />
                       </FormGroup>
                     </div>
                   </div>
@@ -376,7 +382,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="teamBilling">Facturation équipe</Label>
-                        <Input type="select" placeholder={missionToEdit.teamBilling || ''} onChange={(e) => setTeamBilling(e.target.value)} bsSize="sm">
+                        <Input type="select" value={teamBilling} onChange={(e) => setTeamBilling(e.target.value)} bsSize="sm">
                           <option value=""></option>
                           <option value="to do">À faire</option>
                           <option value="in progress">En cours</option>
@@ -387,7 +393,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="partnerBilling">Facturation partenaire</Label>
-                        <Input type="select" placeholder={missionToEdit.partnerBilling || ''} onChange={(e) => setPartnerBilling(e.target.value)} bsSize="sm">
+                        <Input type="select" value={partnerBilling} onChange={(e) => setPartnerBilling(e.target.value)} bsSize="sm">
                           <option value=""></option>
                           <option value="to do">À faire</option>
                           <option value="in progress">En cours</option>
@@ -401,7 +407,7 @@ function AllMissionsAdminDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" placeholder={missionToEdit.notes || ''} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                        <Input type="textarea" value={notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -474,7 +480,7 @@ function AllMissionsAdminDash() {
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="partner">Partenaire *</Label>
-                      <Input type="select" placeholder={missionToEdit.partner || ''} onChange={(e) => setPartner(e.target.value)} bsSize="sm" required >
+                      <Input type="select" onChange={(e) => setPartner(e.target.value)} bsSize="sm" required >
                         <option value=""></option>
                         {partners && partners.map((partner, index) => (
                           <option key={index} value={partner._id}>{partner.name}</option>
@@ -683,7 +689,7 @@ function AllMissionsAdminDash() {
         </div>
       )}
 
-{showAutoDropModal && (
+      {showAutoDropModal && (
         <div className=''>
           <Modal isOpen={toggleAutoDropModal} toggle={toggleAutoDropModal}>
             <ModalHeader toggle={toggleAutoDropModal}>Se désinscrire à une mission</ModalHeader>

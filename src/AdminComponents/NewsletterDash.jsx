@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { getAllSubscribers, subscribeToNewsletter, getSubscriberById, unsubscribeToNewsletter } from '../redux/actions/newsletter'
+import { getAllSubscribers, subscribeToNewsletter, unsubscribeToNewsletter } from '../redux/actions/newsletter'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -70,14 +70,18 @@ function NewsletterDash() {
                         </tr>
                     </thead>
                     <tbody>
-                        {newsletter && newsletter.map((contact) => (
+                        {newsletter.length === 0 ? (
+                            <tr>
+                                <td colSpan="9" className='text-center font-italic'>Il n'y a pas encore d'inscrits à la newsletter Loukoumotiv'</td>
+                            </tr>
+                        ) : (newsletter && newsletter.map((contact) => (
                             <tr key={contact._id}>
                                 <td scope="row">{contact.email}</td>
                                 <td>
                                     <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleUnsubscribeModal(contact._id, contact.email) }} />
                                 </td>
                             </tr>
-                        ))}
+                        )))}
                     </tbody>
                 </table>
             </div>

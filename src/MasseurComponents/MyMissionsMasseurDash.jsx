@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { getUserID } from '../userInfo/getTeamData';
-import { getAllMissions, getMissionById, getMissionByType, DropMission, dropMission, getMissionsByTeamMember } from '../redux/actions/missions';
+import { getMissionsByTeamMember } from '../redux/actions/missions';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -71,6 +71,7 @@ function MyMissionsMasseurDash() {
             <thead>
               <tr>
                 <th scope="col">Titre</th>
+                <th scope="col">Statut &#8597;</th>
                 <th scope="col">Partenaire</th>
                 <th scope="col">Type</th>
                 <th scope="col">Date(s)</th>
@@ -91,6 +92,18 @@ function MyMissionsMasseurDash() {
                 missions.map((mission) => (
                   <tr key={mission._id}>
                     <td scope="row">{mission.title}</td>
+                    <td>{(() => {
+                    switch (mission.status) {
+                      case 'to do':
+                        return 'À venir';
+                      case 'done':
+                        return 'Fait';
+                      case 'cancelled':
+                        return 'Annulée';
+                      default:
+                        return mission.status;
+                    }
+                  })()}</td>
                     <td>{mission.partner.name}</td>
                     <td>{mission.type}</td>
                     <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>

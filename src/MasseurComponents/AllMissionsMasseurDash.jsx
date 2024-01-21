@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { getUserID } from '../userInfo/getTeamData';
-import { getAllMissions, getMissionById, getMissionByType, registerToMission, dropMission } from '../redux/actions/missions';
+import { getAllMissions, registerToMission } from '../redux/actions/missions';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -71,6 +71,7 @@ function AllMissionsMasseurDash() {
     if (missionToRegisterTo && missionToRegisterTo.Id) {
       dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId));
       setShowRegisterModal(false);
+      window.location.reload()
     }
   };
 
@@ -98,7 +99,12 @@ function AllMissionsMasseurDash() {
               </tr>
             </thead>
             <tbody>
-              {missions &&
+              {missions.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className='text-center font-italic'>Aucune mission Loukoumotiv à venir.</td>
+                </tr>
+              ) : (
+              missions &&
                 missions.map((mission) => (
                   <tr key={mission._id}>
                     <td scope="row">{mission.title}</td>
@@ -123,7 +129,7 @@ function AllMissionsMasseurDash() {
                       )}
                     </td>
                   </tr>
-                ))}
+                )))}
             </tbody>
           </table>
         </div>

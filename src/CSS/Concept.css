@@ -54,7 +54,7 @@
     height: 360px
 }
 
-.testimonial-title{
+.testimonial-title {
     margin-top: 75px;
 }
 
@@ -88,15 +88,16 @@
         flex-direction: column;
     }
 
-    .testimonial-container{
+    .testimonial-container {
         padding: 25px;
+        height: 425px
     }
 
-    .testimonial-title{
-        margin-top: 55px;
+    .testimonial-title {
+        margin-top: 35px;
     }
 
-    .single-testimonial{
+    .single-testimonial {
         width: 75%;
     }
 }
@@ -116,15 +117,16 @@
         flex-direction: column;
     }
 
-    .testimonial-container{
+    .testimonial-container {
         padding: 25px;
+        height: 425px
     }
 
-    .testimonial-title{
-        margin-top: 55px;
+    .testimonial-title {
+        margin-top: 35px;
     }
 
-    .single-testimonial{
+    .single-testimonial {
         width: 75%;
     }
 }

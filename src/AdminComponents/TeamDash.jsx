@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { getAllMembers, getMemberById, addMember, getByRole, deleteMember, updateMember, switchToMasseur, switchToAdmin } from '../redux/actions/team'
+import { getAllMembers, addMember, deleteMember, updateMember } from '../redux/actions/team'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
@@ -119,7 +119,11 @@ function TeamDash() {
             </tr>
           </thead>
           <tbody>
-            {team && team.map((teamMember) => (
+            {team.length === 0 ? (
+              <tr>
+                <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore créé les comptes de la team Loukoumotiv'. </td>
+              </tr>
+            ) : (team && team.map((teamMember) => (
               <tr key={teamMember._id}>
                 <td scope="row">{teamMember.fullName}</td>
                 <td>{teamMember.email}</td>
@@ -131,7 +135,7 @@ function TeamDash() {
                   <img className='table-action-icon' src={remove} alt="supprimer" onClick={() => { toggleDeleteModal(teamMember._id, teamMember.fullName) }} />
                 </td>
               </tr>
-            ))}
+            )))}
           </tbody>
         </table>
       </div>
@@ -154,7 +158,7 @@ function TeamDash() {
                       <FormGroup>
                         <Label for="role">Rôle *</Label>
                         <Input type="select" value={role} onChange={(e) => setRole(e.target.value)} bsSize="sm" required >
-                        <option value=""></option>
+                          <option value=""></option>
                           <option value="admin">Admin</option>
                           <option value="masseur">Masseur</option>
                         </Input>
@@ -199,21 +203,21 @@ function TeamDash() {
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">N°</Label>
-                            <Input type="text" value={fullAddress.number} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, number: e.target.value }))} bsSize="sm" />
+                            <Input type="text" value={fullAddress?.number} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, number: e.target.value }))} bsSize="sm" />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Rue</Label>
-                            <Input type="text" value={fullAddress.street} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, street: e.target.value }))} bsSize="sm" />
+                            <Input type="text" value={fullAddress?.street} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, street: e.target.value }))} bsSize="sm" />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">Code postal</Label>
-                            <Input type="text" value={fullAddress.ZIPcode} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, ZIPcode: e.target.value }))} bsSize="sm" />
+                            <Input type="text" value={fullAddress?.ZIPcode} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, ZIPcode: e.target.value }))} bsSize="sm" />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Ville</Label>
-                            <Input type="text" value={fullAddress.city} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
+                            <Input type="text" value={fullAddress?.city} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
                           </div>
                         </div>
                       </FormGroup>
@@ -344,7 +348,7 @@ function TeamDash() {
                     <FormGroup>
                       <Label for="role">Rôle *</Label>
                       <Input type="select" onChange={(e) => setRole(e.target.value)} bsSize="sm" required>
-                      <option value=""></option>
+                        <option value=""></option>
                         <option value="admin">Admin</option>
                         <option value="masseur">Masseur</option>
                       </Input>
