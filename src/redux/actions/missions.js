@@ -81,8 +81,8 @@ export const deleteMission = (Id) => {
     }
 }
 
-export const updateMission = (Id, title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes, picture) => {
-    const updatedMission = { title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes, picture }
+export const updateMission = (Id, title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes) => {
+    const updatedMission = { title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes }
     return (dispatch) => {
         axios.put(`${process.env.REACT_APP_URL}/missions/update/${Id}`, updatedMission)
             .then((response) => {

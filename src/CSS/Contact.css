@@ -89,7 +89,10 @@ input[type="radio"]:checked {
 }
 
 @media (min-width: 576px) and (max-width: 767.98px) {
-
+    .hero-bg-contact {
+        background-image: url(../assets/contact-mobile-hero.png);
+    }
+    
     /* QUOTATION */
 
     .contact-container {
@@ -116,6 +119,9 @@ input[type="radio"]:checked {
 }
 
 @media (max-width: 575.98px) {
+    .hero-bg-contact {
+        background-image: url(../assets/contact-mobile-hero.png);
+    }
 
     /* QUOTATION */
 

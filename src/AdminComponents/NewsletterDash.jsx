@@ -73,7 +73,7 @@ function NewsletterDash() {
                 <button className='action-button add-button d-block d-md-none' onClick={() => { toggleSubscribeModal() }}><img src={add} alt="ajouter" className='add-dash' /></button>
             </div>
             <div className='scrollable-table'>
-                <table className="table">
+                <table className="table newsletter-table">
                     <thead>
                         <tr>
                             <th scope="col">Email</th>

@@ -85,7 +85,31 @@ function AllMissionsAdminDash() {
 
   const handleEdit = () => {
     if (missionToEdit && missionToEdit._id) {
-      dispatch(updateMission(missionToEdit._id, missionToEdit));
+      const updatedTitle = title !== '' ? title : missionToEdit.title;
+      const updatedDescription = description !== '' ? description : missionToEdit.description;
+      const updatedPartner = partner !== '' ? partner : missionToEdit.partner;
+      const updatedLocation = {
+        place: location.place !== '' ? location.place : missionToEdit.location?.place || '',
+        number: location.number !== '' ? location.number : missionToEdit.location?.number || '',
+        street: location.street !== '' ? location.street : missionToEdit.location?.street || '',
+        ZIPcode: location.ZIPcode !== '' ? location.ZIPcode : missionToEdit.location?.ZIPcode || '',
+        city: location.city !== '' ? location.city : missionToEdit.location?.city || '',
+      };
+      const updatedType = type !== '' ? type : missionToEdit.type;
+      const updatedTime = {
+        place: time.date !== '' ? time.date : missionToEdit.time?.date || '',
+        number: time.hours !== '' ? time.hours : missionToEdit.time?.hours || [],
+      };
+      const updatedCapacity = capacity !== '' ? capacity : missionToEdit.capacity;
+      const updatedRequiredMembers = requiredMembers !== '' ? requiredMembers : missionToEdit.requiredMembers;
+      const updatedRegisteredMembers = registeredMembers !== '' ? registeredMembers : missionToEdit.registeredMembers;
+      const updatedRemuneration = remuneration !== '' ? remuneration : missionToEdit.remuneration;
+      const updatedStatus = status !== '' ? status : missionToEdit.status;
+      const updatedTeamBilling = teamBilling !== '' ? teamBilling : missionToEdit.teamBilling;
+      const updatedPartnerBilling = partnerBilling !== '' ? partnerBilling : missionToEdit.partnerBilling;
+      const updatedNotes = notes !== '' ? notes : missionToEdit.notes;
+
+      dispatch(updateMission(missionToEdit._id, updatedTitle, updatedDescription, updatedPartner, updatedLocation, updatedType, updatedTime, updatedCapacity, updatedRequiredMembers, updatedRegisteredMembers, updatedRemuneration, updatedStatus, updatedTeamBilling, updatedPartnerBilling, updatedNotes));
       setShowEditModal(false);
     }
   };
@@ -113,6 +137,7 @@ function AllMissionsAdminDash() {
       setValidationMessage('Les champs * doivent être renseignés');
       return;
     }
+    const registeredMembers = [];
     dispatch(addMission(title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes));
     setShowAddModal(false)
     window.location.reload()
@@ -173,7 +198,7 @@ function AllMissionsAdminDash() {
     }
   }
 
-  console.log("mission to edit: ", missionToEdit);
+  // console.log("mission to edit: ", missionToEdit);
 
   return (
     <div className="container ">
@@ -224,17 +249,17 @@ function AllMissionsAdminDash() {
                         return mission.status;
                     }
                   })()}</td>
-                  <td>{mission.partner.name}</td>
+                  <td>{mission.partner?.name}</td>
                   <td>{mission.type}</td>
-                  <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
+                  <td>{new Date(mission.time?.date).toLocaleDateString("en-GB")}</td>
                   <td>
-                    {mission.time.hours.map((hour, index) => (
+                    {mission.time?.hours.map((hour, index) => (
                       <div key={index}>{hour}</div>
                     ))}
                   </td>
                   <td>{mission.requiredMembers}</td>
-                  {mission.registeredMembers.length > 0 ? (
-                    mission.registeredMembers.map((member, index) => (
+                  {mission.registeredMembers?.length > 0 ? (
+                    mission.registeredMembers?.map((member, index) => (
                       <div key={index}>
                         <img className="table-action-icon drop-mission-member" src={remove} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title, member)} />
                         {member.fullName}
