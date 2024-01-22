@@ -140,6 +140,26 @@
     margin-right: 5px;
 }
 
+.full-mission-masseur {
+    color: rgb(172, 169, 169);
+}
+
+.full-mission-masseur td {
+    font-style: italic;
+}
+
+.full-mission-admin {
+    color: #8C5CBC;
+}
+
+.full-mission-admin td {
+    font-style: italic;
+}
+
+.name-registered-member {
+    font-style: italic;
+}
+
 /* .newsletter-table {
     width: 470px;
 } */

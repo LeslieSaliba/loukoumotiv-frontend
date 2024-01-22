@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { subscribeToNewsletter } from '../redux/actions/newsletter'
 import '../CSS/Homepage.css';
@@ -38,7 +39,7 @@ function Footer() {
             <div className="container-fluid footer-bg d-flex footer-desktop d-none d-md-flex">
                 <div className='container d-flex align-items-end justify-content-between'>
                     <div className='d-flex footer-left'>
-                        <img className='footer-logo' src={LogoVertical} alt="Loukoumotiv'" />
+                    <Link to='/'><img className='footer-logo' src={LogoVertical} alt="Loukoumotiv'" /></Link>
                         <span>© Loukoumotiv’ 2024.</span>
                     </div>
                     <div>

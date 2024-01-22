@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { formatDate } from '../Frequents/formatDate';
 import { getUserID } from '../userInfo/getTeamData';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
@@ -98,12 +99,28 @@ function DashHeader() {
     };
 
     const toggleEditModal = () => {
-        setShowEditModal(!showEditModal);       
+        setShowEditModal(!showEditModal);
     }
 
-    const handleEdit = (loggedMemberId, updatedFields) => {
+    const handleEdit = () => {
         if (loggedMemberInfo && loggedMemberInfo._id) {
-            // dispatch(updateMember(memberToEdit._id, memberToEdit));
+            const updatedFullName = fullName !== '' ? fullName : loggedMemberInfo.fullName;
+            const updatedPhoneNumber = phoneNumber !== '' ? phoneNumber : loggedMemberInfo.phoneNumber;
+            const updatedEmail = email !== '' ? email : loggedMemberInfo.email;
+            const updatedPassword = password !== '' ? password : loggedMemberInfo.password;
+            const updatedDateOfBirth = dateOfBirth !== '' ? dateOfBirth : loggedMemberInfo.dateOfBirth;
+            const updatedFullAddress = {
+              number: fullAddress.number !== '' ? fullAddress.number : loggedMemberInfo.fullAddress?.number || '',
+              street: fullAddress.street !== '' ? fullAddress.street : loggedMemberInfo.fullAddress?.street || '',
+              ZIPcode: fullAddress.ZIPcode !== '' ? fullAddress.ZIPcode : loggedMemberInfo.fullAddress?.ZIPcode || '',
+              city: fullAddress.city !== '' ? fullAddress.city : loggedMemberInfo.fullAddress?.city || '',
+            };
+            const updatedInstagram = instagram !== '' ? instagram : loggedMemberInfo.instagram;
+            const updatedSiret = siret !== '' ? siret : loggedMemberInfo.siret;
+            const updatedIBAN = IBAN !== '' ? IBAN : loggedMemberInfo.IBAN;
+            const updatedDrivingLicense = drivingLicense;
+            const updatedMotorized = motorized;
+            updateMember(loggedMemberId, updatedFullName, updatedPhoneNumber, updatedEmail, updatedPassword, updatedDateOfBirth, updatedFullAddress.number, updatedFullAddress.street, fullAddress.ZIPcode, updatedFullAddress.city, updatedInstagram, updatedSiret, updatedIBAN, updatedDrivingLicense, updatedMotorized, picture)
             setShowEditModal(false);
         }
     };
@@ -136,7 +153,7 @@ function DashHeader() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="dateOfBirth">Date de naissance</Label>
-                                            <Input type="date" placeholder={loggedMemberInfo.dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" />
+                                            <Input type="date" value={formatDate(loggedMemberInfo.dateOfBirth)} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
@@ -209,7 +226,9 @@ function DashHeader() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="picture">Photo</Label>
-                                            <img src={loggedMemberInfo.picture} alt="potrait" className='picture-team-modal'/>
+                                            {loggedMemberInfo.picture && (
+                                                <img src={loggedMemberInfo.picture} alt="portrait" className='picture-team-modal' />
+                                            )}
                                             <Input type="text" bsSize="sm" />
                                         </FormGroup>
                                     </div>

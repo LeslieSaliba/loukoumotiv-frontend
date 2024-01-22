@@ -250,6 +250,12 @@
 .social-media-icons img {
     width: 30px;
     margin-right: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.social-media-icons img:hover {
+    transform: scale(1.1);
 }
 
 .footer-logo {
@@ -280,6 +286,12 @@
     width: 27px;
     column-gap: 3px;
     margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.footer-social-media img:hover {
+    transform: scale(1.1);
 }
 
 .footer-social-media a {
@@ -332,6 +344,38 @@
     margin-top: 15px;
 }
 
+.hero-bg-oops {
+    background-image: url(../assets/oops-hero.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    position: relative;
+}
+
+.oops-container {
+    color: white;
+}
+
+.oops-container a {
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: 50%;
+}
+
+.oops-container a:hover {
+    text-decoration: underline;
+}
+
+.oops-icon {
+    padding-top: 15%;
+}
+
+.oops-subtitle {
+    margin-top: 5%;
+    padding-bottom: 15%;
+}
+
 /* RESPONSIVE */
 
 @media (min-width: 992px) and (max-width: 1199.98px) {}
@@ -366,6 +410,15 @@
 
     .mauve-button {
         margin-right: 0px;
+    }
+
+    .oops-icon {
+        padding-top: 50%;
+    }
+
+    .oops-subtitle {
+        margin-top: 5%;
+        padding-bottom: 53%;
     }
 }
 
@@ -404,5 +457,14 @@
 
     .mauve-button {
         margin-right: 0px;
+    }
+
+    .oops-icon {
+        padding-top: 50%;
+    }
+
+    .oops-subtitle {
+        margin-top: 5%;
+        padding-bottom: 53%;
     }
 }

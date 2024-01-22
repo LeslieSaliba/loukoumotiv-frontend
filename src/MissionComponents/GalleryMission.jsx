@@ -6,7 +6,7 @@ function GalleryMission() {
     const galleryData = [
         {
             name: 'corporatif',
-            imageSrc: '../gallery/gallery1.png',
+            imageSrc: '../gallery/gallery1.jpg',
         },
         {
             name: 'social',
@@ -14,7 +14,7 @@ function GalleryMission() {
         },
         {
             name: 'événementiel',
-            imageSrc: '../gallery/gallery3.png',
+            imageSrc: '../gallery/gallery3.jpg',
         },
     ]
 

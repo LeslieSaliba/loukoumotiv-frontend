@@ -52,7 +52,6 @@ function Header() {
                     <Link to='/concept'><li>Concept</li></Link>
                     <Link to='/equipe'><li>Équipe</li></Link>
                     <Link to='/mission'><li>Mission</li></Link>
-                    {/* <Link to='/se-connecter'><button className='oswald white-button'>Nous rejoindre</button></Link> */}
                     {isLoggedIn ? (
                         <button className='oswald white-button' onClick={() => navigateToRole(role)}>
                             Mon espace

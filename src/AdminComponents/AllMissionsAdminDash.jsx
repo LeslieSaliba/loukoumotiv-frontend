@@ -15,6 +15,7 @@ import edit from '../assets/icones/modifier_noir.png';
 import add from '../assets/icones/ajouter_blanc.png';
 import registered from '../assets/icones/inscrit_noir.png';
 import not_registered from '../assets/icones/desinscrit_noir.png';
+import full from '../assets/icones/cant_noir.png';
 
 function AllMissionsAdminDash() {
   const LoggedMemberId = getUserID();
@@ -23,6 +24,7 @@ function AllMissionsAdminDash() {
   const missions = useSelector((state) => state.missions);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showFullModal, setShowFullModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -103,7 +105,6 @@ function AllMissionsAdminDash() {
       };
       const updatedCapacity = capacity !== '' ? capacity : missionToEdit.capacity;
       const updatedRequiredMembers = requiredMembers !== '' ? requiredMembers : missionToEdit.requiredMembers;
-      // const updatedRegisteredMembers = registeredMembers !== '' ? registeredMembers : missionToEdit.registeredMembers;
       const updatedRemuneration = remuneration !== '' ? remuneration : missionToEdit.remuneration;
       const updatedStatus = status !== '' ? status : missionToEdit.status;
       const updatedTeamBilling = teamBilling !== '' ? teamBilling : missionToEdit.teamBilling;
@@ -143,20 +144,6 @@ function AllMissionsAdminDash() {
     dispatch(addMission(title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes));
     setShowAddModal(false)
     window.location.reload()
-    // setTitle('');
-    // setType('');
-    // setDescription('');
-    // setTime({ date: null, hours: [] });
-    // setLocation({ place: null, number: null, street: null, ZIPcode: null, city: null });
-    // setPartner('');
-    // setCapacity('');
-    // setRequiredMembers('');
-    // setRegisteredMembers([]);
-    // setRemuneration('');
-    // setStatus('');
-    // setTeamBilling('');
-    // setPartnerBilling('');
-    // setNotes('');
   }
 
   const toggleRegisterModal = (Id, title) => {
@@ -200,7 +187,9 @@ function AllMissionsAdminDash() {
     }
   }
 
-  // console.log("mission to edit: ", missionToEdit);
+  const toggleFullModal = () => {
+    setShowFullModal(!showFullModal)
+  }
 
   return (
     <div className="container ">
@@ -231,63 +220,68 @@ function AllMissionsAdminDash() {
                   <Loading />
                 </td>
               </tr>
-            ) : missions.length === 0 ? (
-              <tr>
-                <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore ajouté de missions Loukoumotiv'.</td>
-              </tr>
-            ) : (missions &&
-              missions.map((mission) => (
-                <tr key={mission._id}>
-                  <td scope="row">{mission.title}</td>
-                  <td>{(() => {
-                    switch (mission.status) {
-                      case 'to do':
-                        return 'À venir';
-                      case 'done':
-                        return 'Fait';
-                      case 'cancelled':
-                        return 'Annulée';
-                      default:
-                        return mission.status;
-                    }
-                  })()}</td>
-                  <td>{mission.partner?.name}</td>
-                  <td>{mission.type}</td>
-                  {console.log(new Date(mission.time?.date).toLocaleDateString("en-GB"))}
-                  <td>{new Date(mission.time?.date).toLocaleDateString("en-GB")}</td>
-                  <td>
-                    {mission.time?.hours.map((hour, index) => (
-                      <div key={index}>{hour}</div>
-                    ))}
-                  </td>
-                  <td>{mission.requiredMembers}</td>
-                  {mission.registeredMembers?.length > 0 ? (
-                    mission.registeredMembers?.map((member, index) => (
-                      <div key={index}>
-                        <img className="table-action-icon drop-mission-member" src={remove} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title, member)} />
-                        {member.fullName}
-                      </div>
-                    ))
-                  ) : (
-                    <div>-</div>
-                  )}
-                  <td>{mission.remuneration}</td>
-                  <td>
-                    {mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
-                      <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleAutoDropModal(mission._id, mission.title)} />
+            )
+              // : missions.length === 0 ? (
+              //   <tr>
+              //     <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore ajouté de missions Loukoumotiv'.</td>
+              //   </tr>
+              // ) 
+              : (missions &&
+                missions.map((mission) => (
+                  <tr key={mission._id} className={mission.requiredMembers === mission.registeredMembers.length ? "full-mission-admin" : ""}>
+                    <td scope="row">{mission.title}</td>
+                    <td>{(() => {
+                      switch (mission.status) {
+                        case 'to do':
+                          return 'À venir';
+                        case 'done':
+                          return 'Fait';
+                        case 'cancelled':
+                          return 'Annulée';
+                        default:
+                          return mission.status;
+                      }
+                    })()}</td>
+                    <td>{mission.partner?.name}</td>
+                    <td>{mission.type}</td>
+                    {console.log(new Date(mission.time?.date).toLocaleDateString("en-GB"))}
+                    <td>{new Date(mission.time?.date).toLocaleDateString("en-GB")}</td>
+                    <td>
+                      {mission.time?.hours.map((hour, index) => (
+                        <div key={index}>{hour}</div>
+                      ))}
+                    </td>
+                    <td>{mission.requiredMembers}</td>
+                    {mission.registeredMembers?.length > 0 ? (
+                      mission.registeredMembers?.map((member, index) => (
+                        <div key={index} className='name-registered-member'>
+                          <img className="table-action-icon drop-mission-member" src={remove} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title, member)} />
+                          {member.fullName}
+                        </div>
+                      ))
                     ) : (
-                      <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
+                      <div>-</div>
                     )}
-                    <img className="table-action-icon" src={edit} alt="modifier" onClick={() => toggleEditModal(mission)} />
-                    <img
-                      className="table-action-icon"
-                      src={remove}
-                      alt="supprimer"
-                      onClick={() => toggleDeleteModal(mission._id, mission.title)}
-                    />
-                  </td>
-                </tr>
-              )))}
+                    <td>{mission.remuneration}</td>
+                    <td>
+                      {mission.requiredMembers === mission.registeredMembers.length ?
+                        <img className="table-action-icon" src={full} alt="complète" onClick={() => toggleFullModal()} /> :
+                        (mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
+                          <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title)} />
+                        ) : (
+                          <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
+                        ))
+                      }
+                      <img className="table-action-icon" src={edit} alt="modifier" onClick={() => toggleEditModal(mission)} />
+                      <img
+                        className="table-action-icon"
+                        src={remove}
+                        alt="supprimer"
+                        onClick={() => toggleDeleteModal(mission._id, mission.title)}
+                      />
+                    </td>
+                  </tr>
+                )))}
           </tbody>
         </table>
       </div>
@@ -748,6 +742,26 @@ function AllMissionsAdminDash() {
               </Button>
               <Button className='cancel-button' onClick={toggleAutoDropModal}>
                 Annuler
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+      )}
+
+{showFullModal && (
+        <div className=''>
+          <Modal isOpen={showFullModal} toggle={toggleFullModal}>
+            <ModalHeader toggle={toggleFullModal}>Mission complète</ModalHeader>
+            <ModalBody>
+                <div>
+                  <p>Cette mission a atteint le nombre maximum de loukoums masseurs inscrits !</p>
+                  <br />
+                  <p>N'oubliez pas de leur envoyer une confirmation de mission !</p>
+                </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button className='action-button' onClick={toggleFullModal}>
+                Ok
               </Button>
             </ModalFooter>
           </Modal>

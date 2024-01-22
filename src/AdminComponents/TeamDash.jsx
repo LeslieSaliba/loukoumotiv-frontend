@@ -92,8 +92,8 @@ function TeamDash() {
     const updatedSiret = siret !== '' ? siret : memberToEdit.siret;
     const updatedIBAN = IBAN !== '' ? IBAN : memberToEdit.IBAN;
     const updatedJoiningDate = joiningDate !== '' ? joiningDate : memberToEdit.joiningDate;
-    const updatedDrivingLicense = drivingLicense; 
-    const updatedMotorized = motorized; 
+    const updatedDrivingLicense = drivingLicense;
+    const updatedMotorized = motorized;
     const updatedNotes = notes !== '' ? notes : memberToEdit.notes;
     // const picture ; 
     console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', updatedEmail, '+', updatedPassword, '+')
@@ -280,7 +280,9 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="picture">Photo</Label>
-                        <img src={memberToEdit.picture} alt="portrait" className='picture-team-modal' />
+                        {memberToEdit.picture && (
+                          <img src={memberToEdit.picture} alt="portrait" className='picture-team-modal' />
+                        )}
                         <Input type="file" onChange={(e) => setPicture(e.target.files[0])} bsSize="sm" />
                       </FormGroup>
                     </div>
@@ -304,7 +306,7 @@ function TeamDash() {
                   <div className="row">
                     <div className="col-md-6">
                       <FormGroup>
-                        <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
+                        <Label for="joiningDate">Loukoum'anniversaire</Label>
                         <Input type="date" value={formatDate(memberToEdit.joiningDate)} onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
@@ -426,8 +428,8 @@ function TeamDash() {
                   </div>
                   <div className="col-md-6">
                     <FormGroup>
-                      <Label for="joiningDate">Date de début chez Loukoumotiv' *</Label>
-                      <Input type="date" onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
+                      <Label for="joiningDate">Loukoum'anniversaire *</Label>
+                      <Input type="date" onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
                 </div>

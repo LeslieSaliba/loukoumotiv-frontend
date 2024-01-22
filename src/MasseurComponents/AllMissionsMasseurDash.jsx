@@ -11,12 +11,14 @@ import '../CSS/bootstrap.min.css';
 import registered from '../assets/icones/inscrit_noir.png';
 import not_registered from '../assets/icones/desinscrit_noir.png';
 import see_details from '../assets/icones/voir_noir.png';
+import full from '../assets/icones/cant_noir.png';
 
 function AllMissionsMasseurDash() {
   const dispatch = useDispatch();
   const missions = useSelector((state) => state.missions.filter(mission => mission.status === 'to do'));
   const [loading, setLoading] = useState(true);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showFullModal, setShowFullModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showDropModal, setShowDropModal] = useState(false);
   const [missionToSee, setMissionToSee] = useState({});
@@ -67,12 +69,9 @@ function AllMissionsMasseurDash() {
     setShowDetailsModal(!showDetailsModal)
   }
 
-  console.log('mission: ', missionToSee);
-  // const handleSee = () => {
-  //   if (missionToSee && missionToSee._id) {
-  //     setShowDetailsModal(false);
-  //   }
-  // };
+  const toggleFullModal = () => {
+    setShowFullModal(!showFullModal)
+  }
 
   const toggleRegisterModal = (Id, title, LoggedMemberId) => {
     setMissionToRegisterTo({ Id, title });
@@ -117,37 +116,42 @@ function AllMissionsMasseurDash() {
                     <Loading />
                   </td>
                 </tr>
-              ) : missions.length === 0 ? (
-                <tr>
-                  <td colSpan="9" className='text-center font-italic'>Aucune mission Loukoumotiv à venir.</td>
-                </tr>
-              ) : (
-                missions &&
-                missions.map((mission) => (
-                  <tr key={mission._id}>
-                    <td scope="row">{mission.title}</td>
-                    <td>{mission.partner.name}</td>
-                    <td>{mission.type}</td>
-                    <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
-                    <td>
-                      {mission.time.hours.map((hour, index) => (
-                        <div key={index}>{hour}</div>
-                      ))}
-                    </td>
-                    <td>{mission.requiredMembers}</td>
-                    <td>{mission.remuneration}</td>
-                    <td>
-                      <img className="table-action-icon" src={see_details} alt="détails" onClick={() => toggleDetailsModal(mission)} />
-                    </td>
-                    <td>
-                      {mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
-                        <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title)} />
-                      ) : (
-                        <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
-                      )}
-                    </td>
-                  </tr>
-                )))}
+              )
+                // : missions.length === 0 ? (
+                //   <tr>
+                //     <td colSpan="9" className='text-center font-italic'>Aucune mission Loukoumotiv à venir.</td>
+                //   </tr>
+                // ) 
+                : (
+                  missions &&
+                  missions.map((mission) => (
+                    <tr key={mission._id} className={mission.requiredMembers === mission.registeredMembers.length ? "full-mission-masseur" : ""}>
+                      <td scope="row">{mission.title}</td>
+                      <td>{mission.partner.name}</td>
+                      <td>{mission.type}</td>
+                      <td>{new Date(mission.time.date).toLocaleDateString("en-GB")}</td>
+                      <td>
+                        {mission.time.hours.map((hour, index) => (
+                          <div key={index}>{hour}</div>
+                        ))}
+                      </td>
+                      <td>{mission.requiredMembers}</td>
+                      <td>{mission.remuneration}</td>
+                      <td>
+                        <img className="table-action-icon" src={see_details} alt="détails" onClick={() => toggleDetailsModal(mission)} />
+                      </td>
+                      <td>
+                        {mission.requiredMembers === mission.registeredMembers.length ?
+                          <img className="table-action-icon" src={full} alt="complète" onClick={() => toggleFullModal()} /> :
+                          (mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
+                            <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title)} />
+                          ) : (
+                            <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
+                          ))
+                        }
+                      </td>
+                    </tr>
+                  )))}
             </tbody>
           </table>
         </div>
@@ -338,6 +342,26 @@ function AllMissionsMasseurDash() {
             </ModalBody>
             <ModalFooter>
               <Button className='action-button' onClick={toggleDropModal}>
+                Ok
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+      )}
+
+      {showFullModal && (
+        <div className=''>
+          <Modal isOpen={showFullModal} toggle={toggleFullModal}>
+            <ModalHeader toggle={toggleFullModal}>Mission déjà complète</ModalHeader>
+            <ModalBody>
+                <div>
+                  <p>Cette mission a atteint le nombre maximum de loukoums masseurs inscrits !</p>
+                  <br />
+                  <p>On rajoute des missions régulièrement, stay tuned !</p>
+                </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button className='action-button' onClick={toggleFullModal}>
                 Ok
               </Button>
             </ModalFooter>

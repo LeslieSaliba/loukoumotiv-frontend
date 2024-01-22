@@ -9,6 +9,7 @@ import Contact from './Pages/Contact';
 import Login from './Pages/Login';
 import AdminDashboard from './Pages/AdminDashboard';
 import MasseurDashboard from './Pages/MasseurDashboard';
+import Oops from './Pages/Oops';
 
 function App() {
   const role = getUserRole();
@@ -25,6 +26,7 @@ function App() {
       {/* <Route path="/masseur/*" element={role === "masseur" ? <MasseurDashboard /> : <Homepage />} /> */}
       <Route path="/admin/*" element={<AdminDashboard />} />
       <Route path="/masseur/*" element={<MasseurDashboard />} />
+      <Route path="/*" element={<Oops />} />
     </Routes>
   );
 }

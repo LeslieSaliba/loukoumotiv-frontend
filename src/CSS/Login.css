@@ -74,7 +74,7 @@
 .login-container {
     background-color: #8C5CBC;
     color: #FFF;
-    margin-bottom: -5px;
+    margin-bottom: 50px;
     padding: 25px;
 }
 
@@ -166,6 +166,10 @@
     .candidature-container form {
         row-gap: 20px;
         margin-bottom: 0;
+    }
+
+    .login-container {
+        margin-bottom: -5px;
     }
 
     .login-container h4 {
