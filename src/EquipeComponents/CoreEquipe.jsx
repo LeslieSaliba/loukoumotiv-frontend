@@ -23,7 +23,7 @@ function CoreEquipe() {
         {
             name: 'Cassandra Seyi',
             position: `Responsable partenariats et marketing`,
-            imageSrc: '../equipe/Glenn.png',
+            imageSrc: '../equipe/dummy.jpg',
         },
     ]
 

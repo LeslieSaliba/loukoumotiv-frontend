@@ -688,10 +688,6 @@ function AllMissionsAdminDash() {
               {missionToRegisterTo && (
                 <div>
                   <p>Êtes-vous sûr.e de vouloir vous inscrire à la mission '{missionToRegisterTo.title}' ?</p>
-                  <p className='font-italic'>Vous recevrez une confirmation d'inscription sous quelques jours.
-                    <br />
-                    <br /> Si vous avez un empêchement ou ne souhaitez plus participer à la mission, vous devrez passer par l'un des administrateurs.
-                  </p>
                 </div>
               )}
             </ModalBody>

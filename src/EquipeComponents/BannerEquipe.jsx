@@ -16,20 +16,28 @@ function BannerEquipe() {
             imageSrc: '../equipe/Titouan.png',
         },
         {
-            name: 'Glenn Saliba',
-            imageSrc: '../equipe/Glenn.png',
+            name: 'Margaux Liurette',
+            imageSrc: '../equipe/Margaux.jpg',
         },
         {
             name: 'Vincent Céron',
             imageSrc: '../equipe/Vincent.png',
         },
         {
-            name: 'Antoine Baudin',
-            imageSrc: '../equipe/Antoine.png',
+            name: 'Ombeline De La Bourdonnaye',
+            imageSrc: '../equipe/Ombeline.jpg',
         },
         {
-            name: 'Titouan De Luca',
-            imageSrc: '../equipe/Titouan.png',
+            name: 'Grégory Richard',
+            imageSrc: '../equipe/Gregory.jpg',
+        },
+        {
+            name: 'Hugo Haas',
+            imageSrc: '../equipe/Hugo.jpeg',
+        },
+        {
+            name: 'Jean-Gabriel Davis',
+            imageSrc: '../equipe/JeanGabriel.png',
         },
     ]
 

@@ -28,12 +28,28 @@ function ClientsHomepage() {
             imageSrc: '../clients/le-mazette.png',
         },
         {
-            name: 'Cabaret Sauvage',
-            imageSrc: '../clients/cabaret-sauvage.png',
+            name: 'Hôpital Necker',
+            imageSrc: '../clients/necker.png',
         },
         {
-            name: 'EDF',
-            imageSrc: '../clients/edf.png',
+            name: 'monMartin',
+            imageSrc: '../clients/mon-martin.png',
+        },
+        {
+            name: 'FDJ',
+            imageSrc: '../clients/fdj.png',
+        },
+        {
+            name: 'Hello Fresh',
+            imageSrc: '../clients/hello-fresh.png',
+        },
+        {
+            name: 'Enfin Lundi',
+            imageSrc: '../clients/enfin-lundi.png',
+        },
+        {
+            name: 'AG ostéo',
+            imageSrc: '../clients/ag-osteo.png',
         },
     ]
 

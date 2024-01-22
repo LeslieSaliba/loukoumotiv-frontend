@@ -47,7 +47,7 @@ function LoginLogin() {
     };
 
     return (
-        <div className="container login-container d-flex flex-column justify-content-center align-items-center">
+        <div className="container-fluid login-container d-flex flex-column justify-content-center align-items-center">
             <h4 className="oswald">
                 Espace connexion loukoum masseur
             </h4>

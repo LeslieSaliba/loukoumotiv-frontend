@@ -74,7 +74,7 @@
 .login-container {
     background-color: #8C5CBC;
     color: #FFF;
-    margin-bottom: 50px;
+    margin-bottom: -5px;
     padding: 25px;
 }
 
@@ -96,7 +96,7 @@
     color: #000;
 }
 
-.login-container input:focus{
+.login-container input:focus {
     border-color: none;
     box-shadow: none;
 }
