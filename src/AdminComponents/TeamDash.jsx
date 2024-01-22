@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Loading from '../Frequents/Loading';
+import { formatDate } from '../Frequents/formatDate';
 import { useSelector, useDispatch } from "react-redux";
 import { getAllMembers, addMember, deleteMember, updateMember } from '../redux/actions/team'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -40,8 +41,9 @@ function TeamDash() {
   const [picture, setPicture] = useState(null);
   const [siret, setSiret] = useState(memberToEdit.siret || '');
   const [IBAN, setIBAN] = useState(memberToEdit.IBAN || '');
-  const [drivingLicense, setDrivingLicense] = useState(false);
-  const [motorized, setMotorized] = useState(false);
+  const [drivingLicense, setDrivingLicense] = useState(memberToEdit.drivingLicense || false);
+  const [motorized, setMotorized] = useState(memberToEdit.motorized || false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,15 +64,17 @@ function TeamDash() {
 
   const toggleEditModal = (teamMember) => {
     setMemberToEdit(teamMember);
+    // setDrivingLicense(teamMember.drivingLicense || false);
+    // setMotorized(teamMember.motorized || false);
     setShowEditModal(!showEditModal)
   }
 
   const handleEdit = () => {
-    if (!role || !phoneNumber || !email || !password) {
-      console.error('Les champs * doivent être renseignés');
-      setValidationMessage('Les champs * doivent être renseignés');
-      return;
-    }
+    // if (!role || !phoneNumber || !email || !password) {
+    //   console.error('Les champs * doivent être renseignés');
+    //   setValidationMessage('Les champs * doivent être renseignés');
+    //   return;
+    // }
 
     const updatedFullName = fullName !== '' ? fullName : memberToEdit.fullName;
     const updatedRole = role !== '' ? role : memberToEdit.role;
@@ -88,11 +92,11 @@ function TeamDash() {
     const updatedSiret = siret !== '' ? siret : memberToEdit.siret;
     const updatedIBAN = IBAN !== '' ? IBAN : memberToEdit.IBAN;
     const updatedJoiningDate = joiningDate !== '' ? joiningDate : memberToEdit.joiningDate;
-    const updatedDrivingLicense = drivingLicense !== '' ? drivingLicense : memberToEdit.drivingLicense;
-    const updatedMotorized = motorized !== '' ? motorized : memberToEdit.motorized;
+    const updatedDrivingLicense = drivingLicense; 
+    const updatedMotorized = motorized; 
     const updatedNotes = notes !== '' ? notes : memberToEdit.notes;
     // const picture ; 
-console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', updatedEmail, '+', updatedPassword, '+' )
+    console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', updatedEmail, '+', updatedPassword, '+')
 
     if (memberToEdit && memberToEdit._id) {
       dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedPassword, updatedDateOfBirth, updatedFullAddress.number, updatedFullAddress.street, fullAddress.ZIPcode, updatedFullAddress.city, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture));
@@ -233,7 +237,7 @@ console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', upd
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="dateOfBirth">Date de naissance</Label>
-                        <Input type="date" placeholder={memberToEdit.dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" disabled />
+                        <Input type="date" value={formatDate(memberToEdit.dateOfBirth)} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" disabled />
                       </FormGroup>
                     </div>
                   </div>
@@ -276,7 +280,7 @@ console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', upd
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="picture">Photo</Label>
-                        <img src={memberToEdit.picture} alt="test" />
+                        <img src={memberToEdit.picture} alt="portrait" className='picture-team-modal' />
                         <Input type="file" onChange={(e) => setPicture(e.target.files[0])} bsSize="sm" />
                       </FormGroup>
                     </div>
@@ -301,7 +305,7 @@ console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', upd
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
-                        <Input type="date" placeholder={memberToEdit.joiningDate} onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
+                        <Input type="date" value={formatDate(memberToEdit.joiningDate)} onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -309,7 +313,7 @@ console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', upd
                         <div className="col-md-12">
                           <FormGroup check>
                             <Label check >
-                              <Input type="checkbox" onChange={(e) => setDrivingLicense(true)} />
+                              <Input type="checkbox" checked={drivingLicense} onChange={(e) => setDrivingLicense(e.target.checked)} />
                               Permis de conduire
                             </Label>
                           </FormGroup>
@@ -317,7 +321,7 @@ console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', upd
                         <div className="col-md-12">
                           <FormGroup check>
                             <Label check>
-                              <Input type="checkbox" onChange={(e) => setMotorized(true)} />
+                              <Input type="checkbox" checked={motorized} onChange={(e) => setMotorized(e.target.checked)} />
                               Véhiculé.e
                             </Label>
                           </FormGroup>

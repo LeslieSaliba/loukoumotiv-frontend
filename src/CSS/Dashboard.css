@@ -172,6 +172,13 @@
     padding: 10px;
 }
 
+.picture-team-modal {
+    max-width: 150px;
+    max-height: 150px;
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+
 .cancel-button:hover {
     color: #6A3E96;
     border: 1px solid #6A3E96;

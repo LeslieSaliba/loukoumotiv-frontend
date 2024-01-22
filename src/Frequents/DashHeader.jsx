@@ -130,13 +130,13 @@ function DashHeader() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="fullName">Nom complet</Label>
-                                            <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" disabled />
+                                            <Input type="text" placeholder={loggedMemberInfo.fullName} onChange={(e) => setFullName(e.target.value)} bsSize="sm" disabled />
                                         </FormGroup>
                                     </div>
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="dateOfBirth">Date de naissance</Label>
-                                            <Input type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" />
+                                            <Input type="date" placeholder={loggedMemberInfo.dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
@@ -145,13 +145,13 @@ function DashHeader() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="phoneNumber">Numéro de téléphone</Label>
-                                            <Input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" />
+                                            <Input type="text" placeholder={loggedMemberInfo.phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="email">Email</Label>
-                                            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
+                                            <Input type="email" placeholder={loggedMemberInfo.email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
@@ -159,14 +159,14 @@ function DashHeader() {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <FormGroup>
-                                            <Label for="password">Mot de passe</Label>
-                                            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
+                                            <Label for="password">Changer votre mot de passe </Label>
+                                            <Input type="password" onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                     <div className="col-md-6">
                                         <FormGroup>
-                                            <Label for="password">Confirmer mot de passe</Label>
-                                            <Input type="password" value={password} onChange={(e) => setConfirmPassword(e.target.value)} bsSize="sm" />
+                                            <Label for="password">Confirmer votre nouveau mot de passe</Label>
+                                            <Input type="password" onChange={(e) => setConfirmPassword(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
@@ -178,21 +178,21 @@ function DashHeader() {
                                             <div className="row">
                                                 <div className="col-md-6">
                                                     <Label for="fullAddress">N°</Label>
-                                                    <Input type="text" value={fullAddress?.number} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, number: e.target.value }))} bsSize="sm" />
+                                                    <Input type="text" placeholder={loggedMemberInfo.fullAddress?.number} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, number: e.target.value }))} bsSize="sm" />
                                                 </div>
                                                 <div className="col-md-6">
                                                     <Label for="fullAddress">Rue</Label>
-                                                    <Input type="text" value={fullAddress?.street} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, street: e.target.value }))} bsSize="sm" />
+                                                    <Input type="text" placeholder={loggedMemberInfo.fullAddress?.street} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, street: e.target.value }))} bsSize="sm" />
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-md-6">
                                                     <Label for="fullAddress">Code postal</Label>
-                                                    <Input type="text" value={fullAddress?.ZIPcode} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, ZIPcode: e.target.value }))} bsSize="sm" />
+                                                    <Input type="text" placeholder={loggedMemberInfo.fullAddress?.ZIPcode} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, ZIPcode: e.target.value }))} bsSize="sm" />
                                                 </div>
                                                 <div className="col-md-6">
                                                     <Label for="fullAddress">Ville</Label>
-                                                    <Input type="text" value={fullAddress?.city} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
+                                                    <Input type="text" placeholder={loggedMemberInfo.fullAddress?.city} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
                                                 </div>
                                             </div>
                                         </FormGroup>
@@ -203,14 +203,14 @@ function DashHeader() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="instagram">Instagram (@)</Label>
-                                            <Input type="text" value={instagram} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
+                                            <Input type="text" placeholder={loggedMemberInfo.instagram} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="picture">Photo</Label>
-                                            <img src={picture} alt="photo" />
-                                            <Input type="text" value={picture} bsSize="sm" />
+                                            <img src={loggedMemberInfo.picture} alt="potrait" className='picture-team-modal'/>
+                                            <Input type="text" bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
@@ -219,13 +219,13 @@ function DashHeader() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="siret">Siret</Label>
-                                            <Input type="text" value={siret} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
+                                            <Input type="text" placeholder={loggedMemberInfo.siret} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="IBAN">IBAN</Label>
-                                            <Input type="text" value={IBAN} onChange={(e) => setIBAN(e.target.value)} bsSize="sm" />
+                                            <Input type="text" placeholder={loggedMemberInfo.IBAN} onChange={(e) => setIBAN(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
@@ -234,7 +234,7 @@ function DashHeader() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
-                                            <Input type="date" value={joiningDate} bsSize="sm" disabled />
+                                            <Input type="text" placeholder={loggedMemberInfo.joiningDate} bsSize="sm" disabled />
                                         </FormGroup>
                                     </div>
                                     <div className="col-md-6">
@@ -242,7 +242,7 @@ function DashHeader() {
                                             <div className="col-md-12">
                                                 <FormGroup check>
                                                     <Label check >
-                                                        <Input type="checkbox" checked={drivingLicense || false} onChange={(e) => setDrivingLicense(e.target.value)} />
+                                                        <Input type="checkbox" defaultChecked={drivingLicense || false} onChange={(e) => setDrivingLicense(e.target.checked)} />
                                                         Permis de conduire
                                                     </Label>
                                                 </FormGroup>
@@ -250,7 +250,7 @@ function DashHeader() {
                                             <div className="col-md-12">
                                                 <FormGroup check>
                                                     <Label check>
-                                                        <Input type="checkbox" checked={motorized || false} onChange={(e) => setMotorized(e.target.value)} />
+                                                        <Input type="checkbox" defaultChecked={drivingLicense || false} onChange={(e) => setMotorized(e.target.checked)} />
                                                         Véhiculé.e
                                                     </Label>
                                                 </FormGroup>
