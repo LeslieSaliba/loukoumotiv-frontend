@@ -75,14 +75,7 @@ function AllMissionsAdminDash() {
     fetchData();
   }, [dispatch])
 
-console.log(loading); 
-
   const partnerIds = partners.map(partner => partner._id);
-  // console.log("partners: ", partnerIds);
-
-  // setTimeout(() => {
-  //   console.log("missions", missions);
-  // }, 5000);
 
   const toggleEditModal = (mission) => {
     setMissionToEdit(mission);
@@ -103,7 +96,7 @@ console.log(loading);
       };
       const updatedType = type !== '' ? type : missionToEdit.type;
       const updatedTime = {
-        date: time.date !== '' ? time.date : missionToEdit.time?.date || '',
+        date: formatDate(time.date) !== '' ? formatDate(time.date) : formatDate(missionToEdit.time?.date) || '',
         hours: time.hours !== '' ? time.hours : missionToEdit.time?.hours || [],
       };
       const updatedCapacity = capacity !== '' ? capacity : missionToEdit.capacity;
@@ -115,8 +108,8 @@ console.log(loading);
       const updatedNotes = notes !== '' ? notes : missionToEdit.notes;
 
       dispatch(updateMission(missionToEdit._id, updatedTitle, updatedDescription, updatedPartner, updatedLocation, updatedType, updatedTime, updatedCapacity, updatedRequiredMembers, updatedRemuneration, updatedStatus, updatedTeamBilling, updatedPartnerBilling, updatedNotes, token));
-      window.location.reload()
       setShowEditModal(false);
+      // window.location.reload()
     }
   };
 
@@ -205,7 +198,7 @@ console.log(loading);
           <thead>
             <tr>
               <th scope="col">Titre</th>
-              <th scope="col">Statut &#8597;</th>
+              <th scope="col">Statut</th>
               <th scope="col">Partenaire</th>
               <th scope="col">Type</th>
               <th scope="col">Date(s)</th>
@@ -217,6 +210,7 @@ console.log(loading);
             </tr>
           </thead>
           <tbody>
+      
             {loading ? (
               <tr>
                 <td colSpan="6" className='text-center'>
@@ -228,63 +222,63 @@ console.log(loading);
                 <tr>
                   <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore ajouté de missions Loukoumotiv'.</td>
                 </tr>
-              ) 
-              : (missions &&
-                missions.map((mission) => (
-                  <tr key={mission._id} className={mission.requiredMembers === mission.registeredMembers.length ? "full-mission-admin" : ""}>
-                    <td scope="row">{mission.title}</td>
-                    <td>{(() => {
-                      switch (mission.status) {
-                        case 'to do':
-                          return 'À venir';
-                        case 'done':
-                          return 'Fait';
-                        case 'cancelled':
-                          return 'Annulée';
-                        default:
-                          return mission.status;
-                      }
-                    })()}</td>
-                    <td>{mission.partner?.name}</td>
-                    <td>{mission.type}</td>
-                    {console.log(new Date(mission.time?.date).toLocaleDateString("en-GB"))}
-                    <td>{new Date(mission.time?.date).toLocaleDateString("en-GB")}</td>
-                    <td>
-                      {mission.time?.hours.map((hour, index) => (
-                        <div key={index}>{hour}</div>
-                      ))}
-                    </td>
-                    <td>{mission.requiredMembers}</td>
-                    {mission.registeredMembers?.length > 0 ? (
-                      mission.registeredMembers?.map((member, index) => (
-                        <div key={index} className='name-registered-member'>
-                          <img className="table-action-icon drop-mission-member" src={remove} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title, member)} />
-                          {member.fullName}
-                        </div>
-                      ))
-                    ) : (
-                      <div>-</div>
-                    )}
-                    <td>{mission.remuneration}</td>
-                    <td>
-                      {mission.requiredMembers === mission.registeredMembers.length ?
-                        <img className="table-action-icon" src={full} alt="complète" onClick={() => toggleFullModal()} /> :
-                        (mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
-                          <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title)} />
-                        ) : (
-                          <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
+              )
+                : (missions &&
+                  missions.map((mission) => (
+                    <tr key={mission._id} className={mission.requiredMembers === mission.registeredMembers.length ? "full-mission-admin" : ""}>
+                      <td scope="row">{mission.title}</td>
+                      <td>{(() => {
+                        switch (mission.status) {
+                          case 'to do':
+                            return 'À venir';
+                          case 'done':
+                            return 'Fait';
+                          case 'cancelled':
+                            return 'Annulée';
+                          default:
+                            return mission.status;
+                        }
+                      })()}</td>
+                      <td>{mission.partner?.name}</td>
+                      <td>{mission.type}</td>
+               
+                      <td>{new Date(mission.time?.date).toLocaleDateString("en-GB")}</td>
+                      <td>
+                        {mission.time?.hours.map((hour, index) => (
+                          <div key={index}>{hour}</div>
+                        ))}
+                      </td>
+                      <td>{mission.requiredMembers}</td>
+                      {mission.registeredMembers?.length > 0 ? (
+                        mission.registeredMembers?.map((member, index) => (
+                          <div key={index} className='name-registered-member'>
+                            <img className="table-action-icon drop-mission-member" src={remove} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title, member)} />
+                            {member.fullName}
+                          </div>
                         ))
-                      }
-                      <img className="table-action-icon" src={edit} alt="modifier" onClick={() => toggleEditModal(mission)} />
-                      <img
-                        className="table-action-icon"
-                        src={remove}
-                        alt="supprimer"
-                        onClick={() => toggleDeleteModal(mission._id, mission.title)}
-                      />
-                    </td>
-                  </tr>
-                )))}
+                      ) : (
+                        <div>-</div>
+                      )}
+                      <td>{mission.remuneration}</td>
+                      <td>
+                        {mission.requiredMembers === mission.registeredMembers.length ?
+                          <img className="table-action-icon" src={full} alt="complète" onClick={() => toggleFullModal()} /> :
+                          (mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
+                            <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title)} />
+                          ) : (
+                            <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
+                          ))
+                        }
+                        <img className="table-action-icon" src={edit} alt="modifier" onClick={() => toggleEditModal(mission)} />
+                        <img
+                          className="table-action-icon"
+                          src={remove}
+                          alt="supprimer"
+                          onClick={() => toggleDeleteModal(mission._id, mission.title)}
+                        />
+                      </td>
+                    </tr>
+                  )))}
           </tbody>
         </table>
       </div>
@@ -345,7 +339,7 @@ console.log(loading);
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="date">Date *</Label>
-                        <Input type="date" value={formatDate(missionToEdit.time?.date)} onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: e.target.value }))} bsSize="sm" required />
+                        <Input type="date" value={formatDate(missionToEdit.time?.date)} onChange={(e) => setTime((prevTime) => ({ ...prevTime, date: formatDate(e.target.value) }))} bsSize="sm" required />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -751,16 +745,16 @@ console.log(loading);
         </div>
       )}
 
-{showFullModal && (
+      {showFullModal && (
         <div className=''>
           <Modal isOpen={showFullModal} toggle={toggleFullModal}>
             <ModalHeader toggle={toggleFullModal}>Mission complète</ModalHeader>
             <ModalBody>
-                <div>
-                  <p>Cette mission a atteint le nombre maximum de loukoums masseurs inscrits !</p>
-                  <br />
-                  <p>N'oubliez pas de leur envoyer une confirmation de mission !</p>
-                </div>
+              <div>
+                <p>Cette mission a atteint le nombre maximum de loukoums masseurs inscrits !</p>
+                <br />
+                <p>N'oubliez pas de leur envoyer une confirmation de mission !</p>
+              </div>
             </ModalBody>
             <ModalFooter>
               <Button className='action-button' onClick={toggleFullModal}>

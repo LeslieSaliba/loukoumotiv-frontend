@@ -38,8 +38,7 @@ function LoginLogin() {
             .then((response) => {
                 setEmail('');
                 setPassword('');
-                setValidationMessage(`Connexion réussie ! Redirection vers l'espace missions`)
-
+                // setValidationMessage(`Connexion réussie ! Redirection vers l'espace missions`)
             })
             .catch((error) => {
                 setValidationMessage(error.response.data.message)

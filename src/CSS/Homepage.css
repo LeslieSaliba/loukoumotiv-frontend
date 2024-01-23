@@ -102,7 +102,7 @@
 
     /* CLIENTS */
 
-    .clients-container{
+    .clients-container {
         padding: 0px 25px;
     }
 
@@ -113,7 +113,7 @@
 }
 
 @media (min-width: 576px) and (max-width: 767.98px) {
-    
+
     .hero-bg-homepage {
         background-image: url(../assets/homepage-mobile-hero.png);
     }
@@ -155,7 +155,7 @@
 
     /* CLIENTS */
 
-    .clients-container{
+    .clients-container {
         padding: 0px 25px;
     }
 

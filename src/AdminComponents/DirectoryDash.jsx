@@ -43,10 +43,6 @@ function DirectoryDash() {
     fetchData();
   }, [dispatch])
 
-  // setTimeout(() => {
-  //   console.log("directory", directory);
-  // }, 5000);
-
   const toggleEditModal = (contact) => {
     setContactToEdit(contact);
     setShowEditModal(!showEditModal)
@@ -60,12 +56,6 @@ function DirectoryDash() {
       const updatedPosition = position !== '' ? position : contactToEdit.position;
       const updatedCompanyName = companyName !== '' ? companyName : contactToEdit.companyName;
       const updatedNotes = notes !== '' ? notes : contactToEdit.notes;
-      // console.log(updatedFullName);
-      // console.log(updatedEmail);
-      // console.log(updatedPhoneNumber);
-      // console.log(updatedPosition);
-      // console.log(updatedCompanyName);
-      // console.log(updatedNotes);
       dispatch(updateContact(contactToEdit._id, updatedFullName, updatedEmail, updatedPhoneNumber, updatedPosition, updatedCompanyName, updatedNotes, token));
       setShowEditModal(false);
       window.location.reload()
@@ -99,12 +89,6 @@ function DirectoryDash() {
     dispatch(addContact(fullName, email, phoneNumber, position, companyName, notes, token));
     setShowAddModal(false); 
     window.location.reload(); 
-    // setFullName('');
-    // setEmail('');
-    // setPhoneNumber('');
-    // setPosition('');
-    // setCompanyName('');
-    // setNotes('');
   }
 
   return (
@@ -234,7 +218,7 @@ function DirectoryDash() {
             <ModalHeader toggle={toggleDeleteModal}>Supprimer un contact</ModalHeader>
             <ModalBody>
               {contactToDelete && (
-                <p>Êtes-vous sûr de vouloir supprimer '{contactToDelete.fullName}' des partenaires ?</p>
+                <p>Êtes-vous sûr de vouloir supprimer '{contactToDelete.fullName}' du répertoire ?</p>
               )}
             </ModalBody>
             <ModalFooter>
@@ -253,7 +237,7 @@ function DirectoryDash() {
         <div>
           <Modal isOpen={toggleAddModal} toggle={toggleAddModal}>
             < Form className="form-modal">
-              <ModalHeader toggle={toggleAddModal}>Ajouter un partenaire</ModalHeader>
+              <ModalHeader toggle={toggleAddModal}>Ajouter un contact</ModalHeader>
               <ModalBody>
                 <div className="row">
                   <div className="col-md-6">

@@ -15,28 +15,9 @@ import deconnexion from '../assets/icones/deconnexion_mauve.png';
 function DashHeader() {
     const navigate = useNavigate();
     const loggedMemberId = getUserID();
-    const [loggedMemberInfo, setLoggedMemberInfo] = useState({
-        fullName: '',
-        phoneNumber: '',
-        email: '',
-        password: '',
-        joiningDate: '',
-        dateOfBirth: '',
-        fullAddress: {
-            number: '',
-            street: '',
-            ZIPcode: '',
-            city: ''
-        },
-        instagram: '',
-        picture: null,
-        siret: '',
-        IBAN: '',
-        drivingLicense: false,
-        motorized: false,
-    });
+    const token = localStorage.getItem('token');
+    const [loggedMemberInfo, setLoggedMemberInfo] = useState({});
     const [showEditModal, setShowEditModal] = useState(false);
-    //const [memberToEdit, setMemberToEdit] = useState({});
     const [validationMessage, setValidationMessage] = useState('test');
 
     const [fullName, setFullName] = useState(loggedMemberInfo.fullName || '');
@@ -44,20 +25,17 @@ function DashHeader() {
     const [email, setEmail] = useState(loggedMemberInfo.email || '');
     const [password, setPassword] = useState(loggedMemberInfo.password || '');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [joiningDate, setJoiningDate] = useState(loggedMemberInfo.joiningDate || '');
     const [dateOfBirth, setDateOfBirth] = useState(loggedMemberInfo.dateOfBirth || '');
-    const [fullAddress, setFullAddress] = useState({
-        number: loggedMemberInfo.fullAddress?.number || '',
-        street: loggedMemberInfo.fullAddress?.street || '',
-        ZIPcode: loggedMemberInfo.fullAddress?.ZIPcode || '',
-        city: loggedMemberInfo.fullAddress?.city || '',
-    });
+    const [number, setNumber] = useState(loggedMemberInfo.number || '');
+    const [street, setStreet] = useState(loggedMemberInfo.street || '');
+    const [ZIPcode, setZIPcode] = useState(loggedMemberInfo.ZIPcode || '');
+    const [city, setCity] = useState(loggedMemberInfo.city || '');
     const [instagram, setInstagram] = useState(loggedMemberInfo.instagram || '');
-    const [picture, setPicture] = useState(null);
     const [siret, setSiret] = useState(loggedMemberInfo.siret || '');
     const [IBAN, setIBAN] = useState(loggedMemberInfo.IBAN || '');
-    const [drivingLicense, setDrivingLicense] = useState(false);
-    const [motorized, setMotorized] = useState(false);
+    const [drivingLicense, setDrivingLicense] = useState(loggedMemberInfo.drivingLicense || false);
+    const [motorized, setMotorized] = useState(loggedMemberInfo.motorized || false);
+
 
     useEffect(() => {
         const fetchLoggedMemberInfo = () => {
@@ -80,48 +58,97 @@ function DashHeader() {
         navigate('/');
     };
 
-    const updateMember = async (loggedMemberId, loggedMemberInfo) => {
-        console.log('User ID to be updated: ', loggedMemberId);
-        try {
-            const response = await axios.put(`${process.env.REACT_APP_URL}/team/update/${loggedMemberId}`, loggedMemberInfo, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    //   'Authorization': `Bearer ${token}`,
-                },
-            });
-            console.log('Membre mis à jour avec succcès');
-        } catch (error) {
-            console.error('Erreur lors de la mise à jour du membre ', error);
-            if (error.response) {
-                console.log('Erreur lors de la mise à jour du membre')
-            }
-        }
-    };
-
-    const toggleEditModal = () => {
+    const toggleEditModal = (loggedMemberInfo) => {
+        setDrivingLicense(loggedMemberInfo.drivingLicense || false);
+        setMotorized(loggedMemberInfo.motorized || false);
+        console.log(loggedMemberInfo)
         setShowEditModal(!showEditModal);
     }
 
-    const handleEdit = () => {
+    const handleEdit = async () => {
         if (loggedMemberInfo && loggedMemberInfo._id) {
             const updatedFullName = fullName !== '' ? fullName : loggedMemberInfo.fullName;
             const updatedPhoneNumber = phoneNumber !== '' ? phoneNumber : loggedMemberInfo.phoneNumber;
             const updatedEmail = email !== '' ? email : loggedMemberInfo.email;
-            const updatedPassword = password !== '' ? password : loggedMemberInfo.password;
             const updatedDateOfBirth = dateOfBirth !== '' ? dateOfBirth : loggedMemberInfo.dateOfBirth;
-            const updatedFullAddress = {
-              number: fullAddress.number !== '' ? fullAddress.number : loggedMemberInfo.fullAddress?.number || '',
-              street: fullAddress.street !== '' ? fullAddress.street : loggedMemberInfo.fullAddress?.street || '',
-              ZIPcode: fullAddress.ZIPcode !== '' ? fullAddress.ZIPcode : loggedMemberInfo.fullAddress?.ZIPcode || '',
-              city: fullAddress.city !== '' ? fullAddress.city : loggedMemberInfo.fullAddress?.city || '',
-            };
+            const updatedNumber = number !== '' ? number : loggedMemberInfo.number;
+            const updatedStreet = street !== '' ? street : loggedMemberInfo.street;
+            const updatedZIPcode = ZIPcode !== '' ? ZIPcode : loggedMemberInfo.ZIPcode;
+            const updatedCity = city !== '' ? city : loggedMemberInfo.city;
             const updatedInstagram = instagram !== '' ? instagram : loggedMemberInfo.instagram;
             const updatedSiret = siret !== '' ? siret : loggedMemberInfo.siret;
             const updatedIBAN = IBAN !== '' ? IBAN : loggedMemberInfo.IBAN;
-            const updatedDrivingLicense = drivingLicense;
-            const updatedMotorized = motorized;
-            updateMember(loggedMemberId, updatedFullName, updatedPhoneNumber, updatedEmail, updatedPassword, updatedDateOfBirth, updatedFullAddress.number, updatedFullAddress.street, fullAddress.ZIPcode, updatedFullAddress.city, updatedInstagram, updatedSiret, updatedIBAN, updatedDrivingLicense, updatedMotorized, picture)
-            setShowEditModal(false);
+            const updatedDrivingLicense = Boolean(drivingLicense);
+            const updatedMotorized = Boolean(motorized);
+            // const updatedNotes = loggedMemberInfo.notes; 
+            // const updatedJoiningDate = loggedMemberInfo.joiningDate; 
+            // const updatedRole = loggedMemberInfo.role; 
+
+            if (password != '') {
+                try {
+                    const formData = new FormData();
+                    formData.append('fullName', updatedFullName);
+                    formData.append('phoneNumber', updatedPhoneNumber);
+                    formData.append('email', updatedEmail);
+                    formData.append('dateOfBirth', updatedDateOfBirth);
+                    formData.append('number', updatedNumber);
+                    formData.append('street', updatedStreet);
+                    formData.append('ZIPcode', updatedZIPcode);
+                    formData.append('city', updatedCity);
+                    formData.append('instagram', updatedInstagram);
+                    formData.append('siret', updatedSiret);
+                    formData.append('IBAN', updatedIBAN);
+                    formData.append('drivingLicense', updatedDrivingLicense);
+                    formData.append('motorized', updatedMotorized);
+                    formData.append('password', password)
+
+                    const response = await axios.put(`${process.env.REACT_APP_URL}/team/update/${loggedMemberId}`, formData, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+                    console.log('Membre mis à jour avec succcès');
+                    setShowEditModal(false);
+                } catch (error) {
+                    console.error('Erreur lors de la mise à jour du membre ', error);
+                    if (error.response) {
+                        console.log('Erreur lors de la mise à jour du membre')
+                    }
+                }
+            } else {
+                try {
+                    const formData = new FormData();
+                    formData.append('fullName', updatedFullName);
+                    formData.append('phoneNumber', updatedPhoneNumber);
+                    formData.append('email', updatedEmail);
+                    formData.append('dateOfBirth', updatedDateOfBirth);
+                    formData.append('number', updatedNumber);
+                    formData.append('street', updatedStreet);
+                    formData.append('ZIPcode', updatedZIPcode);
+                    formData.append('city', updatedCity);
+                    formData.append('instagram', updatedInstagram);
+                    formData.append('siret', updatedSiret);
+                    formData.append('IBAN', updatedIBAN);
+                    formData.append('drivingLicense', updatedDrivingLicense);
+                    formData.append('motorized', updatedMotorized);
+
+                    const response = await axios.put(`${process.env.REACT_APP_URL}/team/update/${loggedMemberId}`, formData, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+                    console.log('Membre mis à jour avec succcès');
+                    setShowEditModal(false);
+                } catch (error) {
+                    console.error('Erreur lors de la mise à jour du membre ', error);
+                    if (error.response) {
+                        console.log('Erreur lors de la mise à jour du membre')
+                    }
+                }
+            }
+
         }
     };
 
@@ -131,7 +158,7 @@ function DashHeader() {
                 <div><Link to='/'><img src={logo} alt="LOUKOUMOTIV'" className='logo-dashboard' /></Link></div>
                 <div className='hello-dash'>Hello {loggedMemberInfo.fullName}</div>
                 <div className='responsive-dash-header d-flex align-items-center'>
-                    <img src={profile} alt="profil" className='profile-dash' onClick={toggleEditModal} />
+                    <img src={profile} alt="profil" className='profile-dash' onClick={() => toggleEditModal(loggedMemberInfo)} />
                     <button className='white-button d-none d-md-block' onClick={handleLogout}>Se déconnecter</button>
                     <button className='white-button d-block d-md-none' onClick={handleLogout}><img src={deconnexion} alt="se déconnecter" className='deconnexion-dash' /></button>
                 </div>
@@ -153,7 +180,7 @@ function DashHeader() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="dateOfBirth">Date de naissance</Label>
-                                            <Input type="date" value={formatDate(loggedMemberInfo.dateOfBirth)} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" />
+                                            <Input type="date" defaultValue={formatDate(loggedMemberInfo.dateOfBirth)} onChange={(e) => setDateOfBirth(formatDate(e.target.value))} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
@@ -195,21 +222,21 @@ function DashHeader() {
                                             <div className="row">
                                                 <div className="col-md-6">
                                                     <Label for="fullAddress">N°</Label>
-                                                    <Input type="text" placeholder={loggedMemberInfo.fullAddress?.number} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, number: e.target.value }))} bsSize="sm" />
+                                                    <Input type="text" placeholder={loggedMemberInfo?.number} onChange={(e) => setNumber(e.target.value)} bsSize="sm" />
                                                 </div>
                                                 <div className="col-md-6">
                                                     <Label for="fullAddress">Rue</Label>
-                                                    <Input type="text" placeholder={loggedMemberInfo.fullAddress?.street} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, street: e.target.value }))} bsSize="sm" />
+                                                    <Input type="text" placeholder={loggedMemberInfo?.street} onChange={(e) => setStreet(e.target.value)} bsSize="sm" />
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-md-6">
                                                     <Label for="fullAddress">Code postal</Label>
-                                                    <Input type="text" placeholder={loggedMemberInfo.fullAddress?.ZIPcode} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, ZIPcode: e.target.value }))} bsSize="sm" />
+                                                    <Input type="text" placeholder={loggedMemberInfo?.ZIPcode} onChange={(e) => setZIPcode(e.target.value)} bsSize="sm" />
                                                 </div>
                                                 <div className="col-md-6">
                                                     <Label for="fullAddress">Ville</Label>
-                                                    <Input type="text" placeholder={loggedMemberInfo.fullAddress?.city} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
+                                                    <Input type="text" placeholder={loggedMemberInfo?.city} onChange={(e) => setCity(e.target.value)} bsSize="sm" />
                                                 </div>
                                             </div>
                                         </FormGroup>
@@ -220,10 +247,10 @@ function DashHeader() {
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="instagram">Instagram (@)</Label>
-                                            <Input type="text" placeholder={loggedMemberInfo.instagram} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
+                                            <Input type="text" placeholder={loggedMemberInfo?.instagram} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
-                                    <div className="col-md-6">
+                                    {/* <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="picture">Photo</Label>
                                             {loggedMemberInfo.picture && (
@@ -231,37 +258,34 @@ function DashHeader() {
                                             )}
                                             <Input type="text" bsSize="sm" />
                                         </FormGroup>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <div className="row">
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="siret">Siret</Label>
-                                            <Input type="text" placeholder={loggedMemberInfo.siret} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
+                                            <Input type="text" placeholder={loggedMemberInfo?.siret} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="IBAN">IBAN</Label>
-                                            <Input type="text" placeholder={loggedMemberInfo.IBAN} onChange={(e) => setIBAN(e.target.value)} bsSize="sm" />
+                                            <Input type="text" placeholder={loggedMemberInfo?.IBAN} onChange={(e) => setIBAN(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
 
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <FormGroup>
-                                            <Label for="joiningDate">Date de début chez Loukoumotiv'</Label>
-                                            <Input type="text" placeholder={loggedMemberInfo.joiningDate} bsSize="sm" disabled />
-                                        </FormGroup>
+
                                     </div>
                                     <div className="col-md-6">
                                         <div className="row">
                                             <div className="col-md-12">
                                                 <FormGroup check>
                                                     <Label check >
-                                                        <Input type="checkbox" defaultChecked={drivingLicense || false} onChange={(e) => setDrivingLicense(e.target.checked)} />
+                                                        <Input type="checkbox" checked={drivingLicense} onChange={(e) => setDrivingLicense(e.target.checked)} />
                                                         Permis de conduire
                                                     </Label>
                                                 </FormGroup>
@@ -269,8 +293,9 @@ function DashHeader() {
                                             <div className="col-md-12">
                                                 <FormGroup check>
                                                     <Label check>
-                                                        <Input type="checkbox" defaultChecked={drivingLicense || false} onChange={(e) => setMotorized(e.target.checked)} />
+                                                        <Input type="checkbox" checked={motorized} onChange={(e) => setMotorized(e.target.checked)} />
                                                         Véhiculé.e
+                                                        {console.log("permis", drivingLicense + motorized)}
                                                     </Label>
                                                 </FormGroup>
                                             </div>

@@ -29,23 +29,13 @@ function TeamDash() {
   const [phoneNumber, setPhoneNumber] = useState(memberToEdit.phoneNumber || '');
   const [email, setEmail] = useState(memberToEdit.email || '');
   const [password, setPassword] = useState(memberToEdit.password || '');
-  const [joiningDate, setJoiningDate] = useState(memberToEdit.joiningDate || '');
+  const [joiningDate, setJoiningDate] = useState(formatDate(memberToEdit.joiningDate) || '');
   const [notes, setNotes] = useState(memberToEdit.notes || '');
-  const [dateOfBirth, setDateOfBirth] = useState(memberToEdit.dateOfBirth || '');
-  // const [fullAddress, setFullAddress] = useState({
-  //   number: memberToEdit.number || '',
-  //   street: memberToEdit.street || '',
-  //   ZIPcode: memberToEdit.ZIPcode || '',
-  //   city: memberToEdit.city || '',
-  // });
-
-  //
+  const [dateOfBirth, setDateOfBirth] = useState(formatDate(memberToEdit.dateOfBirth) || '');
   const [number, setNumber] = useState(memberToEdit.number || '');
   const [street, setStreet] = useState(memberToEdit.street || '');
   const [ZIPcode, setZIPcode] = useState(memberToEdit.ZIPcode || '');
   const [city, setCity] = useState(memberToEdit.city || '');
-  //
-
   const [instagram, setInstagram] = useState(memberToEdit.instagram || '');
   const [picture, setPicture] = useState(null);
   const [siret, setSiret] = useState(memberToEdit.siret || '');
@@ -66,10 +56,6 @@ function TeamDash() {
     fetchData();
   }, [dispatch])
 
-  // setTimeout(() => {
-  //   console.log("team: ", team);
-  // }, 5000);
-
   const toggleEditModal = (teamMember) => {
     setMemberToEdit(teamMember);
     setDrivingLicense(teamMember.drivingLicense || false);
@@ -88,7 +74,7 @@ function TeamDash() {
     const updatedRole = role !== '' ? role : memberToEdit.role;
     const updatedPhoneNumber = phoneNumber !== '' ? phoneNumber : memberToEdit.phoneNumber;
     const updatedEmail = email !== '' ? email : memberToEdit.email;
-    const updatedDateOfBirth = dateOfBirth !== '' ? dateOfBirth : memberToEdit.dateOfBirth;
+    const updatedDateOfBirth = formatDate(dateOfBirth) !== '' ? formatDate(dateOfBirth) : formatDate(memberToEdit.dateOfBirth);
     const updatedNumber = number !== '' ? number : memberToEdit.number;
     const updatedStreet = street !== '' ? street : memberToEdit.street;
     const updatedZIPcode = ZIPcode !== '' ? ZIPcode : memberToEdit.ZIPcode;
@@ -96,7 +82,7 @@ function TeamDash() {
     const updatedInstagram = instagram !== '' ? instagram : memberToEdit.instagram;
     const updatedSiret = siret !== '' ? siret : memberToEdit.siret;
     const updatedIBAN = IBAN !== '' ? IBAN : memberToEdit.IBAN;
-    const updatedJoiningDate = joiningDate !== '' ? joiningDate : memberToEdit.joiningDate;
+    const updatedJoiningDate = formatDate(joiningDate) !== '' ? formatDate(joiningDate) : formatDate(memberToEdit.joiningDate);
     const updatedDrivingLicense = Boolean(drivingLicense);
     const updatedMotorized = Boolean(motorized);
     const updatedNotes = notes !== '' ? notes : memberToEdit.notes;
@@ -109,7 +95,7 @@ function TeamDash() {
         dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, token));
       }
       setShowEditModal(false);
-      window.location.reload()
+      // window.location.reload()
     }
   };
 
@@ -131,16 +117,16 @@ function TeamDash() {
   }
 
   const handleAdd = () => {
-    if (!fullName || !role || !phoneNumber || !email || !password || !joiningDate) {
+    if (!fullName || !role || !phoneNumber || !email || !password) {
       console.error('Les champs * doivent être renseignés');
       setValidationMessage('Les champs * doivent être renseignés');
       return;
     }
-    dispatch(addMember(fullName, role, phoneNumber, email, password, joiningDate, notes, token));
+    dispatch(addMember(fullName, role, phoneNumber, email, password, notes, token));
     setShowAddModal(false);
     window.location.reload();
   }
-
+console.log(team)
   return (
     <div className="container ">
       <div className='d-flex justify-content-end'>
@@ -174,7 +160,7 @@ function TeamDash() {
               <tr key={teamMember._id}>
                 <td scope="row">{teamMember.fullName}</td>
                 <td>{teamMember.email}</td>
-                <td>{teamMember.city && teamMember.ZIPcode ? `${teamMember.city}, ${teamMember.ZIPcode}` : '-'}</td>
+                <td>{teamMember.city && teamMember.ZIPcode && teamMember.city != 'undefined' && teamMember.ZIPcode != 'undefined' ? `${teamMember.city}, ${teamMember.ZIPcode}` : '-'}</td>
                 <td>{teamMember.drivingLicense ? "oui" : "non"}, {teamMember.motorized ? "oui" : "non"}</td>
                 <td>{teamMember.role}</td>
                 <td>
@@ -238,7 +224,7 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="dateOfBirth">Date de naissance</Label>
-                        <Input type="date" value={formatDate(memberToEdit.dateOfBirth)} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" />
+                        <Input type="date" defaultValue={formatDate(memberToEdit?.dateOfBirth)} onChange={(e) => setDateOfBirth(formatDate(e.target.value))} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -308,7 +294,7 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="joiningDate">Loukoum'anniversaire</Label>
-                        <Input type="date" value={formatDate(memberToEdit.joiningDate)} onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" />
+                        <Input type="date" defaultValue={formatDate(memberToEdit?.joiningDate)} onChange={(e) => setJoiningDate(formatDate(e.target.value))} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -429,12 +415,12 @@ function TeamDash() {
                       <Input type="password" onChange={(e) => setPassword(e.target.value)} bsSize="sm" required />
                     </FormGroup>
                   </div>
-                  <div className="col-md-6">
+                  {/* <div className="col-md-6">
                     <FormGroup>
                       <Label for="joiningDate">Loukoum'anniversaire *</Label>
                       <Input type="date" onChange={(e) => setJoiningDate(formatDate(e.target.value))} bsSize="sm" required />
                     </FormGroup>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="row">
                   <div className="col-md-12">

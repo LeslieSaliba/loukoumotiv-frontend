@@ -54,8 +54,8 @@ export const login = (email, password) => {
     };
 };
 
-export const addMember = (fullName, role, phoneNumber, email, password, joiningDate, notes, token) => {
-    const newMember = { fullName, role, email, phoneNumber, password, joiningDate, notes }
+export const addMember = (fullName, role, phoneNumber, email, password, notes, token) => {
+    const newMember = { fullName, role, email, phoneNumber, password, notes }
     return (dispatch) => {
         axios.post(`${process.env.REACT_APP_URL}/team/add`, newMember, {
             headers: {
