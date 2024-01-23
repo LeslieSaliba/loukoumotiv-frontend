@@ -31,19 +31,26 @@ function TeamDash() {
   const [joiningDate, setJoiningDate] = useState(memberToEdit.joiningDate || '');
   const [notes, setNotes] = useState(memberToEdit.notes || '');
   const [dateOfBirth, setDateOfBirth] = useState(memberToEdit.dateOfBirth || '');
-  const [fullAddress, setFullAddress] = useState({
-    number: memberToEdit.number || '',
-    street: memberToEdit.street || '',
-    ZIPcode: memberToEdit.ZIPcode || '',
-    city: memberToEdit.city || '',
-  });
+  // const [fullAddress, setFullAddress] = useState({
+  //   number: memberToEdit.number || '',
+  //   street: memberToEdit.street || '',
+  //   ZIPcode: memberToEdit.ZIPcode || '',
+  //   city: memberToEdit.city || '',
+  // });
+
+  //
+  const [number, setNumber] = useState(memberToEdit.number || '');
+  const [street, setStreet] = useState(memberToEdit.street || '');
+  const [ZIPcode, setZIPcode] = useState(memberToEdit.ZIPcode || '');
+  const [city, setCity] = useState(memberToEdit.city || '');
+  //
+
   const [instagram, setInstagram] = useState(memberToEdit.instagram || '');
   const [picture, setPicture] = useState(null);
   const [siret, setSiret] = useState(memberToEdit.siret || '');
   const [IBAN, setIBAN] = useState(memberToEdit.IBAN || '');
   const [drivingLicense, setDrivingLicense] = useState(memberToEdit.drivingLicense || false);
   const [motorized, setMotorized] = useState(memberToEdit.motorized || false);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,8 +71,8 @@ function TeamDash() {
 
   const toggleEditModal = (teamMember) => {
     setMemberToEdit(teamMember);
-    // setDrivingLicense(teamMember.drivingLicense || false);
-    // setMotorized(teamMember.motorized || false);
+    setDrivingLicense(teamMember.drivingLicense || false);
+    setMotorized(teamMember.motorized || false);
     setShowEditModal(!showEditModal)
   }
 
@@ -82,26 +89,31 @@ function TeamDash() {
     const updatedEmail = email !== '' ? email : memberToEdit.email;
     const updatedPassword = password !== '' ? password : memberToEdit.password;
     const updatedDateOfBirth = dateOfBirth !== '' ? dateOfBirth : memberToEdit.dateOfBirth;
-    const updatedFullAddress = {
-      number: fullAddress.number !== '' ? fullAddress.number : memberToEdit.fullAddress?.number || '',
-      street: fullAddress.street !== '' ? fullAddress.street : memberToEdit.fullAddress?.street || '',
-      ZIPcode: fullAddress.ZIPcode !== '' ? fullAddress.ZIPcode : memberToEdit.fullAddress?.ZIPcode || '',
-      city: fullAddress.city !== '' ? fullAddress.city : memberToEdit.fullAddress?.city || '',
-    };
+    // const updatedFullAddress = {
+    //   number: fullAddress.number !== '' ? fullAddress.number : memberToEdit.fullAddress?.number || '',
+    //   street: fullAddress.street !== '' ? fullAddress.street : memberToEdit.fullAddress?.street || '',
+    //   ZIPcode: fullAddress.ZIPcode !== '' ? fullAddress.ZIPcode : memberToEdit.fullAddress?.ZIPcode || '',
+    //   city: fullAddress.city !== '' ? fullAddress.city : memberToEdit.fullAddress?.city || '',
+    // };
+    const updatedNumber = number !== '' ? number : memberToEdit.number;
+    const updatedStreet = street !== '' ? street : memberToEdit.street;
+    const updatedZIPcode = ZIPcode !== '' ? ZIPcode : memberToEdit.ZIPcode;
+    const updatedCity = city !== '' ? city : memberToEdit.city;
     const updatedInstagram = instagram !== '' ? instagram : memberToEdit.instagram;
     const updatedSiret = siret !== '' ? siret : memberToEdit.siret;
     const updatedIBAN = IBAN !== '' ? IBAN : memberToEdit.IBAN;
     const updatedJoiningDate = joiningDate !== '' ? joiningDate : memberToEdit.joiningDate;
-    const updatedDrivingLicense = drivingLicense;
-    const updatedMotorized = motorized;
+    const updatedDrivingLicense = Boolean(drivingLicense);
+    const updatedMotorized = Boolean(motorized);
     const updatedNotes = notes !== '' ? notes : memberToEdit.notes;
     // const picture ; 
     console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', updatedEmail, '+', updatedPassword, '+')
-
+    console.log("updatedDrivingLicense", updatedDrivingLicense)
+    console.log("updatedMotorized", updatedMotorized)
     if (memberToEdit && memberToEdit._id) {
-      dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedPassword, updatedDateOfBirth, updatedFullAddress.number, updatedFullAddress.street, fullAddress.ZIPcode, updatedFullAddress.city, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture));
+      dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedPassword, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture));
       setShowEditModal(false);
-      // window.location.reload()
+      window.location.reload()
     }
   };
 
@@ -173,7 +185,7 @@ function TeamDash() {
               <tr key={teamMember._id}>
                 <td scope="row">{teamMember.fullName}</td>
                 <td>{teamMember.email}</td>
-                <td>{teamMember.fullAddress ? (teamMember.fullAddress.city + ' ' + teamMember.fullAddress.ZIPcode) : '-'}</td>
+                <td>{teamMember.city && teamMember.ZIPcode ? `${teamMember.city}, ${teamMember.ZIPcode}` : '-'}</td>
                 <td>{teamMember.drivingLicense ? "oui" : "non"}, {teamMember.motorized ? "oui" : "non"}</td>
                 <td>{teamMember.role}</td>
                 <td>
@@ -237,12 +249,12 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="dateOfBirth">Date de naissance</Label>
-                        <Input type="date" value={formatDate(memberToEdit.dateOfBirth)} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" disabled />
+                        <Input type="date" value={formatDate(memberToEdit.dateOfBirth)} onChange={(e) => setDateOfBirth(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
 
-                  <div className="row">
+                  {/* <div className="row">
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="fullAddress">Adresse</Label>
@@ -264,6 +276,34 @@ function TeamDash() {
                           <div className="col-md-6">
                             <Label for="fullAddress">Ville</Label>
                             <Input type="text" placeholder={memberToEdit.fullAddress?.city} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
+                          </div>
+                        </div>
+                      </FormGroup>
+                    </div>
+                  </div> */}
+
+<div className="row">
+                    <div className="col-md-12">
+                      <FormGroup>
+                        <Label for="fullAddress">Adresse</Label>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <Label for="fullAddress">N°</Label>
+                            <Input type="text" placeholder={memberToEdit.number} onChange={(e) => setNumber(e.target.value)} bsSize="sm" />
+                          </div>
+                          <div className="col-md-6">
+                            <Label for="fullAddress">Rue</Label>
+                            <Input type="text" placeholder={memberToEdit.street} onChange={(e) => setStreet(e.target.value)} bsSize="sm" />
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <Label for="fullAddress">Code postal</Label>
+                            <Input type="text" placeholder={memberToEdit.ZIPcode} onChange={(e) => setZIPcode(e.target.value)} bsSize="sm" />
+                          </div>
+                          <div className="col-md-6">
+                            <Label for="fullAddress">Ville</Label>
+                            <Input type="text" placeholder={memberToEdit.city} onChange={(e) => setCity(e.target.value)} bsSize="sm" />
                           </div>
                         </div>
                       </FormGroup>
@@ -317,6 +357,7 @@ function TeamDash() {
                             <Label check >
                               <Input type="checkbox" checked={drivingLicense} onChange={(e) => setDrivingLicense(e.target.checked)} />
                               Permis de conduire
+                              {console.log("drivingLicense: ", drivingLicense)}
                             </Label>
                           </FormGroup>
                         </div>
@@ -325,6 +366,7 @@ function TeamDash() {
                             <Label check>
                               <Input type="checkbox" checked={motorized} onChange={(e) => setMotorized(e.target.checked)} />
                               Véhiculé.e
+                              {console.log("motorized: ", motorized)}
                             </Label>
                           </FormGroup>
                         </div>
@@ -429,7 +471,7 @@ function TeamDash() {
                   <div className="col-md-6">
                     <FormGroup>
                       <Label for="joiningDate">Loukoum'anniversaire *</Label>
-                      <Input type="date" onChange={(e) => setJoiningDate(e.target.value)} bsSize="sm" required />
+                      <Input type="date" onChange={(e) => setJoiningDate(formatDate(e.target.value))} bsSize="sm" required />
                     </FormGroup>
                   </div>
                 </div>

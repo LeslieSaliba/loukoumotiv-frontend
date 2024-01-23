@@ -74,6 +74,8 @@ function AllMissionsAdminDash() {
     fetchData();
   }, [dispatch])
 
+console.log(loading); 
+
   const partnerIds = partners.map(partner => partner._id);
   // console.log("partners: ", partnerIds);
 
@@ -221,11 +223,11 @@ function AllMissionsAdminDash() {
                 </td>
               </tr>
             )
-              // : missions.length === 0 ? (
-              //   <tr>
-              //     <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore ajouté de missions Loukoumotiv'.</td>
-              //   </tr>
-              // ) 
+              : missions.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className='text-center font-italic'>Vous n'avez pas encore ajouté de missions Loukoumotiv'.</td>
+                </tr>
+              ) 
               : (missions &&
                 missions.map((mission) => (
                   <tr key={mission._id} className={mission.requiredMembers === mission.registeredMembers.length ? "full-mission-admin" : ""}>

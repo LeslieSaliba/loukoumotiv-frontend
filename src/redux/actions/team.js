@@ -119,7 +119,7 @@ export const deleteMember = (Id) => {
     }
 }
 
-export const updateMember = (Id, fullName, role, phoneNumber, email, password, dateOfBirth, fullAddress, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture) => {
+export const updateMember = (Id, fullName, role, phoneNumber, email, password, dateOfBirth, number, street, ZIPcode, city, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture) => {
     const formData = new FormData();
     formData.append('fullName', fullName);
     formData.append('role', role);
@@ -127,7 +127,10 @@ export const updateMember = (Id, fullName, role, phoneNumber, email, password, d
     formData.append('email', email);
     formData.append('password', password);
     formData.append('dateOfBirth', dateOfBirth);
-    formData.append('fullAddress', fullAddress);
+    formData.append('number', number);
+    formData.append('street', street);
+    formData.append('ZIPcode', ZIPcode);
+    formData.append('city', city);
     formData.append('instagram', instagram);
     formData.append('siret', siret);
     formData.append('IBAN', IBAN);
