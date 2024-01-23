@@ -14,6 +14,7 @@ import add from '../assets/icones/ajouter_blanc.png';
 function PartnersDash() {
   const dispatch = useDispatch();
   const partners = useSelector((state) => state.partners);
+  const token = localStorage.getItem('token');
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -87,7 +88,7 @@ function PartnersDash() {
       // console.log(updatedLocation)
       // console.log(updatedReferenceContact)
       // console.log(updatedNotes)
-      dispatch(updatePartner(partnerToEdit._id, updatedName, updatedType, updatedLocation, updatedWebsite, updatedReferenceContact, updatedNotes));
+      dispatch(updatePartner(partnerToEdit._id, updatedName, updatedType, updatedLocation, updatedWebsite, updatedReferenceContact, updatedNotes, token));
       setShowEditModal(false);
       window.location.reload()
     }
@@ -100,7 +101,7 @@ function PartnersDash() {
 
   const handleDelete = () => {
     if (partnerToDelete && partnerToDelete.Id) {
-      dispatch(deletePartner(partnerToDelete.Id));
+      dispatch(deletePartner(partnerToDelete.Id, token));
       setShowDeleteModal(false);
       window.location.reload()
     }
@@ -117,15 +118,9 @@ function PartnersDash() {
       return;
     }
 
-    dispatch(addPartner(name, type, location, website, referenceContact, notes));
+    dispatch(addPartner(name, type, location, website, referenceContact, notes, token));
     setShowAddModal(false)
     window.location.reload()
-    // setName('');
-    // setType('');
-    // setWebsite('');
-    // setLocation('')
-    // setReferenceContact('');
-    // setNotes('');
   }
 
   return (

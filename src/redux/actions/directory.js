@@ -32,10 +32,15 @@ export const getContactById = (Id) => {
     }
 }
 
-export const addContact = (fullName, email, phoneNumber, position, companyName, notes) => {
+export const addContact = (fullName, email, phoneNumber, position, companyName, notes, token) => {
     const newContact = { fullName, email, phoneNumber, position, companyName, notes }
     return (dispatch) => {
-        axios.post(`${process.env.REACT_APP_URL}/directory/add`, newContact)
+        axios.post(`${process.env.REACT_APP_URL}/directory/add`, newContact, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const contact = response.data.contact
                 dispatch({
@@ -49,9 +54,14 @@ export const addContact = (fullName, email, phoneNumber, position, companyName, 
     }
 }
 
-export const deleteContact = (Id) => {
+export const deleteContact = (Id, token) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/directory/delete/${Id}`)
+        axios.delete(`${process.env.REACT_APP_URL}/directory/delete/${Id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 dispatch({
                     type: "deleteContact",
@@ -64,10 +74,15 @@ export const deleteContact = (Id) => {
     }
 }
 
-export const updateContact = (Id, fullName, email, phoneNumber, position, companyName, notes) => {
+export const updateContact = (Id, fullName, email, phoneNumber, position, companyName, notes, token) => {
     const updatedContact = { Id, fullName, email, phoneNumber, position, companyName, notes}
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL}/directory/update/${Id}`, updatedContact)
+        axios.put(`${process.env.REACT_APP_URL}/directory/update/${Id}`, updatedContact, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const contact = response.data.contact
                 const id = response.data.Id

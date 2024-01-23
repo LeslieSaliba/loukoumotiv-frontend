@@ -22,6 +22,7 @@ function AllMissionsAdminDash() {
   const dispatch = useDispatch();
   const partners = useSelector((state) => state.partners);
   const missions = useSelector((state) => state.missions);
+  const token = localStorage.getItem('token');
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showFullModal, setShowFullModal] = useState(false);
@@ -113,7 +114,7 @@ console.log(loading);
       const updatedPartnerBilling = partnerBilling !== '' ? partnerBilling : missionToEdit.partnerBilling;
       const updatedNotes = notes !== '' ? notes : missionToEdit.notes;
 
-      dispatch(updateMission(missionToEdit._id, updatedTitle, updatedDescription, updatedPartner, updatedLocation, updatedType, updatedTime, updatedCapacity, updatedRequiredMembers, updatedRemuneration, updatedStatus, updatedTeamBilling, updatedPartnerBilling, updatedNotes));
+      dispatch(updateMission(missionToEdit._id, updatedTitle, updatedDescription, updatedPartner, updatedLocation, updatedType, updatedTime, updatedCapacity, updatedRequiredMembers, updatedRemuneration, updatedStatus, updatedTeamBilling, updatedPartnerBilling, updatedNotes, token));
       window.location.reload()
       setShowEditModal(false);
     }
@@ -126,7 +127,7 @@ console.log(loading);
 
   const handleDelete = () => {
     if (missionToDelete && missionToDelete.Id) {
-      dispatch(deleteMission(missionToDelete.Id));
+      dispatch(deleteMission(missionToDelete.Id, token));
       setShowDeleteModal(false);
       window.location.reload()
     }
@@ -143,7 +144,7 @@ console.log(loading);
       return;
     }
     const registeredMembers = [];
-    dispatch(addMission(title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes));
+    dispatch(addMission(title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes, token));
     setShowAddModal(false)
     window.location.reload()
   }
@@ -155,7 +156,7 @@ console.log(loading);
 
   const handleRegister = (e) => {
     if (missionToRegisterTo && missionToRegisterTo.Id) {
-      dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId));
+      dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId, token));
       setShowRegisterModal(false);
       window.location.reload()
     }
@@ -170,7 +171,7 @@ console.log(loading);
     if (missionToDrop && missionToDrop.Id && missionToDrop.registeredMember) {
       const { Id, registeredMember } = missionToDrop;
       const { _id: teamMemberId } = registeredMember;
-      dispatch(dropMission(Id, teamMemberId));
+      dispatch(dropMission(Id, teamMemberId, token));
       setShowDropModal(false);
       window.location.reload()
     }
@@ -183,7 +184,7 @@ console.log(loading);
 
   const handleAutoDrop = () => {
     if (missionToDrop && missionToDrop.Id && LoggedMemberId) {
-      dispatch(dropMission(missionToDrop.Id, LoggedMemberId));
+      dispatch(dropMission(missionToDrop.Id, LoggedMemberId, token));
       setShowAutoDropModal(false);
       window.location.reload()
     }

@@ -48,9 +48,14 @@ export const getSubscriberById = (Id) => {
     }
 }
 
-export const unsubscribeToNewsletter = (Id) => {
+export const unsubscribeToNewsletter = (Id, token) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/newsletter/unsubscribe/${Id}`)
+        axios.delete(`${process.env.REACT_APP_URL}/newsletter/unsubscribe/${Id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 dispatch({
                     type: "unsubscribeToNewsletter",

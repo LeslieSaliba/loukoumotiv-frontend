@@ -16,6 +16,7 @@ function TeamDash() {
   const dispatch = useDispatch();
   const team = useSelector((state) => state.team);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem('token');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -87,14 +88,7 @@ function TeamDash() {
     const updatedRole = role !== '' ? role : memberToEdit.role;
     const updatedPhoneNumber = phoneNumber !== '' ? phoneNumber : memberToEdit.phoneNumber;
     const updatedEmail = email !== '' ? email : memberToEdit.email;
-    const updatedPassword = password !== '' ? password : memberToEdit.password;
     const updatedDateOfBirth = dateOfBirth !== '' ? dateOfBirth : memberToEdit.dateOfBirth;
-    // const updatedFullAddress = {
-    //   number: fullAddress.number !== '' ? fullAddress.number : memberToEdit.fullAddress?.number || '',
-    //   street: fullAddress.street !== '' ? fullAddress.street : memberToEdit.fullAddress?.street || '',
-    //   ZIPcode: fullAddress.ZIPcode !== '' ? fullAddress.ZIPcode : memberToEdit.fullAddress?.ZIPcode || '',
-    //   city: fullAddress.city !== '' ? fullAddress.city : memberToEdit.fullAddress?.city || '',
-    // };
     const updatedNumber = number !== '' ? number : memberToEdit.number;
     const updatedStreet = street !== '' ? street : memberToEdit.street;
     const updatedZIPcode = ZIPcode !== '' ? ZIPcode : memberToEdit.ZIPcode;
@@ -107,11 +101,13 @@ function TeamDash() {
     const updatedMotorized = Boolean(motorized);
     const updatedNotes = notes !== '' ? notes : memberToEdit.notes;
     // const picture ; 
-    console.log(updatedFullName, '+', updatedRole, '+', updatedPhoneNumber, '+', updatedEmail, '+', updatedPassword, '+')
-    console.log("updatedDrivingLicense", updatedDrivingLicense)
-    console.log("updatedMotorized", updatedMotorized)
+
     if (memberToEdit && memberToEdit._id) {
-      dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedPassword, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture));
+      if (password !== '') {
+        dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, password, token));
+      } else {
+        dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, token));
+      }
       setShowEditModal(false);
       window.location.reload()
     }
@@ -124,7 +120,7 @@ function TeamDash() {
 
   const handleDelete = () => {
     if (memberToDelete && memberToDelete.Id) {
-      dispatch(deleteMember(memberToDelete.Id));
+      dispatch(deleteMember(memberToDelete.Id, token));
       setShowDeleteModal(false);
       window.location.reload()
     }
@@ -140,16 +136,9 @@ function TeamDash() {
       setValidationMessage('Les champs * doivent être renseignés');
       return;
     }
-    dispatch(addMember(fullName, role, phoneNumber, email, password, joiningDate, notes));
+    dispatch(addMember(fullName, role, phoneNumber, email, password, joiningDate, notes, token));
     setShowAddModal(false);
     window.location.reload();
-    // setFullName('');
-    // setRole('');
-    // setPhoneNumber('');
-    // setEmail('');
-    // setPassword('');
-    // setJoiningDate('');
-    // setNotes('');
   }
 
   return (
@@ -254,56 +243,28 @@ function TeamDash() {
                     </div>
                   </div>
 
-                  {/* <div className="row">
+                  <div className="row">
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="fullAddress">Adresse</Label>
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">N°</Label>
-                            <Input type="text" placeholder={memberToEdit.fullAddress?.number} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, number: e.target.value }))} bsSize="sm" />
+                            <Input type="text" placeholder={memberToEdit.number != "undefined" ? memberToEdit.number : ''} onChange={(e) => setNumber(e.target.value)} bsSize="sm" />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Rue</Label>
-                            <Input type="text" placeholder={memberToEdit.fullAddress?.street} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, street: e.target.value }))} bsSize="sm" />
+                            <Input type="text" placeholder={memberToEdit.street != "undefined" ? memberToEdit.street : ''} onChange={(e) => setStreet(e.target.value)} bsSize="sm" />
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-md-6">
                             <Label for="fullAddress">Code postal</Label>
-                            <Input type="text" placeholder={memberToEdit.fullAddress?.ZIPcode} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, ZIPcode: e.target.value }))} bsSize="sm" />
+                            <Input type="text" placeholder={memberToEdit.ZIPcode != "undefined" ? memberToEdit.ZIPcode : ''} onChange={(e) => setZIPcode(e.target.value)} bsSize="sm" />
                           </div>
                           <div className="col-md-6">
                             <Label for="fullAddress">Ville</Label>
-                            <Input type="text" placeholder={memberToEdit.fullAddress?.city} onChange={(e) => setFullAddress((prevAddress) => ({ ...prevAddress, city: e.target.value }))} bsSize="sm" />
-                          </div>
-                        </div>
-                      </FormGroup>
-                    </div>
-                  </div> */}
-
-<div className="row">
-                    <div className="col-md-12">
-                      <FormGroup>
-                        <Label for="fullAddress">Adresse</Label>
-                        <div className="row">
-                          <div className="col-md-6">
-                            <Label for="fullAddress">N°</Label>
-                            <Input type="text" placeholder={memberToEdit.number} onChange={(e) => setNumber(e.target.value)} bsSize="sm" />
-                          </div>
-                          <div className="col-md-6">
-                            <Label for="fullAddress">Rue</Label>
-                            <Input type="text" placeholder={memberToEdit.street} onChange={(e) => setStreet(e.target.value)} bsSize="sm" />
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-md-6">
-                            <Label for="fullAddress">Code postal</Label>
-                            <Input type="text" placeholder={memberToEdit.ZIPcode} onChange={(e) => setZIPcode(e.target.value)} bsSize="sm" />
-                          </div>
-                          <div className="col-md-6">
-                            <Label for="fullAddress">Ville</Label>
-                            <Input type="text" placeholder={memberToEdit.city} onChange={(e) => setCity(e.target.value)} bsSize="sm" />
+                            <Input type="text" placeholder={memberToEdit.city != "undefined" ? memberToEdit.city : ''} onChange={(e) => setCity(e.target.value)} bsSize="sm" />
                           </div>
                         </div>
                       </FormGroup>
@@ -314,7 +275,7 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="instagram">Instagram (@)</Label>
-                        <Input type="text" placeholder={memberToEdit.instagram} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
+                        <Input type="text" placeholder={memberToEdit.instagram != "undefined" ? memberToEdit.instagram : ''} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -332,13 +293,13 @@ function TeamDash() {
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="siret">Siret</Label>
-                        <Input type="text" placeholder={memberToEdit.siret} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
+                        <Input type="text" placeholder={memberToEdit.siret != "undefined" ? memberToEdit.siret : ''} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="IBAN">IBAN</Label>
-                        <Input type="text" placeholder={memberToEdit.IBAN} onChange={(e) => setIBAN(e.target.value)} bsSize="sm" />
+                        <Input type="text" placeholder={memberToEdit.IBAN != "undefined" ? memberToEdit.IBAN : ''} onChange={(e) => setIBAN(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>
@@ -378,7 +339,7 @@ function TeamDash() {
                     <div className="col-md-12">
                       <FormGroup>
                         <Label for="notes">Notes</Label>
-                        <Input type="textarea" placeholder={memberToEdit.notes} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
+                        <Input type="textarea" placeholder={memberToEdit.notes ? memberToEdit.notes : ''} onChange={(e) => setNotes(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                   </div>

@@ -14,6 +14,7 @@ import add from '../assets/icones/ajouter_blanc.png';
 function DirectoryDash() {
   const dispatch = useDispatch();
   const directory = useSelector((state) => state.directory);
+  const token = localStorage.getItem('token');
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -65,7 +66,7 @@ function DirectoryDash() {
       // console.log(updatedPosition);
       // console.log(updatedCompanyName);
       // console.log(updatedNotes);
-      dispatch(updateContact(contactToEdit._id, updatedFullName, updatedEmail, updatedPhoneNumber, updatedPosition, updatedCompanyName, updatedNotes));
+      dispatch(updateContact(contactToEdit._id, updatedFullName, updatedEmail, updatedPhoneNumber, updatedPosition, updatedCompanyName, updatedNotes, token));
       setShowEditModal(false);
       window.location.reload()
     }
@@ -78,7 +79,7 @@ function DirectoryDash() {
 
   const handleDelete = () => {
     if (contactToDelete && contactToDelete.Id) {
-      dispatch(deleteContact(contactToDelete.Id));
+      dispatch(deleteContact(contactToDelete.Id, token));
       setShowDeleteModal(false);
       window.location.reload()
     }
@@ -95,7 +96,7 @@ function DirectoryDash() {
       return;
     }
 
-    dispatch(addContact(fullName, email, phoneNumber, position, companyName, notes));
+    dispatch(addContact(fullName, email, phoneNumber, position, companyName, notes, token));
     setShowAddModal(false); 
     window.location.reload(); 
     // setFullName('');

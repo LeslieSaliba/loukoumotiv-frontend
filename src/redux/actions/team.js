@@ -33,22 +33,6 @@ export const getMemberById = (Id) => {
     }
 }
 
-// export const login = (email, password) => {
-//     return (dispatch) => {
-//         axios.post(`${process.env.REACT_APP_URL}/team/login`, { email, password })
-//             .then((response) => {
-//                 const { token, id, role } = response.data
-//                 dispatch({
-//                     type: "login",
-//                     payload: { token, id, role },
-//                 });
-//             })
-//             .catch((error) => {
-//                 console.error("Erreur lors de la connexion", error)
-//             })
-//     }
-// }
-
 export const login = (email, password) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -61,7 +45,6 @@ export const login = (email, password) => {
                         payload: { token, id, role },
                     });
                     localStorage.setItem("token", token);
-                    // localStorage.setItem("id", id);
                     resolve();
                 })
                 .catch((error) => {
@@ -71,10 +54,15 @@ export const login = (email, password) => {
     };
 };
 
-export const addMember = (fullName, role, phoneNumber, email, password, joiningDate, notes) => {
+export const addMember = (fullName, role, phoneNumber, email, password, joiningDate, notes, token) => {
     const newMember = { fullName, role, email, phoneNumber, password, joiningDate, notes }
     return (dispatch) => {
-        axios.post(`${process.env.REACT_APP_URL}/team/add`, newMember)
+        axios.post(`${process.env.REACT_APP_URL}/team/add`, newMember, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const member = response.data.teamMember
                 dispatch({
@@ -104,9 +92,14 @@ export const getByRole = (role) => {
     }
 }
 
-export const deleteMember = (Id) => {
+export const deleteMember = (Id, token) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/team/delete/${Id}`)
+        axios.delete(`${process.env.REACT_APP_URL}/team/delete/${Id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 dispatch({
                     type: "deleteMember",
@@ -119,13 +112,12 @@ export const deleteMember = (Id) => {
     }
 }
 
-export const updateMember = (Id, fullName, role, phoneNumber, email, password, dateOfBirth, number, street, ZIPcode, city, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture) => {
+export const updateMember = (Id, fullName, role, phoneNumber, email, dateOfBirth, number, street, ZIPcode, city, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture, password, token) => {
     const formData = new FormData();
     formData.append('fullName', fullName);
     formData.append('role', role);
     formData.append('phoneNumber', phoneNumber);
     formData.append('email', email);
-    formData.append('password', password);
     formData.append('dateOfBirth', dateOfBirth);
     formData.append('number', number);
     formData.append('street', street);
@@ -139,11 +131,16 @@ export const updateMember = (Id, fullName, role, phoneNumber, email, password, d
     formData.append('motorized', motorized);
     formData.append('notes', notes);
     formData.append('file', picture);
+    if (password) {
+        formData.append('password', password);
+    }
+
     return (dispatch) => {
         console.log(formData);
         axios.put(`${process.env.REACT_APP_URL}/team/update/${Id}`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
+                'authorization': `Bearer ${token}`,
             },
         })
             .then((response) => {
@@ -160,9 +157,14 @@ export const updateMember = (Id, fullName, role, phoneNumber, email, password, d
     }
 }
 
-export const switchToMasseur = (Id) => {
+export const switchToMasseur = (Id, token) => {
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL}/team/switchToMasseur/${Id}`)
+        axios.put(`${process.env.REACT_APP_URL}/team/switchToMasseur/${Id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const member = response.data.teamMember
                 const id = response.data.Id
@@ -177,9 +179,14 @@ export const switchToMasseur = (Id) => {
     }
 }
 
-export const switchToAdmin = (Id) => {
+export const switchToAdmin = (Id, token) => {
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL}/team/switchToAdmin/${Id}`)
+        axios.put(`${process.env.REACT_APP_URL}/team/switchToAdmin/${Id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const member = response.data.teamMember
                 const id = response.data.Id

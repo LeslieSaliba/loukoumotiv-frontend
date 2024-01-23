@@ -13,6 +13,7 @@ import add from '../assets/icones/ajouter_blanc.png';
 function NewsletterDash() {
     const dispatch = useDispatch();
     const newsletter = useSelector((state) => state.newsletter);
+    const token = localStorage.getItem('token');
     const [loading, setLoading] = useState(true);
     const [showUnsubscribeModal, setShowUnsubscribeModal] = useState(false);
     const [contactToUnsubscribe, setContactToUnsubscribe] = useState(null);
@@ -44,7 +45,7 @@ function NewsletterDash() {
 
     const handleUnsubscribe = () => {
         if (contactToUnsubscribe && contactToUnsubscribe.Id) {
-            dispatch(unsubscribeToNewsletter(contactToUnsubscribe.Id));
+            dispatch(unsubscribeToNewsletter(contactToUnsubscribe.Id, token));
             setShowUnsubscribeModal(false);
             window.location.reload()
         }

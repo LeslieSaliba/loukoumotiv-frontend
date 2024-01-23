@@ -33,10 +33,15 @@ export const getPartnerById = (Id) => {
     }
 }
 
-export const addPartner = (name, type, location, website, referenceContact, notes) => {
+export const addPartner = (name, type, location, website, referenceContact, notes, token) => {
     const newPartner = { name, type, location, website, referenceContact, notes }
     return (dispatch) => {
-        axios.post(`${process.env.REACT_APP_URL}/partners/add`, newPartner)
+        axios.post(`${process.env.REACT_APP_URL}/partners/add`, newPartner, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const partner = response.data.partner
                 const id = response.data.id
@@ -67,9 +72,14 @@ export const getPartnerByType = (type) => {
     }
 }
 
-export const deletePartner = (Id) => {
+export const deletePartner = (Id, token) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/partners/delete/${Id}`)
+        axios.delete(`${process.env.REACT_APP_URL}/partners/delete/${Id}`,{
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        } )
             .then((response) => {
                 dispatch({
                     type: "deletePartner",
@@ -82,10 +92,15 @@ export const deletePartner = (Id) => {
     }
 }
 
-export const updatePartner = (Id, name, type, location, website, referenceContact, notes) => {
+export const updatePartner = (Id, name, type, location, website, referenceContact, notes, token) => {
     const updatedPartner = { name, type, location, website, referenceContact, notes }
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL}/partners/update/${Id}`, updatedPartner)
+        axios.put(`${process.env.REACT_APP_URL}/partners/update/${Id}`, updatedPartner, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const partner = response.data.partner
                 const id = response.data.Id

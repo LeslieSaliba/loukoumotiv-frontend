@@ -32,10 +32,15 @@ export const getMissionById = (Id) => {
     }
 }
 
-export const addMission = (title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes) => {
+export const addMission = (title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes, token) => {
     const newMission = { title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes }
     return (dispatch) => {
-        axios.post(`${process.env.REACT_APP_URL}/missions/add`, newMission)
+        axios.post(`${process.env.REACT_APP_URL}/missions/add`, newMission, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const mission = response.data.mission
                 const id = response.data.id
@@ -66,9 +71,14 @@ export const getMissionByType = (type) => {
     }
 }
 
-export const deleteMission = (Id) => {
+export const deleteMission = (Id, token) => {
     return (dispatch) => {
-        axios.delete(`${process.env.REACT_APP_URL}/missions/delete/${Id}`)
+        axios.delete(`${process.env.REACT_APP_URL}/missions/delete/${Id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 dispatch({
                     type: "deleteMission",
@@ -81,10 +91,15 @@ export const deleteMission = (Id) => {
     }
 }
 
-export const updateMission = (Id, title, description, partner, location, type, time, capacity, requiredMembers, remuneration, status, teamBilling, partnerBilling, notes) => {
+export const updateMission = (Id, title, description, partner, location, type, time, capacity, requiredMembers, remuneration, status, teamBilling, partnerBilling, notes, token) => {
     const updatedMission = { title, description, partner, location, type, time, capacity, requiredMembers, remuneration, status, teamBilling, partnerBilling, notes }
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL}/missions/update/${Id}`, updatedMission)
+        axios.put(`${process.env.REACT_APP_URL}/missions/update/${Id}`, updatedMission, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const mission = response.data.mission
                 const id = response.data.Id
@@ -163,10 +178,15 @@ export const getMissionsByTeamMember = (teamMemberId) => {
     }
 }
 
-export const registerToMission = (missionId, teamMemberId) => {
+export const registerToMission = (missionId, teamMemberId, token) => {
     const newRegistration = { missionId, teamMemberId }
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL}/missions/register`, newRegistration)
+        axios.put(`${process.env.REACT_APP_URL}/missions/register`, newRegistration, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const mission = response.data.mission
                 const id = response.data.missionId
@@ -181,10 +201,15 @@ export const registerToMission = (missionId, teamMemberId) => {
     }
 }
 
-export const dropMission = (missionId, teamMemberId) => {
+export const dropMission = (missionId, teamMemberId, token) => {
     const newDrop = { missionId, teamMemberId }
     return (dispatch) => {
-        axios.put(`${process.env.REACT_APP_URL}/missions/drop`, newDrop)
+        axios.put(`${process.env.REACT_APP_URL}/missions/drop`, newDrop, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 const mission = response.data.mission
                 const id = response.data.missionId

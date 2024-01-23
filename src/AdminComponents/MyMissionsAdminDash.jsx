@@ -14,6 +14,7 @@ import see_details from '../assets/icones/voir_noir.png';
 function MyMissionsAdminDash() {
   const dispatch = useDispatch();
   const missions = useSelector((state) => state.missions);
+  const token = localStorage.getItem('token');
   const [loading, setLoading] = useState(true);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);

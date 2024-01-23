@@ -16,6 +16,7 @@ import full from '../assets/icones/cant_noir.png';
 function AllMissionsMasseurDash() {
   const dispatch = useDispatch();
   const missions = useSelector((state) => state.missions.filter(mission => mission.status === 'to do'));
+  const token = localStorage.getItem('token');
   const [loading, setLoading] = useState(true);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showFullModal, setShowFullModal] = useState(false);
@@ -80,7 +81,7 @@ function AllMissionsMasseurDash() {
 
   const handleRegister = (e) => {
     if (missionToRegisterTo && missionToRegisterTo.Id) {
-      dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId));
+      dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId, token));
       setShowRegisterModal(false);
       window.location.reload()
     }
