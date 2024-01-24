@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Loading from '../Frequents/Loading';
 import { useSelector, useDispatch } from "react-redux";
 import { getUserID } from '../userInfo/getTeamData';
-import { registerToMission, dropMission, getMissionsByTeamMember } from '../redux/actions/missions';
+import { dropMission, getMissionsByTeamMember } from '../redux/actions/missions';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import registered from '../assets/icones/inscrit_noir.png';
 import see_details from '../assets/icones/voir_noir.png';
 
@@ -17,12 +18,9 @@ function MyMissionsAdminDash() {
   const token = localStorage.getItem('token');
   const [loading, setLoading] = useState(true);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showDropModal, setShowDropModal] = useState(false);
   const [missionToSee, setMissionToSee] = useState({});
-  const [missionToRegisterTo, setMissionToRegisterTo] = useState(null);
   const [missionToDrop, setMissionToDrop] = useState(null);
-  const [validationMessage, setValidationMessage] = useState('');
   const LoggedMemberId = getUserID();
 
   const [title, setTitle] = useState(missionToSee.title || '');
@@ -73,18 +71,6 @@ function MyMissionsAdminDash() {
     }
   };
 
-  const toggleRegisterModal = (Id, title, LoggedMemberId) => {
-    setMissionToRegisterTo({ Id, title });
-    setShowRegisterModal(!showRegisterModal)
-  }
-
-  const handleRegister = (e) => {
-    if (missionToRegisterTo && missionToRegisterTo.Id) {
-      dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId));
-      setShowRegisterModal(false);
-    }
-  };
-
   const toggleDropModal = (Id, title) => {
     setMissionToDrop({ Id, title });
     setShowDropModal(!showDropModal)
@@ -92,10 +78,18 @@ function MyMissionsAdminDash() {
 
   const handleDrop = () => {
     if (missionToDrop && missionToDrop.Id && LoggedMemberId) {
-      dispatch(dropMission(missionToDrop.Id, LoggedMemberId));
-      setShowDropModal(false);
-      window.location.reload()
-    }
+      try {
+        dispatch(dropMission(missionToDrop.Id, LoggedMemberId, token));
+        toast.success(`Désinscription réussie !`)
+        setTimeout(() => {
+          setShowDropModal(false);
+          window.location.reload()
+        }, 3000);
+      }
+      catch {
+        toast.error(`Oups, réessayez plus tard`)
+      }
+    };
   }
 
   return (
@@ -299,36 +293,6 @@ function MyMissionsAdminDash() {
                 </ModalFooter>
               </Form>
             )}
-          </Modal>
-        </div>
-      )}
-
-      {showRegisterModal && (
-        <div className=''>
-          <Modal isOpen={toggleRegisterModal} toggle={toggleRegisterModal}>
-            <ModalHeader toggle={toggleRegisterModal}>S'inscrire à une mission</ModalHeader>
-            <ModalBody>
-              {missionToRegisterTo && (
-                <div>
-                  <p>Êtes-vous sûr.e de vouloir vous inscrire à la mission '{missionToRegisterTo.title}' ?</p>
-                  <p className='font-italic'>Vous recevrez une confirmation d'inscription sous quelques jours.
-                    <br />
-                    <br /> Si vous avez un empêchement ou ne souhaitez plus participer à la mission, vous devrez passer par l'un des administrateurs.
-                  </p>
-                </div>
-              )}
-            </ModalBody>
-            <ModalFooter>
-              <Button className='action-button' onClick={() => handleRegister()}>
-                Confirmer
-              </Button>
-              <Button className='cancel-button' onClick={toggleRegisterModal}>
-                Annuler
-              </Button>
-              {validationMessage && (
-                <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-              )}
-            </ModalFooter>
           </Modal>
         </div>
       )}

@@ -4,6 +4,7 @@ import { Form, FormGroup, Input, Label } from 'reactstrap';
 import '../CSS/Contact.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import Téléphone from '../assets/icones/telephone_mauve.png';
 import Mail from '../assets/icones/mail_mauve.png';
 
@@ -26,6 +27,15 @@ function JoinFormLogin() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        if (!formData.Nom_complet || !formData.Email || !formData.Telephone || !formData.Localisation || !formData.Message ) {
+            toast.error('Veuillez renseigner tous les champs');
+            return;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.Email)) {
+            toast.error('Format d\'email invalide');
+            return;
+        }
         handleSubmit(e);
         setFormData({
             Nom_complet: "",
@@ -150,7 +160,7 @@ function JoinFormLogin() {
                         </button>
 
                         {state.succeeded && (
-                            <p className="thank-you-message">Merci pour ton message, l'équipe Loukoumotiv' revient vers toi dans les plus brefs délais. Prends soin de toi !</p>
+                            toast.success("Merci pour ton message, l'équipe Loukoumotiv' revient vers toi dans les plus brefs délais. Prends soin de toi !")
                         )}
                     </Form>
 

@@ -6,6 +6,7 @@ import { getUserRole } from "../userInfo/getTeamData";
 import '../CSS/Homepage.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import logo_blanc from '../assets/Logo_complet_blanc.png';
 import logo_mauve from '../assets/Logo_complet_mauve.png';
 import burger_blanc from '../assets/icones/burger_blanc.png';
@@ -27,7 +28,6 @@ function MobileHeader() {
     const dispatch = useDispatch();
     const newsletter = useSelector((state) => state.newsletter);
     const [email, setEmail] = useState('');
-    const [validationError, setValidationError] = useState('');
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -44,7 +44,6 @@ function MobileHeader() {
         };
 
         window.addEventListener('scroll', handleScroll);
-
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
@@ -52,18 +51,23 @@ function MobileHeader() {
 
     const handleInputChange = (e) => {
         setEmail(e.target.value);
-        setValidationError(``);
     };
 
     const handleSubscribe = (e) => {
         e.preventDefault();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            setValidationError(`Format d'email invalide`);
-            return;
+        try {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                toast.error(`Format d'email invalide`);
+                return;
+            }
+            dispatch(subscribeToNewsletter(email));
+            toast.success(`Inscription à la newsletter réussie !`)
+            setEmail('')
+        } catch (error) {
+            console.error("Erreur : ", error)
+            toast.error(`Oups, réessayez plus tard`)
         }
-        dispatch(subscribeToNewsletter(email));
-        setEmail('');
     };
 
     useEffect(() => {
@@ -132,9 +136,6 @@ function MobileHeader() {
                                         onChange={handleInputChange}
                                     />
                                     <button className='white-button'>S'inscrire</button>
-                                    {validationError && (
-                                        <span className='text-danger font-italic'>{validationError}</span>
-                                    )}
                                 </div>
 
                                 <span className='text-white'>© Loukoumotiv’ 2024.</span>

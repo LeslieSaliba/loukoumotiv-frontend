@@ -10,6 +10,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
 import add from '../assets/icones/ajouter_blanc.png';
@@ -35,7 +36,6 @@ function AllMissionsAdminDash() {
   const [missionToDelete, setMissionToDelete] = useState(null);
   const [missionToRegisterTo, setMissionToRegisterTo] = useState(null);
   const [missionToDrop, setMissionToDrop] = useState(null);
-  const [validationMessage, setValidationMessage] = useState('');
 
   const [title, setTitle] = useState(missionToEdit.title || '');
   const [type, setType] = useState(missionToEdit.type || '');
@@ -83,33 +83,46 @@ function AllMissionsAdminDash() {
   }
 
   const handleEdit = () => {
-    if (missionToEdit && missionToEdit._id) {
-      const updatedTitle = title !== '' ? title : missionToEdit.title;
-      const updatedDescription = description !== '' ? description : missionToEdit.description;
-      const updatedPartner = partner !== '' ? partner : missionToEdit.partner;
-      const updatedLocation = {
-        place: location.place !== '' ? location.place : missionToEdit.location?.place || '',
-        number: location.number !== '' ? location.number : missionToEdit.location?.number || '',
-        street: location.street !== '' ? location.street : missionToEdit.location?.street || '',
-        ZIPcode: location.ZIPcode !== '' ? location.ZIPcode : missionToEdit.location?.ZIPcode || '',
-        city: location.city !== '' ? location.city : missionToEdit.location?.city || '',
-      };
-      const updatedType = type !== '' ? type : missionToEdit.type;
-      const updatedTime = {
-        date: formatDate(time.date) !== '' ? formatDate(time.date) : formatDate(missionToEdit.time?.date) || '',
-        hours: time.hours !== '' ? time.hours : missionToEdit.time?.hours || [],
-      };
-      const updatedCapacity = capacity !== '' ? capacity : missionToEdit.capacity;
-      const updatedRequiredMembers = requiredMembers !== '' ? requiredMembers : missionToEdit.requiredMembers;
-      const updatedRemuneration = remuneration !== '' ? remuneration : missionToEdit.remuneration;
-      const updatedStatus = status !== '' ? status : missionToEdit.status;
-      const updatedTeamBilling = teamBilling !== '' ? teamBilling : missionToEdit.teamBilling;
-      const updatedPartnerBilling = partnerBilling !== '' ? partnerBilling : missionToEdit.partnerBilling;
-      const updatedNotes = notes !== '' ? notes : missionToEdit.notes;
+    try {
+      if (missionToEdit && missionToEdit._id) {
+        if (!time || !time.date || formatDate(time.date) === '') {
+          toast.error('Veuillez reconfirmer la date et les horaires de la mission');
+          return;
+        }
 
-      dispatch(updateMission(missionToEdit._id, updatedTitle, updatedDescription, updatedPartner, updatedLocation, updatedType, updatedTime, updatedCapacity, updatedRequiredMembers, updatedRemuneration, updatedStatus, updatedTeamBilling, updatedPartnerBilling, updatedNotes, token));
-      setShowEditModal(false);
-      // window.location.reload()
+        const updatedTitle = title !== '' ? title : missionToEdit.title;
+        const updatedDescription = description !== '' ? description : missionToEdit.description;
+        const updatedPartner = partner !== '' ? partner : missionToEdit.partner;
+        const updatedLocation = {
+          place: location.place !== '' ? location.place : missionToEdit.location?.place || '',
+          number: location.number !== '' ? location.number : missionToEdit.location?.number || '',
+          street: location.street !== '' ? location.street : missionToEdit.location?.street || '',
+          ZIPcode: location.ZIPcode !== '' ? location.ZIPcode : missionToEdit.location?.ZIPcode || '',
+          city: location.city !== '' ? location.city : missionToEdit.location?.city || '',
+        };
+        const updatedType = type !== '' ? type : missionToEdit.type;
+        const updatedTime = {
+          date: formatDate(time.date) !== '' ? formatDate(time.date) : formatDate(missionToEdit.time?.date) || '',
+          hours: time.hours !== '' ? time.hours : missionToEdit.time?.hours || [],
+        };
+        const updatedCapacity = capacity !== '' ? capacity : missionToEdit.capacity;
+        const updatedRequiredMembers = requiredMembers !== '' ? requiredMembers : missionToEdit.requiredMembers;
+        const updatedRemuneration = remuneration !== '' ? remuneration : missionToEdit.remuneration;
+        const updatedStatus = status !== '' ? status : missionToEdit.status;
+        const updatedTeamBilling = teamBilling !== '' ? teamBilling : missionToEdit.teamBilling;
+        const updatedPartnerBilling = partnerBilling !== '' ? partnerBilling : missionToEdit.partnerBilling;
+        const updatedNotes = notes !== '' ? notes : missionToEdit.notes;
+
+        dispatch(updateMission(missionToEdit._id, updatedTitle, updatedDescription, updatedPartner, updatedLocation, updatedType, updatedTime, updatedCapacity, updatedRequiredMembers, updatedRemuneration, updatedStatus, updatedTeamBilling, updatedPartnerBilling, updatedNotes, token));
+        toast.success(`Mission mise à jour avec succès !`)
+        setTimeout(() => {
+          setShowEditModal(false);
+          window.location.reload()
+        }, 3000);
+      }
+    } catch (error) {
+      console.error('Erreur :', error);
+      toast.error('Oups, réessayez plus tard.');
     }
   };
 
@@ -120,9 +133,20 @@ function AllMissionsAdminDash() {
 
   const handleDelete = () => {
     if (missionToDelete && missionToDelete.Id) {
-      dispatch(deleteMission(missionToDelete.Id, token));
-      setShowDeleteModal(false);
-      window.location.reload()
+      try {
+        // if (missionToDelete.registeredMembers.length > 0) {
+        //   toast.error(`Attention : Certains membres sont déjà inscrits à cette mission. N'oubliez pas de les prévenir de l'annulation de la mission.`);
+        // }
+        dispatch(deleteMission(missionToDelete.Id, token));
+        toast.success(`Mission supprimée avec succès !`)
+        setTimeout(() => {
+          setShowDeleteModal(false);
+          window.location.reload()
+        }, 3000);
+      }
+      catch {
+        toast.error(`Oups, réessayez plus tard`)
+      }
     }
   };
 
@@ -131,29 +155,45 @@ function AllMissionsAdminDash() {
   }
 
   const handleAdd = () => {
-    if (!title || !description || !partner || !location || !type || !time || !capacity || !requiredMembers || !remuneration) {
-      console.error('Les champs * doivent être renseignés');
-      setValidationMessage('Les champs * doivent être renseignés');
-      return;
+    try {
+      if (!title || !description || !partner || !location || !type || !time || !capacity || !requiredMembers || !remuneration) {
+        toast.error('Les champs * doivent être renseignés');
+        return;
+      }
+      const registeredMembers = [];
+      dispatch(addMission(title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes, token));
+      toast.success('Mission ajoutée avec succès!');
+
+      setTimeout(() => {
+        setShowAddModal(false);
+        window.location.reload();
+      }, 3000);
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Oups, réessayez plus tard');
     }
-    const registeredMembers = [];
-    dispatch(addMission(title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes, token));
-    setShowAddModal(false)
-    window.location.reload()
-  }
+  };
 
   const toggleRegisterModal = (Id, title) => {
     setMissionToRegisterTo({ Id, title });
     setShowRegisterModal(!showRegisterModal)
   }
 
-  const handleRegister = (e) => {
+  const handleRegister = () => {
     if (missionToRegisterTo && missionToRegisterTo.Id) {
-      dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId, token));
-      setShowRegisterModal(false);
-      window.location.reload()
-    }
-  };
+      try {
+        dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId, token));
+        toast.success(`Inscription réussie !`)
+        setTimeout(() => {
+          setShowRegisterModal(false);
+          window.location.reload()
+        }, 3000);
+      }
+      catch {
+        toast.error(`Oups, réessayez plus tard`)
+      }
+    };
+  }
 
   const toggleDropModal = (Id, title, registeredMember) => {
     setMissionToDrop({ Id, title, registeredMember });
@@ -162,11 +202,19 @@ function AllMissionsAdminDash() {
 
   const handleDrop = () => {
     if (missionToDrop && missionToDrop.Id && missionToDrop.registeredMember) {
-      const { Id, registeredMember } = missionToDrop;
-      const { _id: teamMemberId } = registeredMember;
-      dispatch(dropMission(Id, teamMemberId, token));
-      setShowDropModal(false);
-      window.location.reload()
+      try {
+        const { Id, registeredMember } = missionToDrop;
+        const { _id: teamMemberId } = registeredMember;
+        dispatch(dropMission(Id, teamMemberId, token));
+        toast.success(`Désinscription réussie !`)
+        setTimeout(() => {
+          setShowDropModal(false);
+          window.location.reload()
+        }, 3000);
+      }
+      catch {
+        toast.error(`Oups, réessayez plus tard`)
+      }
     }
   }
 
@@ -177,15 +225,25 @@ function AllMissionsAdminDash() {
 
   const handleAutoDrop = () => {
     if (missionToDrop && missionToDrop.Id && LoggedMemberId) {
-      dispatch(dropMission(missionToDrop.Id, LoggedMemberId, token));
-      setShowAutoDropModal(false);
-      window.location.reload()
-    }
+      try {
+        dispatch(dropMission(missionToDrop.Id, LoggedMemberId, token));
+        toast.success(`Désinscription réussie !`)
+        setTimeout(() => {
+          setShowAutoDropModal(false);
+          window.location.reload()
+        }, 3000);
+      }
+      catch {
+        toast.error(`Oups, réessayez plus tard`)
+      }
+    };
   }
 
   const toggleFullModal = () => {
     setShowFullModal(!showFullModal)
   }
+
+  console.log(missions);
 
   return (
     <div className="container ">
@@ -210,7 +268,7 @@ function AllMissionsAdminDash() {
             </tr>
           </thead>
           <tbody>
-      
+
             {loading ? (
               <tr>
                 <td colSpan="6" className='text-center'>
@@ -241,7 +299,7 @@ function AllMissionsAdminDash() {
                       })()}</td>
                       <td>{mission.partner?.name}</td>
                       <td>{mission.type}</td>
-               
+
                       <td>{new Date(mission.time?.date).toLocaleDateString("en-GB")}</td>
                       <td>
                         {mission.time?.hours.map((hour, index) => (
@@ -264,7 +322,7 @@ function AllMissionsAdminDash() {
                         {mission.requiredMembers === mission.registeredMembers.length ?
                           <img className="table-action-icon" src={full} alt="complète" onClick={() => toggleFullModal()} /> :
                           (mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
-                            <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleDropModal(mission._id, mission.title)} />
+                            <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleAutoDropModal(mission._id, mission.title)} />
                           ) : (
                             <img className="table-action-icon" src={not_registered} alt="non inscrit" onClick={() => toggleRegisterModal(mission._id, mission.title)} />
                           ))
@@ -458,9 +516,6 @@ function AllMissionsAdminDash() {
                   <Button className='cancel-button' onClick={toggleEditModal}>
                     Annuler
                   </Button>
-                  {validationMessage && (
-                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                  )}
                 </ModalFooter>
               </Form>
             )}
@@ -474,7 +529,13 @@ function AllMissionsAdminDash() {
             <ModalHeader toggle={toggleDeleteModal}>Supprimer une mission</ModalHeader>
             <ModalBody>
               {missionToDelete && (
-                <p>Êtes-vous sûr de vouloir supprimer '{missionToDelete.title}' des missions ?</p>
+                <div>
+                  <p>Êtes-vous sûr de vouloir supprimer '{missionToDelete.title}' des missions ?</p>
+                  <br />
+                  <p>Si des loukoums masseurs sont déjà inscrits sur cette mission, n'oubliez pas de les prévenir de cette suppression.</p>
+                  <br />
+                  <p>Si cette mission est reportée, vous pouvez toujours mettre à jour son statut comme "Annulée" plutôt de la supprimer définitivement.</p>
+                </div>
               )}
             </ModalBody>
             <ModalFooter>
@@ -665,9 +726,6 @@ function AllMissionsAdminDash() {
                 <Button className='cancel-button' onClick={toggleAddModal}>
                   Annuler
                 </Button>
-                {validationMessage && (
-                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
               </ModalFooter>
             </Form>
           </Modal>
@@ -692,9 +750,6 @@ function AllMissionsAdminDash() {
               <Button className='cancel-button' onClick={toggleRegisterModal}>
                 Annuler
               </Button>
-              {validationMessage && (
-                <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-              )}
             </ModalFooter>
           </Modal>
         </div>
@@ -703,7 +758,7 @@ function AllMissionsAdminDash() {
       {showDropModal && (
         <div className=''>
           <Modal isOpen={toggleDropModal} toggle={toggleDropModal}>
-            <ModalHeader toggle={toggleDropModal}>Se désinscrire à une mission</ModalHeader>
+            <ModalHeader toggle={toggleDropModal}>Se désinscrire d'une mission</ModalHeader>
             <ModalBody>
               {console.log("missionToDrop: ", missionToDrop)}
               {missionToDrop && missionToDrop.registeredMember && (

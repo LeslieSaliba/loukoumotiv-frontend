@@ -7,6 +7,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
 import add from '../assets/icones/ajouter_blanc.png';
@@ -21,7 +22,6 @@ function PartnersDash() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [partnerToEdit, setPartnerToEdit] = useState({});
   const [partnerToDelete, setPartnerToDelete] = useState(null);
-  const [validationMessage, setValidationMessage] = useState('');
 
   const [name, setName] = useState(partnerToEdit.name || '');
   const [type, setType] = useState(partnerToEdit.type || '');
@@ -47,7 +47,7 @@ function PartnersDash() {
         dispatch(getAllPartners())
         setLoading(false);
       } catch (error) {
-        console.error('Erreur', error);
+        console.error('Erreur : ', error);
         setLoading(false);
       }
     };
@@ -64,33 +64,49 @@ function PartnersDash() {
   }
 
   const handleEdit = () => {
-    if (partnerToEdit && partnerToEdit._id) {
-      const updatedName = name !== '' ? name : partnerToEdit.name;
-      const updatedType = type !== '' ? type : partnerToEdit.type;
-      const updatedWebsite = website !== '' ? website : partnerToEdit.website;
-      const updatedLocation = {
-        place: location.place !== '' ? location.place : partnerToEdit.location?.place || '',
-        number: location.number !== '' ? location.number : partnerToEdit.location?.number || '',
-        street: location.street !== '' ? location.street : partnerToEdit.location?.street || '',
-        ZIPcode: location.ZIPcode !== '' ? location.ZIPcode : partnerToEdit.location?.ZIPcode || '',
-        city: location.city !== '' ? location.city : partnerToEdit.location?.city || '',
-      };
-      const updatedReferenceContact = {
-        name: referenceContact.name !== '' ? referenceContact.name : partnerToEdit.referenceContact?.name || '',
-        number: referenceContact.number !== '' ? referenceContact.number : partnerToEdit.referenceContact?.number || '',
-        email: referenceContact.email !== '' ? referenceContact.email : partnerToEdit.referenceContact?.email || '',
-        position: referenceContact.position !== '' ? referenceContact.position : partnerToEdit.referenceContact?.position || '',
-      };
-      const updatedNotes = notes !== '' ? notes : partnerToEdit.notes;
-      // console.log(updatedName)
-      // console.log(updatedType)
-      // console.log(updatedWebsite)
-      // console.log(updatedLocation)
-      // console.log(updatedReferenceContact)
-      // console.log(updatedNotes)
-      dispatch(updatePartner(partnerToEdit._id, updatedName, updatedType, updatedLocation, updatedWebsite, updatedReferenceContact, updatedNotes, token));
-      setShowEditModal(false);
-      window.location.reload()
+    try {
+      if (partnerToEdit && partnerToEdit._id) {
+        // if (!name || !location || !website || !referenceContact) {
+        //   console.error('Les champs * doivent être renseignés');
+        //   toast.error('Les champs * doivent être renseignés');
+        //   return;
+        // }
+      
+        // const referenceEmail = referenceContact.email || '';
+        // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // if (!emailRegex.test(referenceEmail)) {
+        //   toast.error('Format d\'email invalide');
+        //   return;
+        // }
+
+        const updatedName = name !== '' ? name : partnerToEdit.name;
+        const updatedType = type !== '' ? type : partnerToEdit.type;
+        const updatedWebsite = website !== '' ? website : partnerToEdit.website;
+        const updatedLocation = {
+          place: location.place !== '' ? location.place : partnerToEdit.location?.place || '',
+          number: location.number !== '' ? location.number : partnerToEdit.location?.number || '',
+          street: location.street !== '' ? location.street : partnerToEdit.location?.street || '',
+          ZIPcode: location.ZIPcode !== '' ? location.ZIPcode : partnerToEdit.location?.ZIPcode || '',
+          city: location.city !== '' ? location.city : partnerToEdit.location?.city || '',
+        };
+        const updatedReferenceContact = {
+          name: referenceContact.name !== '' ? referenceContact.name : partnerToEdit.referenceContact?.name || '',
+          number: referenceContact.number !== '' ? referenceContact.number : partnerToEdit.referenceContact?.number || '',
+          email: referenceContact.email !== '' ? referenceContact.email : partnerToEdit.referenceContact?.email || '',
+          position: referenceContact.position !== '' ? referenceContact.position : partnerToEdit.referenceContact?.position || '',
+        };
+        const updatedNotes = notes !== '' ? notes : partnerToEdit.notes;
+
+        dispatch(updatePartner(partnerToEdit._id, updatedName, updatedType, updatedLocation, updatedWebsite, updatedReferenceContact, updatedNotes, token));
+        toast.success(`Partenaire mis à jour avec succès !`)
+        setTimeout(() => {
+          setShowEditModal(false);
+          window.location.reload()
+        }, 3000);
+      }
+    } catch (error) {
+      console.error('Erreur :', error);
+      toast.error(`Oups, réessayez plus tard`)
     }
   };
 
@@ -101,9 +117,17 @@ function PartnersDash() {
 
   const handleDelete = () => {
     if (partnerToDelete && partnerToDelete.Id) {
-      dispatch(deletePartner(partnerToDelete.Id, token));
-      setShowDeleteModal(false);
-      window.location.reload()
+      try {
+        dispatch(deletePartner(partnerToDelete.Id, token));
+        toast.success(`Partenaire supprimé avec succès`)
+        setTimeout(() => {
+          setShowDeleteModal(false);
+          window.location.reload()
+        }, 3000);
+      } catch (error) {
+        console.error('Erreur :', error);
+        toast.error(`Oups, réessayez plus tard`)
+      }
     }
   };
 
@@ -112,16 +136,29 @@ function PartnersDash() {
   }
 
   const handleAdd = () => {
-    if (!name || !type || !location || !website || !referenceContact) {
-      console.error('Les champs * doivent être renseignés');
-      setValidationMessage('Les champs * doivent être renseignés');
-      return;
-    }
+    try {
+      if (!name || !type || !location || !website || !referenceContact) {
+        console.error('Les champs * doivent être renseignés');
+        toast.error('Les champs * doivent être renseignés');
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(referenceContact.email)) {
+        toast.error(`Format d'email invalide`);
+        return;
+      }
+      dispatch(addPartner(name, type, location, website, referenceContact, notes, token));
+      toast.success('Partenaire ajouté avec succès!');
 
-    dispatch(addPartner(name, type, location, website, referenceContact, notes, token));
-    setShowAddModal(false)
-    window.location.reload()
-  }
+      setTimeout(() => {
+        setShowAddModal(false);
+        window.location.reload();
+      }, 3000);
+    } catch (error) {
+      console.error('Erreur :', error);
+      toast.error(`Oups, réessayez plus tard`)
+    }
+  };
 
   return (
     <div className="container ">
@@ -281,9 +318,6 @@ function PartnersDash() {
                   <Button className='cancel-button' onClick={toggleEditModal}>
                     Annuler
                   </Button>
-                  {validationMessage && (
-                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                  )}
                 </ModalFooter>
               </Form>
             )}
@@ -425,9 +459,6 @@ function PartnersDash() {
                 <Button className='cancel-button' onClick={toggleAddModal}>
                   Annuler
                 </Button>
-                {validationMessage && (
-                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
               </ModalFooter>
             </Form>
           </Modal>

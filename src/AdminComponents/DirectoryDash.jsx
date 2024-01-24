@@ -7,6 +7,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
 import add from '../assets/icones/ajouter_blanc.png';
@@ -21,7 +22,6 @@ function DirectoryDash() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [contactToEdit, setContactToEdit] = useState({});
   const [contactToDelete, setContactToDelete] = useState(null);
-  const [validationMessage, setValidationMessage] = useState('');
 
   const [fullName, setFullName] = useState(contactToEdit.fullName || '');
   const [email, setEmail] = useState(contactToEdit.email || '');
@@ -49,16 +49,30 @@ function DirectoryDash() {
   }
 
   const handleEdit = () => {
-    if (contactToEdit && contactToEdit._id) {
-      const updatedFullName = fullName !== '' ? fullName : contactToEdit.fullName;
-      const updatedEmail = email !== '' ? email : contactToEdit.email;
-      const updatedPhoneNumber = phoneNumber !== '' ? phoneNumber : contactToEdit.phoneNumber;
-      const updatedPosition = position !== '' ? position : contactToEdit.position;
-      const updatedCompanyName = companyName !== '' ? companyName : contactToEdit.companyName;
-      const updatedNotes = notes !== '' ? notes : contactToEdit.notes;
-      dispatch(updateContact(contactToEdit._id, updatedFullName, updatedEmail, updatedPhoneNumber, updatedPosition, updatedCompanyName, updatedNotes, token));
-      setShowEditModal(false);
-      window.location.reload()
+    try {
+      if (contactToEdit && contactToEdit._id) {
+        if (!fullName || !email || !phoneNumber || !position) {
+          console.error('Les champs * doivent être renseignés');
+          toast.error('Les champs * doivent être renseignés');
+          return;
+        }
+        const updatedFullName = fullName !== '' ? fullName : contactToEdit.fullName;
+        const updatedEmail = email !== '' ? email : contactToEdit.email;
+        const updatedPhoneNumber = phoneNumber !== '' ? phoneNumber : contactToEdit.phoneNumber;
+        const updatedPosition = position !== '' ? position : contactToEdit.position;
+        const updatedCompanyName = companyName !== '' ? companyName : contactToEdit.companyName;
+        const updatedNotes = notes !== '' ? notes : contactToEdit.notes;
+
+        dispatch(updateContact(contactToEdit._id, updatedFullName, updatedEmail, updatedPhoneNumber, updatedPosition, updatedCompanyName, updatedNotes, token));
+        toast.success(`Contact mis à jour avec succès !`)
+        setTimeout(() => {
+          setShowEditModal(false);
+          window.location.reload()
+        }, 3000);
+      }
+    } catch (error) {
+      console.error("Erreur : ", error)
+      toast.error(`Oups, réessayez plus tard`)
     }
   };
 
@@ -69,9 +83,18 @@ function DirectoryDash() {
 
   const handleDelete = () => {
     if (contactToDelete && contactToDelete.Id) {
-      dispatch(deleteContact(contactToDelete.Id, token));
-      setShowDeleteModal(false);
-      window.location.reload()
+      try {
+        dispatch(deleteContact(contactToDelete.Id, token));
+        toast.success(`Contact supprimé avec succès !`)
+        setTimeout(() => {
+          setShowDeleteModal(false);
+          window.location.reload()
+        }, 3000);
+      } catch (error) {
+        console.error("Erreur : ", error)
+        toast.error(`Oups, réessayez plus tard`)
+      }
+
     }
   };
 
@@ -80,15 +103,28 @@ function DirectoryDash() {
   }
 
   const handleAdd = () => {
-    if (!fullName || !email || !phoneNumber || !position) {
-      console.error('Les champs * doivent être renseignés');
-      setValidationMessage('Les champs * doivent être renseignés');
-      return;
-    }
+    try {
+      if (!fullName || !email || !phoneNumber || !position) {
+        console.error('Les champs * doivent être renseignés');
+        toast.error('Les champs * doivent être renseignés');
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        toast.error('Format d\'email invalide');
+        return;
+      }
 
-    dispatch(addContact(fullName, email, phoneNumber, position, companyName, notes, token));
-    setShowAddModal(false); 
-    window.location.reload(); 
+      dispatch(addContact(fullName, email, phoneNumber, position, companyName, notes, token));
+      toast.success(`Contact ajouté avec succès !`)
+      setTimeout(() => {
+        setShowAddModal(false);
+        window.location.reload();
+      }, 3000);
+    } catch (error) {
+      console.error('Erreur :', error);
+      toast.error(`Oups, réessayez plus tard`)
+    }
   }
 
   return (
@@ -202,9 +238,6 @@ function DirectoryDash() {
                   <Button className='cancel-button' onClick={toggleEditModal}>
                     Annuler
                   </Button>
-                  {validationMessage && (
-                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                  )}
                 </ModalFooter>
               </Form>
             )}
@@ -294,9 +327,6 @@ function DirectoryDash() {
                 <Button className='cancel-button' onClick={toggleAddModal}>
                   Annuler
                 </Button>
-                {validationMessage && (
-                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
               </ModalFooter>
             </Form>
           </Modal>

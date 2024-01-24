@@ -5,6 +5,7 @@ import { subscribeToNewsletter } from '../redux/actions/newsletter'
 import '../CSS/Homepage.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import LogoVertical from '../assets/Logo_horizontal_blanc.png';
 import Téléphone from '../assets/icones/telephone_blanc.png';
 import Mail from '../assets/icones/mail_blanc.png';
@@ -16,22 +17,26 @@ function Footer() {
     const dispatch = useDispatch();
     const newsletter = useSelector((state) => state.newsletter);
     const [email, setEmail] = useState('');
-    const [validationError, setValidationError] = useState('');
 
     const handleInputChange = (e) => {
         setEmail(e.target.value);
-        setValidationError(``);
     };
 
     const handleSubscribe = (e) => {
         e.preventDefault();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            setValidationError(`Format d'email invalide`);
-            return;
+        try {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                toast.error(`Format d'email invalide`);
+                return;
+            }
+            dispatch(subscribeToNewsletter(email));
+            toast.success(`Inscription à la newsletter réussie !`)
+            setEmail('')
+        } catch (error) {
+            console.error("Erreur : ", error)
+            toast.error(`Oups, réessayez plus tard`)
         }
-        dispatch(subscribeToNewsletter(email));
-        setEmail('');
     };
 
     return (
@@ -39,7 +44,7 @@ function Footer() {
             <div className="container-fluid footer-bg d-flex footer-desktop d-none d-md-flex">
                 <div className='container d-flex align-items-end justify-content-between'>
                     <div className='d-flex footer-left'>
-                    <Link to='/'><img className='footer-logo' src={LogoVertical} alt="Loukoumotiv'" /></Link>
+                        <Link to='/'><img className='footer-logo' src={LogoVertical} alt="Loukoumotiv'" /></Link>
                         <span>© Loukoumotiv’ 2024.</span>
                     </div>
                     <div>
@@ -65,9 +70,6 @@ function Footer() {
                                     onChange={handleInputChange}
                                 />
                                 <button className='white-button'>S'inscrire</button>
-                                {validationError && (
-                                    <span className='text-danger font-italic'>{validationError}</span>
-                                )}
                             </div>
                             <div className='social-media-icons'>
                                 <a href="https://www.facebook.com/profile.php?id=100090999639657"><img src={Facebook} alt="Facebook" /></a>

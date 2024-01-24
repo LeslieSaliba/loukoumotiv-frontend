@@ -8,6 +8,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import logo from '../assets/logo_blanc.png';
 import profile from '../assets/icones/profil_blanc.png';
 import deconnexion from '../assets/icones/deconnexion_mauve.png';
@@ -18,7 +19,6 @@ function DashHeader() {
     const token = localStorage.getItem('token');
     const [loggedMemberInfo, setLoggedMemberInfo] = useState({});
     const [showEditModal, setShowEditModal] = useState(false);
-    const [validationMessage, setValidationMessage] = useState('test');
 
     const [fullName, setFullName] = useState(loggedMemberInfo.fullName || '');
     const [phoneNumber, setPhoneNumber] = useState(loggedMemberInfo.phoneNumber || '');
@@ -80,9 +80,6 @@ function DashHeader() {
             const updatedIBAN = IBAN !== '' ? IBAN : loggedMemberInfo.IBAN;
             const updatedDrivingLicense = Boolean(drivingLicense);
             const updatedMotorized = Boolean(motorized);
-            // const updatedNotes = loggedMemberInfo.notes; 
-            // const updatedJoiningDate = loggedMemberInfo.joiningDate; 
-            // const updatedRole = loggedMemberInfo.role; 
 
             if (password != '') {
                 try {
@@ -140,11 +137,18 @@ function DashHeader() {
                         },
                     });
                     console.log('Membre mis à jour avec succcès');
-                    setShowEditModal(false);
+                    toast.success('Mise à jour de votre profil réussie !');
+                    setTimeout(() => {
+                        setShowEditModal(false);
+                        window.location.reload()
+                    }, 3000);
+                    
                 } catch (error) {
                     console.error('Erreur lors de la mise à jour du membre ', error);
+                    toast.error('Oups, réessayez plus tard');
                     if (error.response) {
                         console.log('Erreur lors de la mise à jour du membre')
+                        toast.error('Oups, réessayez plus tard');
                     }
                 }
             }
@@ -170,6 +174,15 @@ function DashHeader() {
                         < Form className="form-modal">
                             <ModalHeader toggle={toggleEditModal}>Mettre à jour votre profil</ModalHeader>
                             <ModalBody>
+                            <div className="row">
+                                    <div className="col-md-6">
+                                        <FormGroup>
+                                            <Label for="password">Veuillez d'abord taper votre mot de passe</Label>
+                                            <Input type="password" onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
+                                        </FormGroup>
+                                    </div>
+                                </div>
+                                
                                 <div className="row">
                                     <div className="col-md-6">
                                         <FormGroup>
@@ -196,21 +209,6 @@ function DashHeader() {
                                         <FormGroup>
                                             <Label for="email">Email</Label>
                                             <Input type="email" placeholder={loggedMemberInfo.email} onChange={(e) => setEmail(e.target.value)} bsSize="sm" />
-                                        </FormGroup>
-                                    </div>
-                                </div>
-
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <FormGroup>
-                                            <Label for="password">Changer votre mot de passe </Label>
-                                            <Input type="password" onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <FormGroup>
-                                            <Label for="password">Confirmer votre nouveau mot de passe</Label>
-                                            <Input type="password" onChange={(e) => setConfirmPassword(e.target.value)} bsSize="sm" />
                                         </FormGroup>
                                     </div>
                                 </div>
@@ -246,24 +244,6 @@ function DashHeader() {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <FormGroup>
-                                            <Label for="instagram">Instagram (@)</Label>
-                                            <Input type="text" placeholder={loggedMemberInfo?.instagram} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
-                                        </FormGroup>
-                                    </div>
-                                    {/* <div className="col-md-6">
-                                        <FormGroup>
-                                            <Label for="picture">Photo</Label>
-                                            {loggedMemberInfo.picture && (
-                                                <img src={loggedMemberInfo.picture} alt="portrait" className='picture-team-modal' />
-                                            )}
-                                            <Input type="text" bsSize="sm" />
-                                        </FormGroup>
-                                    </div> */}
-                                </div>
-
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <FormGroup>
                                             <Label for="siret">Siret</Label>
                                             <Input type="text" placeholder={loggedMemberInfo?.siret} onChange={(e) => setSiret(e.target.value)} bsSize="sm" />
                                         </FormGroup>
@@ -278,7 +258,10 @@ function DashHeader() {
 
                                 <div className="row">
                                     <div className="col-md-6">
-
+                                        <FormGroup>
+                                            <Label for="instagram">Instagram (@)</Label>
+                                            <Input type="text" placeholder={loggedMemberInfo?.instagram} onChange={(e) => setInstagram(e.target.value)} bsSize="sm" />
+                                        </FormGroup>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="row">
@@ -301,6 +284,15 @@ function DashHeader() {
                                             </div>
                                         </div>
                                     </div>
+                                    {/* <div className="col-md-6">
+                                        <FormGroup>
+                                            <Label for="picture">Photo</Label>
+                                            {loggedMemberInfo.picture && (
+                                                <img src={loggedMemberInfo.picture} alt="portrait" className='picture-team-modal' />
+                                            )}
+                                            <Input type="text" bsSize="sm" />
+                                        </FormGroup>
+                                    </div> */}
                                 </div>
 
                             </ModalBody>
@@ -311,9 +303,6 @@ function DashHeader() {
                                 <Button className='cancel-button' onClick={toggleEditModal}>
                                     Annuler
                                 </Button>
-                                {validationMessage && (
-                                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                                )}
                             </ModalFooter>
                         </Form>
                     </Modal>

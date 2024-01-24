@@ -22,8 +22,8 @@ function App() {
       <Route path="/mission" element={<Mission />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/se-connecter" element={<Login />} />
-      {/* <Route path="/admin/*" element={role === "admin" ? <AdminDashboard /> : <Homepage />} /> */}
-      {/* <Route path="/masseur/*" element={role === "masseur" ? <MasseurDashboard /> : <Homepage />} /> */}
+      <Route path="/admin/*" element={role === "admin" ? <AdminDashboard /> : <Homepage />} />
+      <Route path="/masseur/*" element={role === "masseur" ? <MasseurDashboard /> : <Homepage />} />
       <Route path="/admin/*" element={<AdminDashboard />} />
       <Route path="/masseur/*" element={<MasseurDashboard />} />
       <Route path="/*" element={<Oops />} />

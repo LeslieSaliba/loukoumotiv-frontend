@@ -8,6 +8,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import registered from '../assets/icones/inscrit_noir.png';
 import not_registered from '../assets/icones/desinscrit_noir.png';
 import see_details from '../assets/icones/voir_noir.png';
@@ -25,7 +26,6 @@ function AllMissionsMasseurDash() {
   const [missionToSee, setMissionToSee] = useState({});
   const [missionToRegisterTo, setMissionToRegisterTo] = useState(null);
   const [missionToDrop, setMissionToDrop] = useState(null);
-  const [validationMessage, setValidationMessage] = useState('');
   const LoggedMemberId = getUserID();
 
   const [title, setTitle] = useState(missionToSee.title || '');
@@ -79,13 +79,21 @@ function AllMissionsMasseurDash() {
     setShowRegisterModal(!showRegisterModal)
   }
 
-  const handleRegister = (e) => {
+  const handleRegister = () => {
     if (missionToRegisterTo && missionToRegisterTo.Id) {
-      dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId, token));
-      setShowRegisterModal(false);
-      window.location.reload()
-    }
-  };
+      try {
+        dispatch(registerToMission(missionToRegisterTo.Id, LoggedMemberId, token));
+        toast.success(`Inscription réussie !`)
+        setTimeout(() => {
+          setShowRegisterModal(false);
+          window.location.reload()
+        }, 3000);
+      }
+      catch {
+        toast.error(`Oups, réessayez plus tard`)
+      }
+    };
+  }
 
   const toggleDropModal = (Id, title) => {
     setMissionToDrop({ Id, title });
@@ -118,11 +126,11 @@ function AllMissionsMasseurDash() {
                   </td>
                 </tr>
               )
-                // : missions.length === 0 ? (
-                //   <tr>
-                //     <td colSpan="9" className='text-center font-italic'>Aucune mission Loukoumotiv à venir.</td>
-                //   </tr>
-                // ) 
+                : missions.length === 0 ? (
+                  <tr>
+                    <td colSpan="9" className='text-center font-italic'>Aucune mission Loukoumotiv à venir.</td>
+                  </tr>
+                ) 
                 : (
                   missions &&
                   missions.map((mission) => (
@@ -321,9 +329,6 @@ function AllMissionsMasseurDash() {
               <Button className='cancel-button' onClick={toggleRegisterModal}>
                 Annuler
               </Button>
-              {validationMessage && (
-                <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-              )}
             </ModalFooter>
           </Modal>
         </div>
@@ -355,11 +360,11 @@ function AllMissionsMasseurDash() {
           <Modal isOpen={showFullModal} toggle={toggleFullModal}>
             <ModalHeader toggle={toggleFullModal}>Mission déjà complète</ModalHeader>
             <ModalBody>
-                <div>
-                  <p>Cette mission a atteint le nombre maximum de loukoums masseurs inscrits !</p>
-                  <br />
-                  <p>On rajoute des missions régulièrement, stay tuned !</p>
-                </div>
+              <div>
+                <p>Cette mission a atteint le nombre maximum de loukoums masseurs inscrits !</p>
+                <br />
+                <p>On rajoute des missions régulièrement, stay tuned !</p>
+              </div>
             </ModalBody>
             <ModalFooter>
               <Button className='action-button' onClick={toggleFullModal}>

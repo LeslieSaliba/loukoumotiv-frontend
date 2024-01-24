@@ -4,6 +4,7 @@ import { Form, FormGroup, Input, Label } from 'reactstrap';
 import '../CSS/Contact.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import Téléphone from '../assets/icones/telephone_mauve.png';
 import Mail from '../assets/icones/mail_mauve.png';
 
@@ -28,6 +29,15 @@ function QuotationContact() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        if (!formData.Nom_complet || !formData.Entreprise || !formData.Email || !formData.Telephone || !formData.Type || !formData.Message || !formData.Canal) {
+            toast.error('Veuillez renseigner tous les champs');
+            return;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.Email)) {
+            toast.error('Format d\'email invalide');
+            return;
+        }
         handleSubmit(e);
         setFormData({
             Nom_complet: "",
@@ -221,7 +231,7 @@ function QuotationContact() {
                         </button>
 
                         {state.succeeded && (
-                            <p className="thank-you-message">Merci pour votre message, l'équipe Loukoumotiv' revient vers vous dans les plus brefs délais. Prenez soin de vous !</p>
+                            toast.success("Merci pour votre message, l'équipe Loukoumotiv' revient vers vous dans les plus brefs délais. Prenez soin de vous !")
                         )}
                     </Form>
 

@@ -8,6 +8,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import remove from '../assets/icones/supprimer_noir.png';
 import edit from '../assets/icones/modifier_noir.png';
 import add from '../assets/icones/ajouter_blanc.png';
@@ -22,7 +23,6 @@ function TeamDash() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [memberToEdit, setMemberToEdit] = useState({});
   const [memberToDelete, setMemberToDelete] = useState(null);
-  const [validationMessage, setValidationMessage] = useState('');
 
   const [fullName, setFullName] = useState(memberToEdit.fullName || '');
   const [role, setRole] = useState(memberToEdit.role || '');
@@ -64,38 +64,57 @@ function TeamDash() {
   }
 
   const handleEdit = () => {
-    // if (!role || !phoneNumber || !email || !password) {
-    //   console.error('Les champs * doivent être renseignés');
-    //   setValidationMessage('Les champs * doivent être renseignés');
-    //   return;
-    // }
+    try {
+      // if (!phoneNumber || !email || !password) {
+      //   console.error('Les champs * doivent être renseignés');
+      //   toast.error('Les champs * doivent être renseignés');
+      //   return;
+      // }
 
-    const updatedFullName = fullName !== '' ? fullName : memberToEdit.fullName;
-    const updatedRole = role !== '' ? role : memberToEdit.role;
-    const updatedPhoneNumber = phoneNumber !== '' ? phoneNumber : memberToEdit.phoneNumber;
-    const updatedEmail = email !== '' ? email : memberToEdit.email;
-    const updatedDateOfBirth = formatDate(dateOfBirth) !== '' ? formatDate(dateOfBirth) : formatDate(memberToEdit.dateOfBirth);
-    const updatedNumber = number !== '' ? number : memberToEdit.number;
-    const updatedStreet = street !== '' ? street : memberToEdit.street;
-    const updatedZIPcode = ZIPcode !== '' ? ZIPcode : memberToEdit.ZIPcode;
-    const updatedCity = city !== '' ? city : memberToEdit.city;
-    const updatedInstagram = instagram !== '' ? instagram : memberToEdit.instagram;
-    const updatedSiret = siret !== '' ? siret : memberToEdit.siret;
-    const updatedIBAN = IBAN !== '' ? IBAN : memberToEdit.IBAN;
-    const updatedJoiningDate = formatDate(joiningDate) !== '' ? formatDate(joiningDate) : formatDate(memberToEdit.joiningDate);
-    const updatedDrivingLicense = Boolean(drivingLicense);
-    const updatedMotorized = Boolean(motorized);
-    const updatedNotes = notes !== '' ? notes : memberToEdit.notes;
-    // const picture ; 
+      // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      // if (!emailRegex.test(email)) {
+      //   toast.error('Format d\'email invalide');
+      //   return;
+      // }
+      // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+      // if (!passwordRegex.test(password)) {
+      //   toast.error("Mot de passe faible. Inclure au moins une majuscule, une minuscule, un chiffre et un symbole.");
+      // }
 
-    if (memberToEdit && memberToEdit._id) {
-      if (password !== '') {
-        dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, password, token));
-      } else {
-        dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, token));
+      const updatedFullName = fullName !== '' ? fullName : memberToEdit.fullName;
+      const updatedRole = role !== '' ? role : memberToEdit.role;
+      const updatedPhoneNumber = phoneNumber !== '' ? phoneNumber : memberToEdit.phoneNumber;
+      const updatedEmail = email !== '' ? email : memberToEdit.email;
+      const updatedDateOfBirth = formatDate(dateOfBirth) !== '' ? formatDate(dateOfBirth) : formatDate(memberToEdit.dateOfBirth);
+      const updatedNumber = number !== '' ? number : memberToEdit.number;
+      const updatedStreet = street !== '' ? street : memberToEdit.street;
+      const updatedZIPcode = ZIPcode !== '' ? ZIPcode : memberToEdit.ZIPcode;
+      const updatedCity = city !== '' ? city : memberToEdit.city;
+      const updatedInstagram = instagram !== '' ? instagram : memberToEdit.instagram;
+      const updatedSiret = siret !== '' ? siret : memberToEdit.siret;
+      const updatedIBAN = IBAN !== '' ? IBAN : memberToEdit.IBAN;
+      const updatedJoiningDate = formatDate(joiningDate) !== '' ? formatDate(joiningDate) : formatDate(memberToEdit.joiningDate);
+      const updatedDrivingLicense = Boolean(drivingLicense);
+      const updatedMotorized = Boolean(motorized);
+      const updatedNotes = notes !== '' ? notes : memberToEdit.notes;
+      // const picture ; 
+
+      if (memberToEdit && memberToEdit._id) {
+        if (password !== '') {
+          dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, password, token));
+          toast.success(`Membre mis à jour avec succès !`);
+        } else {
+          dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, token));
+          toast.success(`Membre mis à jour avec succès !`);
+        }
+        setTimeout(() => {
+          setShowEditModal(false);
+          // window.location.reload()
+        }, 3000);
       }
-      setShowEditModal(false);
-      // window.location.reload()
+    } catch (error) {
+      console.error("Erreur : ", error);
+      toast.error(`Oups, réessayez plus tard`)
     }
   };
 
@@ -106,9 +125,17 @@ function TeamDash() {
 
   const handleDelete = () => {
     if (memberToDelete && memberToDelete.Id) {
-      dispatch(deleteMember(memberToDelete.Id, token));
-      setShowDeleteModal(false);
-      window.location.reload()
+      try {
+        dispatch(deleteMember(memberToDelete.Id, token));
+        toast.success(`Membre supprimé avec succès !`)
+        setTimeout(() => {
+          setShowDeleteModal(false);
+          window.location.reload()
+        }, 3000);
+      } catch (error) {
+        console.error("Erreur : ", error);
+        toast.error("Oups, réessayez plus tard");
+      }
     }
   };
 
@@ -116,17 +143,36 @@ function TeamDash() {
     setShowAddModal(!showAddModal)
   }
 
-  const handleAdd = () => {
-    if (!fullName || !role || !phoneNumber || !email || !password) {
-      console.error('Les champs * doivent être renseignés');
-      setValidationMessage('Les champs * doivent être renseignés');
-      return;
+  const handleAdd = async () => {
+    try {
+      if (!fullName || !role || !phoneNumber || !email || !password) {
+        console.error('Les champs * doivent être renseignés');
+        toast.error('Les champs * doivent être renseignés');
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        toast.error('Format d\'email invalide');
+        return;
+      }
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+      if (!passwordRegex.test(password)) {
+        toast.error("Mot de passe faible. Inclure au moins une majuscule, une minuscule, un chiffre et un symbole.");
+      }
+
+      await dispatch(addMember(fullName, role, phoneNumber, email, password, notes, token));
+      toast.success("Membre ajouté avec succès!");
+
+      setTimeout(() => {
+        setShowAddModal(false);
+        window.location.reload();
+      }, 3000);
+    } catch (error) {
+      console.error("Erreur : ", error);
+      toast.error("Oups, réessayez plus tard");
     }
-    dispatch(addMember(fullName, role, phoneNumber, email, password, notes, token));
-    setShowAddModal(false);
-    window.location.reload();
-  }
-console.log(team)
+  };
+
   return (
     <div className="container ">
       <div className='d-flex justify-content-end'>
@@ -218,7 +264,7 @@ console.log(team)
                     <div className="col-md-6">
                       <FormGroup>
                         <Label for="password">Mot de passe *</Label>
-                        <Input type="password" placeholder={memberToEdit.password} onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
+                        <Input type="password" onChange={(e) => setPassword(e.target.value)} bsSize="sm" />
                       </FormGroup>
                     </div>
                     <div className="col-md-6">
@@ -337,9 +383,6 @@ console.log(team)
                   <Button className='cancel-button' onClick={toggleEditModal}>
                     Annuler
                   </Button>
-                  {validationMessage && (
-                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                  )}
                 </ModalFooter>
               </Form>
             )}
@@ -438,9 +481,6 @@ console.log(team)
                 <Button className='cancel-button' onClick={toggleAddModal}>
                   Annuler
                 </Button>
-                {validationMessage && (
-                  <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
               </ModalFooter>
             </Form>
           </Modal>

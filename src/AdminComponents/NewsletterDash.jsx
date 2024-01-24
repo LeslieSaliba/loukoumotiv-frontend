@@ -7,6 +7,7 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import '../CSS/Dashboard.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
+import { toast } from "react-hot-toast";
 import remove from '../assets/icones/supprimer_noir.png';
 import add from '../assets/icones/ajouter_blanc.png';
 
@@ -45,9 +46,17 @@ function NewsletterDash() {
 
     const handleUnsubscribe = () => {
         if (contactToUnsubscribe && contactToUnsubscribe.Id) {
-            dispatch(unsubscribeToNewsletter(contactToUnsubscribe.Id, token));
-            setShowUnsubscribeModal(false);
-            window.location.reload()
+            try {
+                dispatch(unsubscribeToNewsletter(contactToUnsubscribe.Id, token));
+                toast.success(`Email supprimé avec succès !`)
+                setTimeout(() => {
+                    setShowUnsubscribeModal(false);
+                    window.location.reload()
+                }, 2000);
+            } catch (error) {
+                console.error('Erreur :', error);
+                toast.error('Oups, réessayez plus tard');
+            }
         }
     };
 
@@ -55,16 +64,30 @@ function NewsletterDash() {
         setShowSubscribeModal(!showSubscribeModal)
     }
 
-    const handleSubscribe = () => {
-        if (!email) {
-            console.error('Renseignez un mail à inscrire à la newsletter');
-            setValidationMessage('Renseignez un mail à inscrire à la newsletter');
-            return;
+    const handleSubscribe = async () => {
+        try {
+            if (!email) {
+                console.error('Renseignez un mail à inscrire à la newsletter');
+                toast.error('Renseignez un mail à inscrire à la newsletter');
+                return;
+            }
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                toast.error('Format d\'email invalide');
+                return;
+            }
+
+            await dispatch(subscribeToNewsletter(email));
+            toast.success('Inscription à la newsletter réussie !');
+
+            setTimeout(() => {
+                setShowSubscribeModal(false);
+                window.location.reload();
+            }, 2000);
+        } catch (error) {
+            console.error('Erreur :', error);
+            toast.error('Oups, réessayez plus tard');
         }
-        dispatch(subscribeToNewsletter(email));
-        setShowSubscribeModal(false);
-        window.location.reload()
-        // setEmail('');
     };
 
     return (

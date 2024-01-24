@@ -4,6 +4,7 @@ import { getUserRole } from "../userInfo/getTeamData";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from '../redux/actions/team'
 import { Form, FormGroup, Input, Label } from 'reactstrap';
+import { toast } from "react-hot-toast";
 import '../CSS/Login.css';
 import '../CSS/General.css';
 import '../CSS/bootstrap.min.css';
@@ -11,16 +12,11 @@ import '../CSS/bootstrap.min.css';
 function LoginLogin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [validationMessage, setValidationMessage] = useState('');
     const dispatch = useDispatch();
     const team = useSelector((state) => state.team);
     const navigate = useNavigate();
     const role = getUserRole();
     const token = localStorage.getItem('token');
-
-    const handleInputChange = (e) => {
-        setValidationMessage(``);
-    };
 
     useEffect(() => {
         if (role === "admin") {
@@ -38,10 +34,10 @@ function LoginLogin() {
             .then((response) => {
                 setEmail('');
                 setPassword('');
-                // setValidationMessage(`Connexion réussie ! Redirection vers l'espace missions`)
+                toast.success(`Connexion réussie !`)
             })
             .catch((error) => {
-                setValidationMessage(error.response.data.message)
+                toast.error(error.response.data.message)
             })
     };
 
@@ -59,7 +55,7 @@ function LoginLogin() {
                             name="email"
                             placeholder=" "
                             value={email}
-                            onInput={(e) => { handleInputChange(); setEmail(e.target.value); }}
+                            onInput={(e) => setEmail(e.target.value)}
                             className="form-style border-dark"
                             required
                         />
@@ -75,10 +71,10 @@ function LoginLogin() {
                             id="password"
                             name="password"
                             value={password}
-                            onInput={(e) => { handleInputChange(); setPassword(e.target.value); }}
-                            placeholder=" "
-                            className="form-style border-dark"
-                            required
+                            onInput={(e) => setPassword(e.target.value) }
+                        placeholder=" "
+                        className="form-style border-dark"
+                        required
                         />
                         <Label for="MDP" className="login-label">
                             Mot de passe
@@ -91,9 +87,6 @@ function LoginLogin() {
                 >
                     Se connecter
                 </button>
-                {validationMessage && (
-                    <span className='text-danger font-italic pt-3'>{validationMessage}</span>
-                )}
             </Form>
         </div>
     );
