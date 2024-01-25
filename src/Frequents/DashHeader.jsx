@@ -106,7 +106,11 @@ function DashHeader() {
                         },
                     });
                     console.log('Membre mis à jour avec succcès');
-                    setShowEditModal(false);
+                    toast.success('Mise à jour de votre profil réussie !');
+                    setTimeout(() => {
+                        setShowEditModal(false);
+                        window.location.reload()
+                    }, 3000);
                 } catch (error) {
                     console.error('Erreur lors de la mise à jour du membre ', error);
                     if (error.response) {
@@ -142,7 +146,7 @@ function DashHeader() {
                         setShowEditModal(false);
                         window.location.reload()
                     }, 3000);
-                    
+
                 } catch (error) {
                     console.error('Erreur lors de la mise à jour du membre ', error);
                     toast.error('Oups, réessayez plus tard');
@@ -174,7 +178,7 @@ function DashHeader() {
                         < Form className="form-modal">
                             <ModalHeader toggle={toggleEditModal}>Mettre à jour votre profil</ModalHeader>
                             <ModalBody>
-                            <div className="row">
+                                <div className="row">
                                     <div className="col-md-6">
                                         <FormGroup>
                                             <Label for="password">Veuillez d'abord taper votre mot de passe</Label>
@@ -182,7 +186,7 @@ function DashHeader() {
                                         </FormGroup>
                                     </div>
                                 </div>
-                                
+
                                 <div className="row">
                                     <div className="col-md-6">
                                         <FormGroup>
@@ -278,7 +282,7 @@ function DashHeader() {
                                                     <Label check>
                                                         <Input type="checkbox" checked={motorized} onChange={(e) => setMotorized(e.target.checked)} />
                                                         Véhiculé.e
-                                                        {console.log("permis", drivingLicense + motorized)}
+                                                        {/* {console.log("permis", drivingLicense + motorized)} */}
                                                     </Label>
                                                 </FormGroup>
                                             </div>

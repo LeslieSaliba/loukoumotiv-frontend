@@ -101,7 +101,7 @@ function TeamDash() {
 
       if (memberToEdit && memberToEdit._id) {
         if (password !== '') {
-          dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, password, token));
+          dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, token, password));
           toast.success(`Membre mis à jour avec succès !`);
         } else {
           dispatch(updateMember(memberToEdit._id, updatedFullName, updatedRole, updatedPhoneNumber, updatedEmail, updatedDateOfBirth, updatedNumber, updatedStreet, updatedZIPcode, updatedCity, updatedInstagram, updatedSiret, updatedIBAN, updatedJoiningDate, updatedDrivingLicense, updatedMotorized, updatedNotes, picture, token));
@@ -350,7 +350,7 @@ function TeamDash() {
                             <Label check >
                               <Input type="checkbox" checked={drivingLicense} onChange={(e) => setDrivingLicense(e.target.checked)} />
                               Permis de conduire
-                              {console.log("drivingLicense: ", drivingLicense)}
+                              {/* {console.log("drivingLicense: ", drivingLicense)} */}
                             </Label>
                           </FormGroup>
                         </div>
@@ -359,7 +359,7 @@ function TeamDash() {
                             <Label check>
                               <Input type="checkbox" checked={motorized} onChange={(e) => setMotorized(e.target.checked)} />
                               Véhiculé.e
-                              {console.log("motorized: ", motorized)}
+                              {/* {console.log("motorized: ", motorized)} */}
                             </Label>
                           </FormGroup>
                         </div>

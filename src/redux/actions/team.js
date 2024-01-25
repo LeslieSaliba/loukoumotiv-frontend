@@ -112,7 +112,7 @@ export const deleteMember = (Id, token) => {
     }
 }
 
-export const updateMember = (Id, fullName, role, phoneNumber, email, dateOfBirth, number, street, ZIPcode, city, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture, password, token) => {
+export const updateMember = (Id, fullName, role, phoneNumber, email, dateOfBirth, number, street, ZIPcode, city, instagram, siret, IBAN, joiningDate, drivingLicense, motorized, notes, picture, token, password) => {
     const formData = new FormData();
     formData.append('fullName', fullName);
     formData.append('role', role);

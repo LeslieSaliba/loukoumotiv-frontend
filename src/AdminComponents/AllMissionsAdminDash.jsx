@@ -134,7 +134,7 @@ function AllMissionsAdminDash() {
   const handleDelete = () => {
     if (missionToDelete && missionToDelete.Id) {
       try {
-        // if (missionToDelete.registeredMembers.length > 0) {
+        // if (missionToDelete.registeredMembers?.length > 0) {
         //   toast.error(`Attention : Certains membres sont déjà inscrits à cette mission. N'oubliez pas de les prévenir de l'annulation de la mission.`);
         // }
         dispatch(deleteMission(missionToDelete.Id, token));
@@ -163,7 +163,7 @@ function AllMissionsAdminDash() {
       const registeredMembers = [];
       dispatch(addMission(title, description, partner, location, type, time, capacity, requiredMembers, registeredMembers, remuneration, status, teamBilling, partnerBilling, notes, token));
       toast.success('Mission ajoutée avec succès!');
-
+console.log("location: ", location)
       setTimeout(() => {
         setShowAddModal(false);
         window.location.reload();
@@ -283,7 +283,7 @@ function AllMissionsAdminDash() {
               )
                 : (missions &&
                   missions.map((mission) => (
-                    <tr key={mission._id} className={mission.requiredMembers === mission.registeredMembers.length ? "full-mission-admin" : ""}>
+                    <tr key={mission._id} className={mission.requiredMembers === mission.registeredMembers?.length ? "full-mission-admin" : ""}>
                       <td scope="row">{mission.title}</td>
                       <td>{(() => {
                         switch (mission.status) {
@@ -319,7 +319,7 @@ function AllMissionsAdminDash() {
                       )}
                       <td>{mission.remuneration}</td>
                       <td>
-                        {mission.requiredMembers === mission.registeredMembers.length ?
+                        {mission.requiredMembers === mission.registeredMembers?.length ?
                           <img className="table-action-icon" src={full} alt="complète" onClick={() => toggleFullModal()} /> :
                           (mission.registeredMembers && mission.registeredMembers.some(member => member._id === LoggedMemberId) ? (
                             <img className="table-action-icon" src={registered} alt="inscrit" onClick={() => toggleAutoDropModal(mission._id, mission.title)} />
